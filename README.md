@@ -67,7 +67,8 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 | Climate-adjusted **probable minimum** | **2,719,039  (+9.0%)** |
 | Sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
 
-Full write-up and caveats in [`docs/methodology.md`](docs/methodology.md).
+Full write-up and caveats in [`docs/methodology.md`](docs/methodology.md);
+planned extensions in [`docs/FUTURE_WORK.md`](docs/FUTURE_WORK.md).
 
 ## Status
 
