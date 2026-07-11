@@ -1,0 +1,114 @@
+# =============================================================================
+# RHNA-Climate — tunable assumptions for the climate adjustment model
+# -----------------------------------------------------------------------------
+# EVERY assumption-laden parameter lives here so the model is auditable and the
+# sensitivity analysis (src/sensitivity.py) can sweep the uncertain ones.
+# Values are deliberately CONSERVATIVE (low-end) — the goal is a "probable
+# MINIMUM", i.e. a defensible floor, not a central or worst-case forecast.
+# =============================================================================
+
+scenario:
+  ssp: ssp245            # CMIP6 emissions scenario (SSP2-4.5)
+  decade: "2050s"        # horizon decade used for the climate multiplier
+  cmip6_baseline: "1981-2010"
+
+horizon:
+  # Years of climate exposure accumulated into replacement need. The 6th cycle
+  # is ~8 years; we extend to the mid-century planning horizon the adjusted
+  # allocation is meant to anticipate. Swept in sensitivity.
+  years: 8
+  years_sensitivity: [8, 16, 30]
+
+# ---- Hazard exposure index E_j (0..1) ---------------------------------------
+# Weighted blend of normalized hazard components; weights are renormalized to
+# sum to 1. Each component is in [0,1]:
+#   fire  = NRI wildfire risk percentile (WFIR_RISKS/100)
+#   flood = max(inland, coastal) NRI flood risk percentile /100
+#   heat  = NRI heat-wave risk percentile (HWAV_RISKS/100)
+#   slr   = normalized projected sea-level rise at nearest gauge (coastal only)
+exposure:
+  weights:
+    fire: 0.40
+    flood: 0.30
+    heat: 0.15
+    slr: 0.15
+  # Coastal classification: a jurisdiction is "coastal" if its centroid is
+  # within this distance of a NOAA SLR gauge.
+  coastal_km: 25
+  # SLR scenario + year used for the coastal exposure signal (OPC planning std).
+  slr_scenario: intermediate
+  slr_year: "2050"
+  # Normalization cap: SLR (in cm) mapped linearly onto [0,1] up to this cap.
+  slr_norm_cm: 60
+
+# ---- Component A: replacement need (raises the statewide total) --------------
+replacement:
+  # Which FEMA NRI building expected-annual-loss (EAL) hazards feed replacement.
+  hazards: [wfir, cfld, ifld]     # wildfire, coastal flood, inland flood
+  # NRI EAL is an annualized *dollar* loss. Converting to destroyed HOUSING
+  # UNITS requires a value-per-unit assumption. We instead use the building
+  # EAL *rate* (EAL / building exposure value) as an annual fractional loss of
+  # the building stock, then apply it to occupied housing units. This factor
+  # scales that rate to reflect that residential unit loss ~ tracks building
+  # value loss. Conservative default = 1.0 (no amplification).
+  eal_to_unit_loss_factor: 1.0
+  # Cap the annual per-jurisdiction loss rate so a single extreme tract cannot
+  # produce implausible replacement counts.
+  max_annual_loss_rate: 0.02      # 2%/yr ceiling
+  # CMIP6 future multiplier: how much the historical NRI loss rate is scaled up
+  # by projected mid-century intensification. Built from normalized SSP2-4.5
+  # signals (dry-spell/heat -> fire; extreme-precip -> flood). These weights map
+  # a 0..1 normalized climate signal onto a multiplier in [1, 1+max_uplift].
+  climate_uplift:
+    max_uplift: 0.5               # up to +50% over historical at signal=1.0
+    fire_signal_weight: 0.6       # weight on max_dry_spell + tasmax_peak_f
+    flood_signal_weight: 0.4      # weight on extreme_precip_days
+
+# ---- Component B: out-displacement (redistributes) --------------------------
+displacement:
+  # Exposure index E_j in [0,1] maps to a displacement fraction of population
+  # over the horizon via a threshold-relative power curve:
+  #   e = clip((E_j - min_exposure) / (1 - min_exposure), 0, 1)
+  #   frac = max_fraction * e ** exponent
+  # => 0 below the threshold, max_fraction at E_j = 1. Convex (exponent>1) so
+  # only the most-exposed places shed meaningful population.
+  max_fraction: 0.10              # at most 10% of pop displaced over horizon
+  exponent: 2.0
+  # Exposure threshold below which no displacement occurs (avoids penalizing
+  # low-risk places for noise).
+  min_exposure: 0.5
+  # Swept in sensitivity.
+  max_fraction_sensitivity: [0.05, 0.10, 0.20]
+  exponent_sensitivity: [1.5, 2.0, 3.0]
+
+# ---- Component C: receiver capture (redistributes) --------------------------
+receiver:
+  # Displaced pool is distributed to jurisdictions weighted by
+  #   weight_j = ((1 - E_j) ** resilience_exponent) * (capacity_j ** capacity_exponent)
+  # capacity proxy = existing population (jobs proxy unavailable statewide).
+  resilience_exponent: 1.5
+  capacity_exponent: 1.0
+  # Receivers must be below this exposure to be eligible at all.
+  max_exposure_eligible: 0.5
+
+# ---- Component D: siting discount (redistributes unsafe capacity) -----------
+siting:
+  # Share of a jurisdiction's baseline RHNA assumed to fall in "unsafe" tracts,
+  # estimated from the fraction of its tracts that are very-high hazard.
+  # A tract is "unsafe" if its NRI wildfire OR flood rating percentile >=
+  # unsafe_percentile, or it is SLR-inundated (coastal).
+  unsafe_percentile: 0.90
+  # Only this fraction of the theoretically-unsafe share is actually moved
+  # (some infill/retrofit remains feasible) — conservative.
+  move_fraction: 0.5
+
+# ---- Household conversion ----------------------------------------------------
+household:
+  avg_size: 2.9                   # CA avg household size (persons/household)
+
+# ---- External in-migration (optional additive term) -------------------------
+# Net climate in-migration to CA from out of state is highly uncertain; default
+# OFF so the statewide increase is driven only by in-state replacement need.
+external_migration:
+  enabled: false
+  net_households: 0

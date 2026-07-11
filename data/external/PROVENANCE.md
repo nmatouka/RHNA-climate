@@ -1,0 +1,16 @@
+# Vendored external data — provenance
+
+These files are **snapshots** copied into the repo for reproducibility. They are
+inputs the pipeline reads read-only; regenerate them from the upstream projects
+if the sources are updated.
+
+| File | Source project | Upstream path | Description |
+|---|---|---|---|
+| `ca_jurisdictions.json` | climateshed-cmip6-service | `ca_jurisdictions.json` | 598 CA jurisdictions keyed by slug: name, juris_type, county_fips, place_fips, population, centroid, tract_fips[]. Built by `precompute_jurisdictions.py`. |
+| `ca_jurisdictions_climate.json` | climateshed-cmip6-service | `ca_jurisdictions_climate.json` | Per-jurisdiction CMIP6 5-model ensemble. Scenarios ssp245/ssp370/ssp585; decades 2030s–2090s; vars tasmax_peak_f, warm_nights, extreme_precip_days, max_dry_spell, cdd_65f, precip_change_pct (each median/p10/p90). Baseline 1981–2010. |
+| `nri_ca_tracts.csv.gz` | climateshed-cmip6-service (`NRI_Table_CensusTracts/NRI_Table_CensusTracts.csv`, 467 cols, 634 MB) | FEMA National Risk Index v1.20 (Dec 2025) | **CA tracts only (9,106 rows)**, subset of columns extracted from the full FEMA table: `STCOFIPS, TRACTFIPS, POPULATION, BUILDVALUE, AREA`; composites `RISK_SCORE, EAL_SCORE, EAL_VALB, SOVI_SCORE`; per-hazard risk percentiles + ratings + **building EAL dollars** for wildfire/coastal-flood/inland-flood (`{WFIR,CFLD,IFLD}_RISKS/_RISKR/_EALB`) plus `HWAV_*`, `DRGT_RISKS`. Building EAL dollars drive replacement component A; risk percentiles drive the exposure index. Keyed by 11-digit TRACTFIPS. |
+| `ca_coastal_slr.json` | climateshed-cmip6-service | `ca_coastal_slr.json` | NOAA Technical Report NOS 01 (Sweet et al. 2022) via OPC 2024. 15 CA coastal gauges; scenarios low–high; years 2020–2100 (cm/ft). Nearest-neighbor by lat/lon. |
+| `ghg_jurisdiction_table.csv` | California GHG Inventory | `01_processed/jurisdiction_table.csv` | Canonical 540 CA jurisdictions (482 cities + 58 unincorporated). Cols JURISDICTION, JURIS_TYPE, PLACE_FIPS, COUNTY, COUNTY_FIPS. |
+| `v2_jurisdictions.csv` | climate-action-sensitivity-analysis | `data/v2_jurisdictions.csv` | Jurisdiction × year (2019–2024): POPULATION, OCC_HOUSING + GHG/energy fields. Includes 5 MPO region rows (JURIS_TYPE=MPO): ABAG/MTC, AMBAG, SACOG, SANDAG, SCAG. |
+
+Snapshot date: 2026-07-10.

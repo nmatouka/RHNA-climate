@@ -1,0 +1,541 @@
+JURISDICTION,JURIS_TYPE,PLACE_FIPS,COUNTY,COUNTY_FIPS
+Adelanto,City,0600296,San Bernardino,06071
+Agoura Hills,City,0600394,Los Angeles,06037
+Alameda,City,0600562,Alameda,06001
+Albany,City,0600674,Alameda,06001
+Alhambra,City,0600884,Los Angeles,06037
+Aliso Viejo,City,0600947,Orange,06059
+Alturas,City,0601444,Modoc,06049
+Amador City,City,0601514,Amador,06005
+American Canyon,City,0601640,Napa,06055
+Anaheim,City,0602000,Orange,06059
+Anderson,City,0602042,Shasta,06089
+Angels,City,0602112,Calaveras,06009
+Antioch,City,0602252,Contra Costa,06013
+Apple Valley,City,0602364,San Bernardino,06071
+Arcadia,City,0602462,Los Angeles,06037
+Arcata,City,0602476,Humboldt,06023
+Arroyo Grande,City,0602868,San Luis Obispo,06079
+Artesia,City,0602896,Los Angeles,06037
+Arvin,City,0602924,Kern,06029
+Atascadero,City,0603064,San Luis Obispo,06079
+Atherton,City,0603092,San Mateo,06081
+Atwater,City,0603162,Merced,06047
+Auburn,City,0603204,Placer,06061
+Avalon,City,0603274,Los Angeles,06037
+Avenal,City,0603302,Kings,06031
+Azusa,City,0603386,Los Angeles,06037
+Bakersfield,City,0603526,Kern,06029
+Baldwin Park,City,0603666,Los Angeles,06037
+Banning,City,0603820,Riverside,06065
+Barstow,City,0604030,San Bernardino,06071
+Beaumont,City,0604758,Riverside,06065
+Bell,City,0604870,Los Angeles,06037
+Bellflower,City,0604982,Los Angeles,06037
+Bell Gardens,City,0604996,Los Angeles,06037
+Belmont,City,0605108,San Mateo,06081
+Belvedere,City,0605164,Marin,06041
+Benicia,City,0605290,Solano,06095
+Berkeley,City,0606000,Alameda,06001
+Beverly Hills,City,0606308,Los Angeles,06037
+Big Bear Lake,City,0606434,San Bernardino,06071
+Biggs,City,0606560,Butte,06007
+Bishop,City,0606798,Inyo,06027
+Blue Lake,City,0607162,Humboldt,06023
+Blythe,City,0607218,Riverside,06065
+Bradbury,City,0607946,Los Angeles,06037
+Brawley,City,0608058,Imperial,06025
+Brea,City,0608100,Orange,06059
+Brentwood,City,0608142,Contra Costa,06013
+Brisbane,City,0608310,San Mateo,06081
+Buellton,City,0608758,Santa Barbara,06083
+Buena Park,City,0608786,Orange,06059
+Burbank,City,0608954,Los Angeles,06037
+Burlingame,City,0609066,San Mateo,06081
+Calabasas,City,0609598,Los Angeles,06037
+Calexico,City,0609710,Imperial,06025
+California City,City,0609780,Kern,06029
+Calimesa,City,0609864,Riverside,06065
+Calipatria,City,0609878,Imperial,06025
+Calistoga,City,0609892,Napa,06055
+Camarillo,City,0610046,Ventura,06111
+Campbell,City,0610345,Santa Clara,06085
+Canyon Lake,City,0610928,Riverside,06065
+Capitola,City,0611040,Santa Cruz,06087
+Carlsbad,City,0611194,San Diego,06073
+Carmel-by-the-Sea,City,0611250,Monterey,06053
+Carpinteria,City,0611446,Santa Barbara,06083
+Carson,City,0611530,Los Angeles,06037
+Cathedral City,City,0612048,Riverside,06065
+Ceres,City,0612524,Stanislaus,06099
+Cerritos,City,0612552,Los Angeles,06037
+Chico,City,0613014,Butte,06007
+Chino,City,0613210,San Bernardino,06071
+Chino Hills,City,0613214,San Bernardino,06071
+Chowchilla,City,0613294,Madera,06039
+Chula Vista,City,0613392,San Diego,06073
+Citrus Heights,City,0613588,Sacramento,06067
+Claremont,City,0613756,Los Angeles,06037
+Clayton,City,0613882,Contra Costa,06013
+Clearlake,City,0613945,Lake,06033
+Cloverdale,City,0614190,Sonoma,06097
+Clovis,City,0614218,Fresno,06019
+Coachella,City,0614260,Riverside,06065
+Coalinga,City,0614274,Fresno,06019
+Colfax,City,0614498,Placer,06061
+Colma,City,0614736,San Mateo,06081
+Colton,City,0614890,San Bernardino,06071
+Colusa,City,0614946,Colusa,06011
+Commerce,City,0614974,Los Angeles,06037
+Compton,City,0615044,Los Angeles,06037
+Concord,City,0616000,Contra Costa,06013
+Corcoran,City,0616224,Kings,06031
+Corning,City,0616322,Tehama,06103
+Corona,City,0616350,Riverside,06065
+Coronado,City,0616378,San Diego,06073
+Corte Madera,City,0616462,Marin,06041
+Costa Mesa,City,0616532,Orange,06059
+Cotati,City,0616560,Sonoma,06097
+Covina,City,0616742,Los Angeles,06037
+Crescent City,City,0617022,Del Norte,06015
+Cudahy,City,0617498,Los Angeles,06037
+Culver City,City,0617568,Los Angeles,06037
+Cupertino,City,0617610,Santa Clara,06085
+Cypress,City,0617750,Orange,06059
+Daly City,City,0617918,San Mateo,06081
+Dana Point,City,0617946,Orange,06059
+Danville,City,0617988,Contra Costa,06013
+Davis,City,0618100,Yolo,06113
+Delano,City,0618394,Kern,06029
+Del Mar,City,0618506,San Diego,06073
+Del Rey Oaks,City,0618688,Monterey,06053
+Desert Hot Springs,City,0618996,Riverside,06065
+Diamond Bar,City,0619192,Los Angeles,06037
+Dinuba,City,0619318,Tulare,06107
+Dixon,City,0619402,Solano,06095
+Dorris,City,0619584,Siskiyou,06093
+Dos Palos,City,0619612,Merced,06047
+Downey,City,0619766,Los Angeles,06037
+Duarte,City,0619990,Los Angeles,06037
+Dublin,City,0620018,Alameda,06001
+Dunsmuir,City,0620242,Siskiyou,06093
+East Palo Alto,City,0620956,San Mateo,06081
+Eastvale,City,0621230,Riverside,06065
+El Cajon,City,0621712,San Diego,06073
+El Centro,City,0621782,Imperial,06025
+El Cerrito,City,0621796,Contra Costa,06013
+Elk Grove,City,0622020,Sacramento,06067
+El Monte,City,0622230,Los Angeles,06037
+El Paso de Robles (Paso Robles),City,0622300,San Luis Obispo,06079
+El Segundo,City,0622412,Los Angeles,06037
+Emeryville,City,0622594,Alameda,06001
+Encinitas,City,0622678,San Diego,06073
+Escalon,City,0622790,San Joaquin,06077
+Escondido,City,0622804,San Diego,06073
+Etna,City,0622972,Siskiyou,06093
+Eureka,City,0623042,Humboldt,06023
+Exeter,City,0623126,Tulare,06107
+Fairfax,City,0623168,Marin,06041
+Fairfield,City,0623182,Solano,06095
+Farmersville,City,0623616,Tulare,06107
+Ferndale,City,0623910,Humboldt,06023
+Fillmore,City,0624092,Ventura,06111
+Firebaugh,City,0624134,Fresno,06019
+Folsom,City,0624638,Sacramento,06067
+Fontana,City,0624680,San Bernardino,06071
+Fort Bragg,City,0625058,Mendocino,06045
+Fort Jones,City,0625128,Siskiyou,06093
+Fortuna,City,0625296,Humboldt,06023
+Foster City,City,0625338,San Mateo,06081
+Fountain Valley,City,0625380,Orange,06059
+Fowler,City,0625436,Fresno,06019
+Fremont,City,0626000,Alameda,06001
+Fresno,City,0627000,Fresno,06019
+Fullerton,City,0628000,Orange,06059
+Galt,City,0628112,Sacramento,06067
+Gardena,City,0628168,Los Angeles,06037
+Garden Grove,City,0629000,Orange,06059
+Gilroy,City,0629504,Santa Clara,06085
+Glendale,City,0630000,Los Angeles,06037
+Glendora,City,0630014,Los Angeles,06037
+Goleta,City,0630378,Santa Barbara,06083
+Gonzales,City,0630392,Monterey,06053
+Grand Terrace,City,0630658,San Bernardino,06071
+Grass Valley,City,0630798,Nevada,06057
+Greenfield,City,0630994,Monterey,06053
+Gridley,City,0631260,Butte,06007
+Grover Beach,City,0631393,San Luis Obispo,06079
+Guadalupe,City,0631414,Santa Barbara,06083
+Gustine,City,0631568,Merced,06047
+Half Moon Bay,City,0631708,San Mateo,06081
+Hanford,City,0631960,Kings,06031
+Hawaiian Gardens,City,0632506,Los Angeles,06037
+Hawthorne,City,0632548,Los Angeles,06037
+Hayward,City,0633000,Alameda,06001
+Healdsburg,City,0633056,Sonoma,06097
+Hemet,City,0633182,Riverside,06065
+Hercules,City,0633308,Contra Costa,06013
+Hermosa Beach,City,0633364,Los Angeles,06037
+Hesperia,City,0633434,San Bernardino,06071
+Hidden Hills,City,0633518,Los Angeles,06037
+Highland,City,0633588,San Bernardino,06071
+Hillsborough,City,0633798,San Mateo,06081
+Hollister,City,0634120,San Benito,06069
+Holtville,City,0634246,Imperial,06025
+Hughson,City,0634904,Stanislaus,06099
+Huntington Beach,City,0636000,Orange,06059
+Huntington Park,City,0636056,Los Angeles,06037
+Huron,City,0636084,Fresno,06019
+Imperial,City,0636280,Imperial,06025
+Imperial Beach,City,0636294,San Diego,06073
+Indian Wells,City,0636434,Riverside,06065
+Indio,City,0636448,Riverside,06065
+Industry,City,0636490,Los Angeles,06037
+Inglewood,City,0636546,Los Angeles,06037
+Ione,City,0636672,Amador,06005
+Irvine,City,0636770,Orange,06059
+Irwindale,City,0636826,Los Angeles,06037
+Isleton,City,0636882,Sacramento,06067
+Jackson,City,0636980,Amador,06005
+Jurupa Valley,City,0637692,Riverside,06065
+Kerman,City,0638226,Fresno,06019
+King City,City,0638520,Monterey,06053
+Kingsburg,City,0638562,Fresno,06019
+La Cañada Flintridge,City,0639003,Los Angeles,06037
+Lafayette,City,0639122,Contra Costa,06013
+Laguna Beach,City,0639178,Orange,06059
+Laguna Hills,City,0639220,Orange,06059
+Laguna Niguel,City,0639248,Orange,06059
+Laguna Woods,City,0639259,Orange,06059
+La Habra,City,0639290,Orange,06059
+La Habra Heights,City,0639304,Los Angeles,06037
+Lake Elsinore,City,0639486,Riverside,06065
+Lake Forest,City,0639496,Orange,06059
+Lakeport,City,0639710,Lake,06033
+Lakewood,City,0639892,Los Angeles,06037
+La Mesa,City,0640004,San Diego,06073
+La Mirada,City,0640032,Los Angeles,06037
+Lancaster,City,0640130,Los Angeles,06037
+La Palma,City,0640256,Orange,06059
+La Puente,City,0640340,Los Angeles,06037
+La Quinta,City,0640354,Riverside,06065
+Larkspur,City,0640438,Marin,06041
+Lathrop,City,0640704,San Joaquin,06077
+La Verne,City,0640830,Los Angeles,06037
+Lawndale,City,0640886,Los Angeles,06037
+Lemon Grove,City,0641124,San Diego,06073
+Lemoore,City,0641152,Kings,06031
+Lincoln,City,0641474,Placer,06061
+Lindsay,City,0641712,Tulare,06107
+Live Oak,City,0641936,Sutter,06101
+Livermore,City,0641992,Alameda,06001
+Livingston,City,0642006,Merced,06047
+Lodi,City,0642202,San Joaquin,06077
+Loma Linda,City,0642370,San Bernardino,06071
+Lomita,City,0642468,Los Angeles,06037
+Lompoc,City,0642524,Santa Barbara,06083
+Long Beach,City,0643000,Los Angeles,06037
+Loomis,City,0643140,Placer,06061
+Los Alamitos,City,0643224,Orange,06059
+Los Altos,City,0643280,Santa Clara,06085
+Los Altos Hills,City,0643294,Santa Clara,06085
+Los Angeles,City,0644000,Los Angeles,06037
+Los Banos,City,0644028,Merced,06047
+Los Gatos,City,0644112,Santa Clara,06085
+Loyalton,City,0644364,Sierra,06091
+Lynwood,City,0644574,Los Angeles,06037
+McFarland,City,0644826,Kern,06029
+Madera,City,0645022,Madera,06039
+Malibu,City,0645246,Los Angeles,06037
+Mammoth Lakes,City,0645358,Mono,06051
+Manhattan Beach,City,0645400,Los Angeles,06037
+Manteca,City,0645484,San Joaquin,06077
+Maricopa,City,0645736,Kern,06029
+Marina,City,0645778,Monterey,06053
+Martinez,City,0646114,Contra Costa,06013
+Marysville,City,0646170,Yuba,06115
+Maywood,City,0646492,Los Angeles,06037
+Mendota,City,0646828,Fresno,06019
+Menifee,City,0646842,Riverside,06065
+Menlo Park,City,0646870,San Mateo,06081
+Merced,City,0646898,Merced,06047
+Millbrae,City,0647486,San Mateo,06081
+Mill Valley,City,0647710,Marin,06041
+Milpitas,City,0647766,Santa Clara,06085
+Mission Viejo,City,0648256,Orange,06059
+Modesto,City,0648354,Stanislaus,06099
+Monrovia,City,0648648,Los Angeles,06037
+Montague,City,0648690,Siskiyou,06093
+Montclair,City,0648788,San Bernardino,06071
+Montebello,City,0648816,Los Angeles,06037
+Monterey,City,0648872,Monterey,06053
+Monterey Park,City,0648914,Los Angeles,06037
+Monte Sereno,City,0648956,Santa Clara,06085
+Moorpark,City,0649138,Ventura,06111
+Moraga,City,0649187,Contra Costa,06013
+Moreno Valley,City,0649270,Riverside,06065
+Morgan Hill,City,0649278,Santa Clara,06085
+Morro Bay,City,0649362,San Luis Obispo,06079
+Mountain View,City,0649670,Santa Clara,06085
+Mount Shasta,City,0649852,Siskiyou,06093
+Murrieta,City,0650076,Riverside,06065
+Napa,City,0650258,Napa,06055
+National City,City,0650398,San Diego,06073
+Needles,City,0650734,San Bernardino,06071
+Nevada City,City,0650874,Nevada,06057
+Newark,City,0650916,Alameda,06001
+Newman,City,0651140,Stanislaus,06099
+Newport Beach,City,0651182,Orange,06059
+Norco,City,0651560,Riverside,06065
+Norwalk,City,0652526,Los Angeles,06037
+Novato,City,0652582,Marin,06041
+Oakdale,City,0652694,Stanislaus,06099
+Oakland,City,0653000,Alameda,06001
+Oakley,City,0653070,Contra Costa,06013
+Oceanside,City,0653322,San Diego,06073
+Ojai,City,0653476,Ventura,06111
+Ontario,City,0653896,San Bernardino,06071
+Orange,City,0653980,Orange,06059
+Orange Cove,City,0654008,Fresno,06019
+Orinda,City,0654232,Contra Costa,06013
+Orland,City,0654274,Glenn,06021
+Oroville,City,0654386,Butte,06007
+Oxnard,City,0654652,Ventura,06111
+Pacifica,City,0654806,San Mateo,06081
+Pacific Grove,City,0654848,Monterey,06053
+Palmdale,City,0655156,Los Angeles,06037
+Palm Desert,City,0655184,Riverside,06065
+Palm Springs,City,0655254,Riverside,06065
+Palo Alto,City,0655282,Santa Clara,06085
+Palos Verdes Estates,City,0655380,Los Angeles,06037
+Paradise,City,0655520,Butte,06007
+Paramount,City,0655618,Los Angeles,06037
+Parlier,City,0655856,Fresno,06019
+Pasadena,City,0656000,Los Angeles,06037
+Patterson,City,0656112,Stanislaus,06099
+Perris,City,0656700,Riverside,06065
+Petaluma,City,0656784,Sonoma,06097
+Pico Rivera,City,0656924,Los Angeles,06037
+Piedmont,City,0656938,Alameda,06001
+Pinole,City,0657288,Contra Costa,06013
+Pismo Beach,City,0657414,San Luis Obispo,06079
+Pittsburg,City,0657456,Contra Costa,06013
+Placentia,City,0657526,Orange,06059
+Placerville,City,0657540,El Dorado,06017
+Pleasant Hill,City,0657764,Contra Costa,06013
+Pleasanton,City,0657792,Alameda,06001
+Plymouth,City,0657834,Amador,06005
+Point Arena,City,0657876,Mendocino,06045
+Pomona,City,0658072,Los Angeles,06037
+Porterville,City,0658240,Tulare,06107
+Port Hueneme,City,0658296,Ventura,06111
+Portola,City,0658352,Plumas,06063
+Portola Valley,City,0658380,San Mateo,06081
+Poway,City,0658520,San Diego,06073
+Rancho Cordova,City,0659444,Sacramento,06067
+Rancho Cucamonga,City,0659451,San Bernardino,06071
+Rancho Mirage,City,0659500,Riverside,06065
+Rancho Palos Verdes,City,0659514,Los Angeles,06037
+Rancho Santa Margarita,City,0659587,Orange,06059
+Red Bluff,City,0659892,Tehama,06103
+Redding,City,0659920,Shasta,06089
+Redlands,City,0659962,San Bernardino,06071
+Redondo Beach,City,0660018,Los Angeles,06037
+Redwood City,City,0660102,San Mateo,06081
+Reedley,City,0660242,Fresno,06019
+Rialto,City,0660466,San Bernardino,06071
+Richmond,City,0660620,Contra Costa,06013
+Ridgecrest,City,0660704,Kern,06029
+Rio Dell,City,0660900,Humboldt,06023
+Rio Vista,City,0660984,Solano,06095
+Ripon,City,0661026,San Joaquin,06077
+Riverbank,City,0661068,Stanislaus,06099
+Riverside,City,0662000,Riverside,06065
+Rocklin,City,0662364,Placer,06061
+Rohnert Park,City,0662546,Sonoma,06097
+Rolling Hills,City,0662602,Los Angeles,06037
+Rolling Hills Estates,City,0662644,Los Angeles,06037
+Rosemead,City,0662896,Los Angeles,06037
+Roseville,City,0662938,Placer,06061
+Ross,City,0662980,Marin,06041
+Sacramento,City,0664000,Sacramento,06067
+St. Helena,City,0664140,Napa,06055
+Salinas,City,0664224,Monterey,06053
+San Anselmo,City,0664434,Marin,06041
+San Bernardino,City,0665000,San Bernardino,06071
+San Bruno,City,0665028,San Mateo,06081
+San Buenaventura (Ventura),City,0665042,Ventura,06111
+San Carlos,City,0665070,San Mateo,06081
+San Clemente,City,0665084,Orange,06059
+Sand City,City,0665112,Monterey,06053
+San Diego,City,0666000,San Diego,06073
+San Dimas,City,0666070,Los Angeles,06037
+San Fernando,City,0666140,Los Angeles,06037
+San Francisco,City,0667000,San Francisco,06075
+San Gabriel,City,0667042,Los Angeles,06037
+Sanger,City,0667056,Fresno,06019
+San Jacinto,City,0667112,Riverside,06065
+San Joaquin,City,0667126,Fresno,06019
+San Jose,City,0668000,Santa Clara,06085
+San Juan Bautista,City,0668014,San Benito,06069
+San Juan Capistrano,City,0668028,Orange,06059
+San Leandro,City,0668084,Alameda,06001
+San Luis Obispo,City,0668154,San Luis Obispo,06079
+San Marcos,City,0668196,San Diego,06073
+San Marino,City,0668224,Los Angeles,06037
+San Mateo,City,0668252,San Mateo,06081
+San Pablo,City,0668294,Contra Costa,06013
+San Rafael,City,0668364,Marin,06041
+San Ramon,City,0668378,Contra Costa,06013
+Santa Ana,City,0669000,Orange,06059
+Santa Barbara,City,0669070,Santa Barbara,06083
+Santa Clara,City,0669084,Santa Clara,06085
+Santa Clarita,City,0669088,Los Angeles,06037
+Santa Cruz,City,0669112,Santa Cruz,06087
+Santa Fe Springs,City,0669154,Los Angeles,06037
+Santa Maria,City,0669196,Santa Barbara,06083
+Santa Monica,City,0670000,Los Angeles,06037
+Santa Paula,City,0670042,Ventura,06111
+Santa Rosa,City,0670098,Sonoma,06097
+Santee,City,0670224,San Diego,06073
+Saratoga,City,0670280,Santa Clara,06085
+Sausalito,City,0670364,Marin,06041
+Scotts Valley,City,0670588,Santa Cruz,06087
+Seal Beach,City,0670686,Orange,06059
+Seaside,City,0670742,Monterey,06053
+Sebastopol,City,0670770,Sonoma,06097
+Selma,City,0670882,Fresno,06019
+Shafter,City,0671106,Kern,06029
+Shasta Lake,City,0671225,Shasta,06089
+Sierra Madre,City,0671806,Los Angeles,06037
+Signal Hill,City,0671876,Los Angeles,06037
+Simi Valley,City,0672016,Ventura,06111
+Solana Beach,City,0672506,San Diego,06073
+Soledad,City,0672520,Monterey,06053
+Solvang,City,0672576,Santa Barbara,06083
+Sonoma,City,0672646,Sonoma,06097
+Sonora,City,0672674,Tuolumne,06109
+South El Monte,City,0672996,Los Angeles,06037
+South Gate,City,0673080,Los Angeles,06037
+South Lake Tahoe,City,0673108,El Dorado,06017
+South Pasadena,City,0673220,Los Angeles,06037
+South San Francisco,City,0673262,San Mateo,06081
+Stanton,City,0673962,Orange,06059
+Stockton,City,0675000,San Joaquin,06077
+Suisun City,City,0675630,Solano,06095
+Sunnyvale,City,0677000,Santa Clara,06085
+Susanville,City,0677364,Lassen,06035
+Sutter Creek,City,0677392,Amador,06005
+Taft,City,0677574,Kern,06029
+Tehachapi,City,0678092,Kern,06029
+Tehama,City,0678106,Tehama,06103
+Temecula,City,0678120,Riverside,06065
+Temple City,City,0678148,Los Angeles,06037
+Thousand Oaks,City,0678582,Ventura,06111
+Tiburon,City,0678666,Marin,06041
+Torrance,City,0680000,Los Angeles,06037
+Tracy,City,0680238,San Joaquin,06077
+Trinidad,City,0680448,Humboldt,06023
+Truckee,City,0680588,Nevada,06057
+Tulare,City,0680644,Tulare,06107
+Tulelake,City,0680686,Siskiyou,06093
+Turlock,City,0680812,Stanislaus,06099
+Tustin,City,0680854,Orange,06059
+Twentynine Palms,City,0680994,San Bernardino,06071
+Ukiah,City,0681134,Mendocino,06045
+Union City,City,0681204,Alameda,06001
+Upland,City,0681344,San Bernardino,06071
+Vacaville,City,0681554,Solano,06095
+Vallejo,City,0681666,Solano,06095
+Vernon,City,0682422,Los Angeles,06037
+Victorville,City,0682590,San Bernardino,06071
+Villa Park,City,0682744,Orange,06059
+Visalia,City,0682954,Tulare,06107
+Vista,City,0682996,San Diego,06073
+Walnut,City,0683332,Los Angeles,06037
+Walnut Creek,City,0683346,Contra Costa,06013
+Wasco,City,0683542,Kern,06029
+Waterford,City,0683612,Stanislaus,06099
+Watsonville,City,0683668,Santa Cruz,06087
+Weed,City,0683850,Siskiyou,06093
+West Covina,City,0684200,Los Angeles,06037
+West Hollywood,City,0684410,Los Angeles,06037
+Westlake Village,City,0684438,Los Angeles,06037
+Westminster,City,0684550,Orange,06059
+Westmorland,City,0684606,Imperial,06025
+West Sacramento,City,0684816,Yolo,06113
+Wheatland,City,0685012,Yuba,06115
+Whittier,City,0685292,Los Angeles,06037
+Wildomar,City,0685446,Riverside,06065
+Williams,City,0685586,Colusa,06011
+Willits,City,0685600,Mendocino,06045
+Willows,City,0685684,Glenn,06021
+Windsor,City,0685922,Sonoma,06097
+Winters,City,0686034,Yolo,06113
+Woodlake,City,0686300,Tulare,06107
+Woodland,City,0686328,Yolo,06113
+Woodside,City,0686440,San Mateo,06081
+Yorba Linda,City,0686832,Orange,06059
+Yountville,City,0686930,Napa,06055
+Yreka,City,0686944,Siskiyou,06093
+Yuba City,City,0686972,Sutter,06101
+Yucaipa,City,0687042,San Bernardino,06071
+Yucca Valley,City,0687056,San Bernardino,06071
+Unincorporated Alameda County,Unincorporated County,06001uninc,Alameda,06001
+Unincorporated Alpine County,Unincorporated County,06003uninc,Alpine,06003
+Unincorporated Amador County,Unincorporated County,06005uninc,Amador,06005
+Unincorporated Butte County,Unincorporated County,06007uninc,Butte,06007
+Unincorporated Calaveras County,Unincorporated County,06009uninc,Calaveras,06009
+Unincorporated Colusa County,Unincorporated County,06011uninc,Colusa,06011
+Unincorporated Contra Costa County,Unincorporated County,06013uninc,Contra Costa,06013
+Unincorporated Del Norte County,Unincorporated County,06015uninc,Del Norte,06015
+Unincorporated El Dorado County,Unincorporated County,06017uninc,El Dorado,06017
+Unincorporated Fresno County,Unincorporated County,06019uninc,Fresno,06019
+Unincorporated Glenn County,Unincorporated County,06021uninc,Glenn,06021
+Unincorporated Humboldt County,Unincorporated County,06023uninc,Humboldt,06023
+Unincorporated Imperial County,Unincorporated County,06025uninc,Imperial,06025
+Unincorporated Inyo County,Unincorporated County,06027uninc,Inyo,06027
+Unincorporated Kern County,Unincorporated County,06029uninc,Kern,06029
+Unincorporated Kings County,Unincorporated County,06031uninc,Kings,06031
+Unincorporated Lake County,Unincorporated County,06033uninc,Lake,06033
+Unincorporated Lassen County,Unincorporated County,06035uninc,Lassen,06035
+Unincorporated Los Angeles County,Unincorporated County,06037uninc,Los Angeles,06037
+Unincorporated Madera County,Unincorporated County,06039uninc,Madera,06039
+Unincorporated Marin County,Unincorporated County,06041uninc,Marin,06041
+Unincorporated Mariposa County,Unincorporated County,06043uninc,Mariposa,06043
+Unincorporated Mendocino County,Unincorporated County,06045uninc,Mendocino,06045
+Unincorporated Merced County,Unincorporated County,06047uninc,Merced,06047
+Unincorporated Modoc County,Unincorporated County,06049uninc,Modoc,06049
+Unincorporated Mono County,Unincorporated County,06051uninc,Mono,06051
+Unincorporated Monterey County,Unincorporated County,06053uninc,Monterey,06053
+Unincorporated Napa County,Unincorporated County,06055uninc,Napa,06055
+Unincorporated Nevada County,Unincorporated County,06057uninc,Nevada,06057
+Unincorporated Orange County,Unincorporated County,06059uninc,Orange,06059
+Unincorporated Placer County,Unincorporated County,06061uninc,Placer,06061
+Unincorporated Plumas County,Unincorporated County,06063uninc,Plumas,06063
+Unincorporated Riverside County,Unincorporated County,06065uninc,Riverside,06065
+Unincorporated Sacramento County,Unincorporated County,06067uninc,Sacramento,06067
+Unincorporated San Benito County,Unincorporated County,06069uninc,San Benito,06069
+Unincorporated San Bernardino County,Unincorporated County,06071uninc,San Bernardino,06071
+Unincorporated San Diego County,Unincorporated County,06073uninc,San Diego,06073
+Unincorporated San Francisco County,Unincorporated County,06075uninc,San Francisco,06075
+Unincorporated San Joaquin County,Unincorporated County,06077uninc,San Joaquin,06077
+Unincorporated San Luis Obispo County,Unincorporated County,06079uninc,San Luis Obispo,06079
+Unincorporated San Mateo County,Unincorporated County,06081uninc,San Mateo,06081
+Unincorporated Santa Barbara County,Unincorporated County,06083uninc,Santa Barbara,06083
+Unincorporated Santa Clara County,Unincorporated County,06085uninc,Santa Clara,06085
+Unincorporated Santa Cruz County,Unincorporated County,06087uninc,Santa Cruz,06087
+Unincorporated Shasta County,Unincorporated County,06089uninc,Shasta,06089
+Unincorporated Sierra County,Unincorporated County,06091uninc,Sierra,06091
+Unincorporated Siskiyou County,Unincorporated County,06093uninc,Siskiyou,06093
+Unincorporated Solano County,Unincorporated County,06095uninc,Solano,06095
+Unincorporated Sonoma County,Unincorporated County,06097uninc,Sonoma,06097
+Unincorporated Stanislaus County,Unincorporated County,06099uninc,Stanislaus,06099
+Unincorporated Sutter County,Unincorporated County,06101uninc,Sutter,06101
+Unincorporated Tehama County,Unincorporated County,06103uninc,Tehama,06103
+Unincorporated Trinity County,Unincorporated County,06105uninc,Trinity,06105
+Unincorporated Tulare County,Unincorporated County,06107uninc,Tulare,06107
+Unincorporated Tuolumne County,Unincorporated County,06109uninc,Tuolumne,06109
+Unincorporated Ventura County,Unincorporated County,06111uninc,Ventura,06111
+Unincorporated Yolo County,Unincorporated County,06113uninc,Yolo,06113
+Unincorporated Yuba County,Unincorporated County,06115uninc,Yuba,06115
