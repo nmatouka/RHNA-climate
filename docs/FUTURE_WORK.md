@@ -89,7 +89,30 @@ DOF extends the household series.
 
 ---
 
-### Cross-cutting refinements (smaller, noted in methodology.md §8)
+## 3. Other climate factors identified (available, not yet used)
+
+A review of the CMIP6 server + climateshed layers against the model surfaced
+housing-relevant signals still on the table (all present in existing data):
+
+- **Heat-habitability — partially done.** `src/heat.py` builds `H_j` (warm nights
+  + cooling burden + peak heat + AC access) and it feeds the compound view
+  (methodology §8). It is deliberately **not** a discount component (would
+  double-count the NRI heat-wave term already in `E_j`). If ever wired as a
+  discount, remove `hwav` from `E_j` first.
+- **Post-fire debris flow / landslide** (NRI `lnds`) — climate-linked location
+  constraint for hillside/WUI parcels; a natural 6th compound axis.
+- **Urban heat island** (NLCD `PCT_TREE_CANOPY` / `PCT_IMPERVIOUS`) — a
+  within-jurisdiction siting signal (dense infill in low-canopy tracts is hotter).
+- **Wildfire smoke / air quality** (CalEnviroScreen PM2.5) — habitability.
+- **Snowpack decline** (`ca_snow_historical`) — would sharpen the water layer's
+  surface-supply dimension (currently only aridification).
+- **Compound-hazard as a model effect** (not just a reporting view) — the deeper
+  refinement: the Inland Empire stacks fire+flood+water+heat, and a jurisdiction
+  moderate on each individually may be effectively unbuildable when they combine.
+- **Land subsidence** from overdraft (San Joaquin Valley) — needs InSAR/DWR data
+  (not in climateshed); ties water → physical buildability.
+
+### Cross-cutting refinements (smaller, noted in methodology.md §9)
 - Per-jurisdiction **receiver cap** (small towns can absorb large % gains today).
 - **CA-relative vs national** NRI percentile option for the exposure index.
 - **Income-category** split of the adjustment (baseline has VLI/LI/MOD/AboveMod).

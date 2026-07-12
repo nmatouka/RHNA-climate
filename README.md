@@ -57,8 +57,9 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m src.source_rhna   # normalize HCD baseline -> FIPS
 ./.venv/bin/python -m src.allocate      # 6th-cycle pipeline -> outputs/ + charts
 ./.venv/bin/python -m src.trajectory    # decadal need to 2100 (county DOF baseline)
+./.venv/bin/python -m src.constraints   # compound climate-constraint view
 ./.venv/bin/python -m src.sensitivity   # uncertainty bands
-./.venv/bin/python -m pytest -q         # invariants (14 tests)
+./.venv/bin/python -m pytest -q         # invariants (20 tests)
 ```
 
 ## Headline result
@@ -82,6 +83,14 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 County-resolved DOF growth moves cumulative need **out of SCAG (−10 pp)** into
 Sacramento (SACOG +3.8 pp), the Bay Area, and the Central Valley — a shift the
 uniform taper misses. See `outputs/trajectory_region_compare.csv`.
+
+**Compound climate constraints (each hazard counted once):**
+
+| | Share of 6th-cycle RHNA |
+|---|---|
+| ≥1 high climate constraint (fire/flood/SLR/water/heat) | **39%** |
+| ≥2 stacked | 7% |
+| Epicenter of stacking | **Inland Empire + Coachella Valley** |
 
 Full write-up and caveats in [`docs/methodology.md`](docs/methodology.md);
 planned extensions in [`docs/FUTURE_WORK.md`](docs/FUTURE_WORK.md).

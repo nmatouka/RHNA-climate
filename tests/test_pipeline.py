@@ -139,6 +139,35 @@ def test_water_is_purely_redistributive_and_conserves_pool():
     assert on["water_S"].sum() > 0
 
 
+def test_heat_habitability_bounded_and_desert_peaks():
+    from src.heat import build_heat_habitability
+    master = build_master(verbose=False)
+    h = build_heat_habitability(master).merge(master[["slug", "county"]], on="slug")
+    assert h["H"].between(0, 1).all() and h["H"].notna().all()
+    by_county = h.groupby("county")["H"].mean()
+    # SoCal deserts hot; North Coast cool.
+    assert by_county["Imperial"] > by_county["Humboldt"]
+
+
+def test_compound_constraints_count_each_axis_once():
+    from src.constraints import build_constraints, AXES
+    df = build_constraints(verbose=False, make_chart=False)
+    flags = df[[f"c_{a}" for a in AXES]]
+    # Each axis flag is 0/1 and n_constraints is their sum (0..5) — no axis
+    # counted twice, and heat enters once (via H, not the hwav inside E_j).
+    assert flags.isin([0, 1]).all().all()
+    assert (df["n_constraints"] == flags.sum(axis=1)).all()
+    assert df["n_constraints"].between(0, len(AXES)).all()
+
+
+def test_compound_flags_expected_geography():
+    from src.constraints import build_constraints
+    df = build_constraints(verbose=False, make_chart=False).set_index("name")
+    # Coachella (desert) flags heat; a San Joaquin Valley city flags water.
+    assert df.loc["Coachella", "c_heat"] == 1
+    assert df.loc["Visalia", "c_water"] == 1
+
+
 def test_water_moves_allocation_out_of_overdrafted_valley():
     import copy
     master = build_master(verbose=False)

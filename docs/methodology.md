@@ -114,7 +114,7 @@ w_j        = (1−E_j)^a · population_j^b · (1−W_j)^c   for eligible receive
 received_j = pool · w_j / Σ w
 ```
 The water-headroom exponent `c` is kept **modest (0.5)** — see the imported-supply
-limitation in §8.
+limitation in §9.
 
 ### Result and conservation
 ```
@@ -225,7 +225,53 @@ unmet need), and compounding uncertainty makes late-century decades more
 illustrative than predictive. It shows the *shape and direction* of climate-driven
 need, not a point forecast for 2090.
 
-## 8. Key assumptions and limitations
+## 8. Compound climate-constraint view
+
+Components A–E adjust *how much / where* to build. `src/constraints.py` is a
+separate **reporting layer** that asks a different question: *what share of RHNA
+sits somewhere genuinely hard to build, and where do hazards stack?* It flags
+five **distinct** hazard axes, each counted **once** — so nothing is
+double-counted:
+
+| Axis | Source | "Constrained" cutoff |
+|---|---|---|
+| fire | NRI wildfire (exposure sub-score) | ≥90th pct |
+| flood | NRI inland/coastal flood | ≥90th pct |
+| slr | sea-level-rise exposure | ≥0.40 |
+| water | `W_j` (SGMA + drought + aridification) | ≥0.55 |
+| heat | `H_j` heat-habitability | ≥0.55 |
+
+**Avoiding double-counting.** The acute NRI heat-wave term (`hwav`) already lives
+in the exposure index `E_j`, so heat enters the compound view **only once**, via
+the *habitability* index `H_j` (`src/heat.py`: CMIP6 warm nights + cooling
+degree-days + peak heat + Census-LACE AC-access — deliberately **not** `hwav`).
+Fire/flood use the 90th-pct "very high" cutoff (matching the siting
+`unsafe_percentile`) because California skews high on *national* NRI percentiles —
+a looser cutoff would flag half the state on flood alone.
+
+**Result (6th-cycle baseline):**
+
+| | Jurisdictions | RHNA | % of state |
+|---|---|---|---|
+| water | 135 | 433,962 | 17.4% |
+| flood | 157 | 356,020 | 14.3% |
+| fire | 123 | 174,007 | 7.0% |
+| slr | 53 | 155,906 | 6.2% |
+| heat | 21 | 89,393 | 3.6% |
+| **≥1 axis (union)** | **357** | **976,426** | **39.1%** |
+| ≥2 axes (stacked) | 109 | 166,256 | 6.7% |
+| ≥3 axes | 22 | 66,573 | 2.7% |
+
+**~39% of statewide RHNA carries at least one genuinely-high climate constraint;
+~7% stacks two or more.** The single largest axis is **water** (17%), then flood
+(14%). Crucially, the compound view surfaces what no single axis did: the
+**Inland Empire + Coachella Valley** as the epicenter of *stacked* constraints —
+Unincorporated Riverside (fire+flood+heat), Coachella (flood+water+heat), Perris
+and Menifee (fire+flood+water). These are a growth destination **and** the hardest
+places to build, a tension invisible to any one hazard. Output:
+`outputs/constraints_by_jurisdiction.csv`, `charts/compound_constraints.png`.
+
+## 9. Key assumptions and limitations
 
 - **All tunable parameters live in `config/assumptions.yaml`** and are chosen at
   the conservative end. Sensitivity (`src/sensitivity.py`) sweeps the three most
@@ -269,13 +315,14 @@ need, not a point forecast for 2090.
   no legal/RHNA-methodology constraints (e.g. jobs-housing fit, equity
   adjustments) are modeled.
 
-## 9. Reproduce
+## 10. Reproduce
 
 ```bash
 python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m src.source_rhna     # normalize HCD baseline -> FIPS
 ./.venv/bin/python -m src.allocate        # 6th-cycle pipeline -> outputs/ + charts
 ./.venv/bin/python -m src.trajectory      # decadal need to 2100 -> outputs/trajectory_*
+./.venv/bin/python -m src.constraints     # compound climate-constraint view
 ./.venv/bin/python -m src.sensitivity     # uncertainty bands -> outputs/sensitivity*.csv
 ./.venv/bin/python -m pytest -q           # invariants
 ```

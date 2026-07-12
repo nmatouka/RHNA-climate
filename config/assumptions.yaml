@@ -181,6 +181,38 @@ water:
     # methodology §8 (imported-supply limitation).
     headroom_exponent: 0.5
 
+# ---- Heat-habitability index H_j (src/heat.py) ------------------------------
+# Chronic extreme-heat livability, DISTINCT from the acute NRI heat-wave term
+# already in E_j (uses warm nights / cooling burden / AC gap, not hwav). Feeds
+# the compound-constraint view only — NOT a discount component (would double-
+# count heat against E_j).
+heat:
+  weights:
+    warm_nights: 0.35
+    cdd_65f: 0.30
+    tasmax_peak_f: 0.20
+    ac_gap: 0.15
+
+# ---- Compound climate-constraint view (src/constraints.py) ------------------
+# Flags each DISTINCT hazard axis once, so nothing is double-counted:
+#   fire/flood/slr  <- exposure sub-scores (NRI wfir / ifld+cfld / SLR)
+#   water           <- W_j (SGMA overdraft + drought + aridification)
+#   heat            <- H_j (heat-habitability; NRI hwav is NOT re-counted here)
+# A jurisdiction is "constrained" on an axis if its score exceeds the threshold.
+constraints:
+  # Per-axis cutoffs identify the genuinely-high tail for THAT hazard; they are
+  # not directly comparable across axes. Fire/flood use the 90th-percentile
+  # "very high" cutoff (matching the model's siting unsafe_percentile) because CA
+  # skews high on national NRI percentiles — a lower cutoff would flag half the
+  # state on flood alone. Water/heat are indices (mean ~0.3), so 0.55 is their
+  # elevated tail.
+  thresholds:
+    fire: 0.90      # NRI wildfire percentile /100 (very high)
+    flood: 0.90     # NRI inland/coastal flood percentile /100 (very high)
+    slr: 0.40       # normalized sea-level-rise exposure (~24 cm+)
+    water: 0.55     # water-stress index W_j
+    heat: 0.55      # heat-habitability index H_j
+
 # ---- External in-migration (optional additive term) -------------------------
 # Net climate in-migration to CA from out of state is highly uncertain; default
 # OFF so the statewide increase is driven only by in-state replacement need.

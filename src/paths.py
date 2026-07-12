@@ -18,6 +18,7 @@ CA_SLR = EXTERNAL / "ca_coastal_slr.json"
 GHG_JURISDICTION_TABLE = EXTERNAL / "ghg_jurisdiction_table.csv"
 V2_JURISDICTIONS = EXTERNAL / "v2_jurisdictions.csv"
 SGMA_BY_JURISDICTION = EXTERNAL / "sgma_by_jurisdiction.csv"
+AC_ACCESS_BY_JURISDICTION = EXTERNAL / "ac_access_by_jurisdiction.csv"
 
 ASSUMPTIONS = CONFIG / "assumptions.yaml"
 

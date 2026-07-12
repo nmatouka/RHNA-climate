@@ -123,6 +123,45 @@ def _trajectory_cumulative(statewide) -> None:
     plt.close(fig)
 
 
+def make_constraints_chart(df) -> None:
+    """Two panels: RHNA constrained per axis, and RHNA by number of stacked axes."""
+    paths.CHARTS.mkdir(parents=True, exist_ok=True)
+    axes = ["fire", "flood", "slr", "water", "heat"]
+    tot = df["rhna_baseline"].sum()
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.8))
+
+    per = [(df[df[f"c_{a}"] == 1]["rhna_baseline"].sum()) for a in axes]
+    colors = {"fire": "#c0392b", "flood": "#2980b9", "slr": "#16a085",
+              "water": "#2c7fb8", "heat": "#e67e22"}
+    ax1.bar(axes, per, color=[colors[a] for a in axes])
+    for i, v in enumerate(per):
+        ax1.text(i, v, f"{v/1e3:.0f}k\n{v/tot*100:.0f}%", ha="center", va="bottom", fontsize=8)
+    ax1.set_ylabel("6th-cycle RHNA constrained (units)")
+    ax1.set_title("RHNA constrained by each hazard axis\n(counted once, no double-count)", fontsize=10)
+    ax1.margins(y=0.18)
+
+    # RHNA by number of overlapping constraints.
+    buckets = {"0": 0, "1": 1, "2": 2, "3+": 3}
+    vals = []
+    labels = list(buckets.keys())
+    for lbl, k in buckets.items():
+        if lbl == "3+":
+            vals.append(df[df["n_constraints"] >= 3]["rhna_baseline"].sum())
+        else:
+            vals.append(df[df["n_constraints"] == k]["rhna_baseline"].sum())
+    bar_colors = ["#bdc3c7", "#f1c40f", "#e67e22", "#c0392b"]
+    ax2.bar(labels, vals, color=bar_colors)
+    for i, v in enumerate(vals):
+        ax2.text(i, v, f"{v/1e3:.0f}k\n{v/tot*100:.0f}%", ha="center", va="bottom", fontsize=8)
+    ax2.set_xlabel("Number of climate constraints stacked")
+    ax2.set_ylabel("6th-cycle RHNA (units)")
+    ax2.set_title("Most RHNA faces one constraint;\nfew places stack many", fontsize=10)
+    ax2.margins(y=0.18)
+    fig.tight_layout()
+    fig.savefig(paths.CHARTS / "compound_constraints.png", dpi=130)
+    plt.close(fig)
+
+
 def make_trajectory_compare_chart(cmp) -> None:
     """Regional share shift from uniform -> county-resolved baseline."""
     paths.CHARTS.mkdir(parents=True, exist_ok=True)
