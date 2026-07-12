@@ -5,6 +5,24 @@ build on hooks that already exist in the codebase.
 
 ---
 
+## 0. Water — imported-supply layer (partially done)
+
+**Done:** water as a supply-side siting constraint — component E (`src/water.py`,
+methodology §4/§8). `W_j` blends SGMA basin priority/overdraft (via climateshed's
+own `casgem_basins` lookup), NRI drought, and CMIP6 aridification; it moves
+allocation out of the overdrafted San Joaquin Valley + Sacramento region, purely
+redistributively. Config `water:` (enabled by default).
+
+**Remaining — imported-supply risk.** `W_j` is groundwater-based and under-counts
+reliance on imported water with declining reliability (**Colorado River, State
+Water Project**), so it overstates how water-secure the coastal metros (LA/SF/SD)
+are as *receivers*. Add a per-jurisdiction imported-supply-risk term from **Urban
+Water Management Plan** supply-demand balances (or a coarse Colorado-River /
+SWP-dependence overlay by county). Until then the receiver-side water effect is
+softened (`headroom_exponent` 0.5) and the robust signal is the siting discount.
+
+---
+
 ## 1. External (out-of-state) climate in/out-migration
 
 **Status:** hook present, disabled. `config/assumptions.yaml → external_migration`

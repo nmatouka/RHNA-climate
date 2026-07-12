@@ -17,6 +17,7 @@ NRI_CA_TRACTS = EXTERNAL / "nri_ca_tracts.csv.gz"
 CA_SLR = EXTERNAL / "ca_coastal_slr.json"
 GHG_JURISDICTION_TABLE = EXTERNAL / "ghg_jurisdiction_table.csv"
 V2_JURISDICTIONS = EXTERNAL / "v2_jurisdictions.csv"
+SGMA_BY_JURISDICTION = EXTERNAL / "sgma_by_jurisdiction.csv"
 
 ASSUMPTIONS = CONFIG / "assumptions.yaml"
 

@@ -1,0 +1,541 @@
+slug,sgma_basin,sgma_priority,sgma_critically_overdrafted,hydrologic_region
+adelanto,Upper Mojave River Valley,Very Low,False,South Lahontan
+agoura-hills,Russell Valley,Very Low,False,South Coast
+alameda,,None,False,
+albany,,None,False,
+alhambra,San Gabriel Valley,Very Low,False,South Coast
+aliso-viejo,,None,False,
+alturas,Alturas Area - South Fork Pitt River,Low,False,Sacramento Valley
+amador-city,,None,False,
+american-canyon,,None,False,
+anaheim,Coastal Plain Of Orange County,Medium,False,South Coast
+anderson,Redding Area - Anderson,Medium,False,Sacramento Valley
+angels,,None,False,
+antioch,,None,False,
+apple-valley,Upper Mojave River Valley,Very Low,False,South Lahontan
+arcadia,San Gabriel Valley,Very Low,False,South Coast
+arcata,Mad River Valley - Mad River Lowland,Very Low,False,North Coast
+arroyo-grande,,None,False,
+artesia,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+arvin,San Joaquin Valley - Kern County,High,True,Tulare Lake
+atascadero,,None,False,
+atherton,Santa Clara Valley - San Mateo Plain,Very Low,False,San Francisco Bay
+atwater,San Joaquin Valley - Merced,High,True,San Joaquin River
+auburn,,None,False,
+avalon,,None,False,
+avenal,,None,False,
+azusa,San Gabriel Valley,Very Low,False,South Coast
+bakersfield,San Joaquin Valley - Kern County,High,True,Tulare Lake
+baldwin-park,San Gabriel Valley,Very Low,False,South Coast
+banning,Coachella Valley - San Gorgonio Pass,Medium,False,Colorado River
+barstow,Middle Mojave River Valley,Very Low,False,South Lahontan
+beaumont,,None,False,
+bell,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+bell-gardens,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+bellflower,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+belmont,,None,False,
+belvedere,,None,False,
+benicia,,None,False,
+berkeley,Santa Clara Valley - East Bay Plain,Medium,False,San Francisco Bay
+beverly-hills,Coastal Plain Of Los Angeles - Hollywood,Very Low,False,South Coast
+big-bear-lake,Bear Valley,Very Low,False,South Coast
+biggs,Sacramento Valley - Butte,Medium,False,Sacramento Valley
+bishop,Owens Valley - Owens Valley,Low,False,South Lahontan
+blue-lake,Mad River Valley - Mad River Lowland,Very Low,False,North Coast
+blythe,Palo Verde Valley,Very Low,False,Colorado River
+bradbury,San Gabriel Valley,Very Low,False,South Coast
+brawley,Imperial Valley,Very Low,False,Colorado River
+brea,Coastal Plain Of Orange County,Medium,False,South Coast
+brentwood,San Joaquin Valley - East Contra Costa,Medium,False,San Joaquin River
+brisbane,,None,False,
+buellton,Santa Ynez River Valley,Medium,False,Central Coast
+buena-park,Coastal Plain Of Orange County,Medium,False,South Coast
+burbank,San Fernando Valley,Very Low,False,South Coast
+burlingame,Westside,Very Low,False,San Francisco Bay
+calabasas,,None,False,
+calexico,Imperial Valley,Very Low,False,Colorado River
+california-city,Fremont Valley,Low,False,South Lahontan
+calimesa,Upper Santa Ana Valley - San Timoteo,Very Low,False,South Coast
+calipatria,Imperial Valley,Very Low,False,Colorado River
+calistoga,Napa-Sonoma Valley - Napa Valley,High,False,San Francisco Bay
+camarillo,Pleasant Valley,High,True,South Coast
+campbell,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+canyon-lake,,None,False,
+capitola,Santa Cruz Mid-County,High,True,Central Coast
+carlsbad,,None,False,
+carmel-by-the-sea,,None,False,
+carpinteria,,None,False,
+carson,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+cathedral-city,Coachella Valley - Indio,Medium,False,Colorado River
+ceres,San Joaquin Valley - Turlock,High,False,San Joaquin River
+cerritos,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+chico,Sacramento Valley - Vina,High,False,Sacramento Valley
+chino,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+chino-hills,,None,False,
+chowchilla,San Joaquin Valley - Chowchilla,High,True,San Joaquin River
+chula-vista,Coastal Plain Of San Diego,Low,False,South Coast
+citrus-heights,Sacramento Valley - North American,High,False,Sacramento Valley
+claremont,San Gabriel Valley,Very Low,False,South Coast
+clayton,Clayton Valley,Very Low,False,San Francisco Bay
+clearlake,Clear Lake Cache Formation,Very Low,False,Sacramento Valley
+cloverdale,Alexander Valley - Cloverdale Area,Very Low,False,North Coast
+clovis,San Joaquin Valley - Kings,High,True,Tulare Lake
+coachella,Coachella Valley - Indio,Medium,False,Colorado River
+coalinga,San Joaquin Valley - Pleasant Valley,Medium,False,Tulare Lake
+colfax,,None,False,
+colma,Westside,Very Low,False,San Francisco Bay
+colton,,None,False,
+colusa,Sacramento Valley - Colusa,High,False,Sacramento Valley
+commerce,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+compton,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+concord,Clayton Valley,Very Low,False,San Francisco Bay
+corcoran,San Joaquin Valley - Tulare Lake,High,True,Tulare Lake
+corning,Sacramento Valley - Corning,High,False,Sacramento Valley
+corona,Upper Santa Ana Valley - Temescal,Medium,False,South Coast
+coronado,,None,False,
+corte-madera,Ross Valley,Very Low,False,San Francisco Bay
+costa-mesa,Coastal Plain Of Orange County,Medium,False,South Coast
+cotati,Santa Rosa Valley - Santa Rosa Plain,Medium,False,North Coast
+covina,San Gabriel Valley,Very Low,False,South Coast
+crescent-city,Smith River Plain,Very Low,False,North Coast
+cudahy,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+culver-city,Coastal Plain Of Los Angeles - Santa Monica,Medium,False,South Coast
+cupertino,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+cypress,Coastal Plain Of Orange County,Medium,False,South Coast
+daly-city,,None,False,
+dana-point,,None,False,
+danville,San Ramon Valley,Very Low,False,San Francisco Bay
+davis,Sacramento Valley - Yolo,High,False,Sacramento Valley
+del-mar,,None,False,
+del-rey-oaks,Salinas Valley - Seaside,Very Low,False,Central Coast
+delano,San Joaquin Valley - Kern County,High,True,Tulare Lake
+desert-hot-springs,Coachella Valley - Mission Creek,Medium,False,Colorado River
+diamond-bar,,None,False,
+dinuba,San Joaquin Valley - Kings,High,True,Tulare Lake
+dixon,Sacramento Valley - Solano,Medium,False,Sacramento Valley
+dorris,Butte Valley,Medium,False,North Coast
+dos-palos,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+downey,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+duarte,,None,False,
+dublin,,None,False,
+dunsmuir,,None,False,
+east-palo-alto,Santa Clara Valley - San Mateo Plain,Very Low,False,San Francisco Bay
+eastvale,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+el-cajon,El Cajon Valley,Very Low,False,South Coast
+el-centro,Imperial Valley,Very Low,False,Colorado River
+el-cerrito,,None,False,
+el-monte,San Gabriel Valley,Very Low,False,South Coast
+el-paso-de-robles-paso-robles,Salinas Valley - Paso Robles Area,High,True,Central Coast
+el-segundo,,None,False,
+elk-grove,Sacramento Valley - South American,High,False,Sacramento Valley
+emeryville,Santa Clara Valley - East Bay Plain,Medium,False,San Francisco Bay
+encinitas,,None,False,
+escalon,San Joaquin Valley - Eastern San Joaquin,High,True,San Joaquin River
+escondido,,None,False,
+etna,Scott River Valley,Medium,False,North Coast
+eureka,Eureka Plain,Very Low,False,North Coast
+exeter,San Joaquin Valley - Kaweah,High,True,Tulare Lake
+fairfax,,None,False,
+fairfield,Suisun-Fairfield Valley,Low,False,San Francisco Bay
+farmersville,San Joaquin Valley - Kaweah,High,True,Tulare Lake
+ferndale,Eel River Valley,Medium,False,North Coast
+fillmore,Santa Clara River Valley - Fillmore,High,False,South Coast
+firebaugh,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+folsom,,None,False,
+fontana,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+fort-bragg,Fort Bragg Terrace Area,Very Low,False,North Coast
+fort-jones,Scott River Valley,Medium,False,North Coast
+fortuna,Eel River Valley,Medium,False,North Coast
+foster-city,,None,False,
+fountain-valley,Coastal Plain Of Orange County,Medium,False,South Coast
+fowler,San Joaquin Valley - Kings,High,True,Tulare Lake
+fremont,Santa Clara Valley - Niles Cone,Medium,False,San Francisco Bay
+fresno,San Joaquin Valley - Kings,High,True,Tulare Lake
+fullerton,Coastal Plain Of Orange County,Medium,False,South Coast
+galt,San Joaquin Valley - Cosumnes,Medium,False,San Joaquin River
+garden-grove,Coastal Plain Of Orange County,Medium,False,South Coast
+gardena,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+gilroy,Gilroy-Hollister Valley - Llagas Area,High,False,Central Coast
+glendale,,None,False,
+glendora,San Gabriel Valley,Very Low,False,South Coast
+goleta,Goleta,Very Low,False,Central Coast
+gonzales,Salinas Valley - East Side Aquifer,High,False,Central Coast
+grand-terrace,Upper Santa Ana Valley - Riverside-Arlington,Very Low,False,South Coast
+grass-valley,,None,False,
+greenfield,Salinas Valley - Forebay Aquifer,Medium,False,Central Coast
+gridley,Sacramento Valley - Butte,Medium,False,Sacramento Valley
+grover-beach,Santa Maria River Valley - Santa Maria,Very Low,False,Central Coast
+guadalupe,Santa Maria River Valley - Santa Maria,Very Low,False,Central Coast
+gustine,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+half-moon-bay,Half Moon Bay Terrace,Very Low,False,San Francisco Bay
+hanford,San Joaquin Valley - Tulare Lake,High,True,Tulare Lake
+hawaiian-gardens,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+hawthorne,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+hayward,Santa Clara Valley - Niles Cone,Medium,False,San Francisco Bay
+healdsburg,Santa Rosa Valley - Healdsburg Area,Very Low,False,North Coast
+hemet,San Jacinto,High,False,South Coast
+hercules,,None,False,
+hermosa-beach,,None,False,
+hesperia,Upper Mojave River Valley,Very Low,False,South Lahontan
+hidden-hills,,None,False,
+highland,Upper Santa Ana Valley - San Bernardino,Very Low,False,South Coast
+hillsborough,,None,False,
+hollister,Gilroy-Hollister Valley - North San Benito,Medium,False,Central Coast
+holtville,Imperial Valley,Very Low,False,Colorado River
+hughson,San Joaquin Valley - Turlock,High,False,San Joaquin River
+huntington-beach,Coastal Plain Of Orange County,Medium,False,South Coast
+huntington-park,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+huron,San Joaquin Valley - Westside,High,True,Tulare Lake
+imperial,Imperial Valley,Very Low,False,Colorado River
+imperial-beach,Coastal Plain Of San Diego,Low,False,South Coast
+indian-wells,Coachella Valley - Indio,Medium,False,Colorado River
+indio,Coachella Valley - Indio,Medium,False,Colorado River
+industry,San Gabriel Valley,Very Low,False,South Coast
+inglewood,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+ione,San Joaquin Valley - Cosumnes,Medium,False,San Joaquin River
+irvine,Coastal Plain Of Orange County,Medium,False,South Coast
+irwindale,San Gabriel Valley,Very Low,False,South Coast
+isleton,Sacramento Valley - Solano,Medium,False,Sacramento Valley
+jackson,,None,False,
+jurupa-valley,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+kerman,San Joaquin Valley - Kings,High,True,Tulare Lake
+king-city,Salinas Valley - Upper Valley Aquifer,Medium,False,Central Coast
+kingsburg,San Joaquin Valley - Kings,High,True,Tulare Lake
+la-ca-ada-flintridge,Raymond,Very Low,False,South Coast
+la-habra,Coastal Plain Of Orange County,Medium,False,South Coast
+la-habra-heights,,None,False,
+la-mesa,,None,False,
+la-mirada,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+la-palma,Coastal Plain Of Orange County,Medium,False,South Coast
+la-puente,San Gabriel Valley,Very Low,False,South Coast
+la-quinta,Coachella Valley - Indio,Medium,False,Colorado River
+la-verne,San Gabriel Valley,Very Low,False,South Coast
+lafayette,,None,False,
+laguna-beach,,None,False,
+laguna-hills,,None,False,
+laguna-niguel,,None,False,
+laguna-woods,,None,False,
+lake-elsinore,Elsinore - Elsinore Valley,Medium,False,South Coast
+lake-forest,Coastal Plain Of Orange County,Medium,False,South Coast
+lakeport,Scotts Valley,Very Low,False,Sacramento Valley
+lakewood,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+lancaster,Antelope Valley,Very Low,False,South Lahontan
+larkspur,Ross Valley,Very Low,False,San Francisco Bay
+lathrop,San Joaquin Valley - Tracy,Medium,False,San Joaquin River
+lawndale,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+lemon-grove,,None,False,
+lemoore,San Joaquin Valley - Tulare Lake,High,True,Tulare Lake
+lincoln,Sacramento Valley - North American,High,False,Sacramento Valley
+lindsay,San Joaquin Valley - Kaweah,High,True,Tulare Lake
+live-oak,Sacramento Valley - Sutter,Medium,False,Sacramento Valley
+livermore,Livermore Valley,Medium,False,San Francisco Bay
+livingston,San Joaquin Valley - Merced,High,True,San Joaquin River
+lodi,San Joaquin Valley - Eastern San Joaquin,High,True,San Joaquin River
+loma-linda,Upper Santa Ana Valley - San Bernardino,Very Low,False,South Coast
+lomita,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+lompoc,Santa Ynez River Valley,Medium,False,Central Coast
+long-beach,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+loomis,,None,False,
+los-alamitos,Coastal Plain Of Orange County,Medium,False,South Coast
+los-altos,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+los-altos-hills,,None,False,
+los-angeles,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+los-banos,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+los-gatos,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+loyalton,Sierra Valley - Sierra Valley,Medium,False,Sacramento Valley
+lynwood,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+madera,San Joaquin Valley - Madera,High,True,San Joaquin River
+malibu,,None,False,
+mammoth-lakes,,None,False,
+manhattan-beach,,None,False,
+manteca,San Joaquin Valley - Eastern San Joaquin,High,True,San Joaquin River
+maricopa,San Joaquin Valley - Kern County,High,True,Tulare Lake
+marina,Salinas Valley - Monterey,Medium,False,Central Coast
+martinez,,None,False,
+marysville,Sacramento Valley - North Yuba,Medium,False,Sacramento Valley
+maywood,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+mcfarland,San Joaquin Valley - Kern County,High,True,Tulare Lake
+mendota,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+menifee,San Jacinto,High,False,South Coast
+menlo-park,,None,False,
+merced,San Joaquin Valley - Merced,High,True,San Joaquin River
+mill-valley,,None,False,
+millbrae,Westside,Very Low,False,San Francisco Bay
+milpitas,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+mission-viejo,,None,False,
+modesto,San Joaquin Valley - Modesto,High,False,San Joaquin River
+monrovia,San Gabriel Valley,Very Low,False,South Coast
+montague,Shasta Valley,Medium,False,North Coast
+montclair,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+monte-sereno,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+montebello,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+monterey,,None,False,
+monterey-park,,None,False,
+moorpark,Las Posas Valley,High,False,South Coast
+moraga,,None,False,
+moreno-valley,San Jacinto,High,False,South Coast
+morgan-hill,Gilroy-Hollister Valley - Llagas Area,High,False,Central Coast
+morro-bay,Morro Valley,Very Low,False,Central Coast
+mount-shasta,,None,False,
+mountain-view,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+murrieta,Temecula Valley,Very Low,False,South Coast
+napa,Napa-Sonoma Valley - Napa Valley,High,False,San Francisco Bay
+national-city,,None,False,
+needles,Needles Valley,Very Low,False,Colorado River
+nevada-city,,None,False,
+newark,Santa Clara Valley - Niles Cone,Medium,False,San Francisco Bay
+newman,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+newport-beach,,None,False,
+norco,Upper Santa Ana Valley - Temescal,Medium,False,South Coast
+norwalk,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+novato,Novato Valley,Low,False,San Francisco Bay
+oakdale,San Joaquin Valley - Modesto,High,False,San Joaquin River
+oakland,Santa Clara Valley - East Bay Plain,Medium,False,San Francisco Bay
+oakley,San Joaquin Valley - East Contra Costa,Medium,False,San Joaquin River
+oceanside,,None,False,
+ojai,Ojai Valley,High,False,South Coast
+ontario,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+orange,Coastal Plain Of Orange County,Medium,False,South Coast
+orange-cove,San Joaquin Valley - Kings,High,True,Tulare Lake
+orinda,,None,False,
+orland,Sacramento Valley - Colusa,High,False,Sacramento Valley
+oroville,Sacramento Valley - Wyandotte Creek,Medium,False,Sacramento Valley
+oxnard,Santa Clara River Valley - Oxnard,High,True,South Coast
+pacific-grove,,None,False,
+pacifica,,None,False,
+palm-desert,Coachella Valley - Indio,Medium,False,Colorado River
+palm-springs,,None,False,
+palmdale,Antelope Valley,Very Low,False,South Lahontan
+palo-alto,Santa Clara Valley - San Mateo Plain,Very Low,False,San Francisco Bay
+palos-verdes-estates,,None,False,
+paradise,,None,False,
+paramount,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+parlier,San Joaquin Valley - Kings,High,True,Tulare Lake
+pasadena,Raymond,Very Low,False,South Coast
+patterson,San Joaquin Valley - Delta-Mendota,High,True,San Joaquin River
+perris,San Jacinto,High,False,South Coast
+petaluma,Petaluma Valley,Medium,False,San Francisco Bay
+pico-rivera,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+piedmont,,None,False,
+pinole,,None,False,
+pismo-beach,,None,False,
+pittsburg,Pittsburg Plain,Very Low,False,San Francisco Bay
+placentia,Coastal Plain Of Orange County,Medium,False,South Coast
+placerville,,None,False,
+pleasant-hill,Ygnacio Valley,Very Low,False,San Francisco Bay
+pleasanton,Livermore Valley,Medium,False,San Francisco Bay
+plymouth,,None,False,
+point-arena,Fort Ross Terrace Deposits,Very Low,False,North Coast
+pomona,San Gabriel Valley,Very Low,False,South Coast
+port-hueneme,Santa Clara River Valley - Oxnard,High,True,South Coast
+porterville,San Joaquin Valley - Tule,High,True,Tulare Lake
+portola,Humbug Valley,Very Low,False,Sacramento Valley
+portola-valley,,None,False,
+poway,,None,False,
+rancho-cordova,Sacramento Valley - South American,High,False,Sacramento Valley
+rancho-cucamonga,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+rancho-mirage,Coachella Valley - Indio,Medium,False,Colorado River
+rancho-palos-verdes,,None,False,
+rancho-santa-margarita,San Juan Valley,Very Low,False,South Coast
+red-bluff,Sacramento Valley - Red Bluff,Medium,False,Sacramento Valley
+redding,Redding Area - Anderson,Medium,False,Sacramento Valley
+redlands,Upper Santa Ana Valley - San Bernardino,Very Low,False,South Coast
+redondo-beach,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+redwood-city,Santa Clara Valley - San Mateo Plain,Very Low,False,San Francisco Bay
+reedley,San Joaquin Valley - Kings,High,True,Tulare Lake
+rialto,Upper Santa Ana Valley - Rialto-Colton,Very Low,False,South Coast
+richmond,Santa Clara Valley - East Bay Plain,Medium,False,San Francisco Bay
+ridgecrest,Indian Wells Valley,High,True,South Lahontan
+rio-dell,Eel River Valley,Medium,False,North Coast
+rio-vista,Sacramento Valley - Solano,Medium,False,Sacramento Valley
+ripon,San Joaquin Valley - Eastern San Joaquin,High,True,San Joaquin River
+riverbank,San Joaquin Valley - Modesto,High,False,San Joaquin River
+riverside,Upper Santa Ana Valley - Riverside-Arlington,Very Low,False,South Coast
+rocklin,Sacramento Valley - North American,High,False,Sacramento Valley
+rohnert-park,Santa Rosa Valley - Santa Rosa Plain,Medium,False,North Coast
+rolling-hills,,None,False,
+rolling-hills-estates,,None,False,
+rosemead,San Gabriel Valley,Very Low,False,South Coast
+roseville,Sacramento Valley - North American,High,False,Sacramento Valley
+ross,,None,False,
+sacramento,Sacramento Valley - South American,High,False,Sacramento Valley
+salinas,Salinas Valley - East Side Aquifer,High,False,Central Coast
+san-anselmo,,None,False,
+san-bernardino,Upper Santa Ana Valley - San Bernardino,Very Low,False,South Coast
+san-bruno,Westside,Very Low,False,San Francisco Bay
+san-buenaventura-ventura,Santa Clara River Valley - Mound,High,False,South Coast
+san-carlos,Santa Clara Valley - San Mateo Plain,Very Low,False,San Francisco Bay
+san-clemente,,None,False,
+san-diego,,None,False,
+san-dimas,San Gabriel Valley,Very Low,False,South Coast
+san-fernando,San Fernando Valley,Very Low,False,South Coast
+san-francisco,,None,False,
+san-gabriel,San Gabriel Valley,Very Low,False,South Coast
+san-jacinto,San Jacinto,High,False,South Coast
+san-joaquin,San Joaquin Valley - Kings,High,True,Tulare Lake
+san-jose,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+san-juan-bautista,Gilroy-Hollister Valley - North San Benito,Medium,False,Central Coast
+san-juan-capistrano,San Juan Valley,Very Low,False,South Coast
+san-leandro,Santa Clara Valley - East Bay Plain,Medium,False,San Francisco Bay
+san-luis-obispo,,None,False,
+san-marcos,,None,False,
+san-marino,San Gabriel Valley,Very Low,False,South Coast
+san-mateo,Santa Clara Valley - San Mateo Plain,Very Low,False,San Francisco Bay
+san-pablo,Santa Clara Valley - East Bay Plain,Medium,False,San Francisco Bay
+san-rafael,,None,False,
+san-ramon,,None,False,
+sand-city,,None,False,
+sanger,San Joaquin Valley - Kings,High,True,Tulare Lake
+santa-ana,Coastal Plain Of Orange County,Medium,False,South Coast
+santa-barbara,Santa Barbara,Very Low,False,Central Coast
+santa-clara,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+santa-clarita,Santa Clara River Valley - Santa Clara River Valley East,High,False,South Coast
+santa-cruz,West Santa Cruz Terrace,Very Low,False,Central Coast
+santa-fe-springs,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+santa-maria,Santa Maria River Valley - Santa Maria,Very Low,False,Central Coast
+santa-monica,Coastal Plain Of Los Angeles - Santa Monica,Medium,False,South Coast
+santa-paula,Santa Clara River Valley - Santa Paula,Very Low,False,South Coast
+santa-rosa,Santa Rosa Valley - Santa Rosa Plain,Medium,False,North Coast
+santee,,None,False,
+saratoga,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+sausalito,,None,False,
+scotts-valley,Santa Margarita,Medium,False,Central Coast
+seal-beach,Coastal Plain Of Orange County,Medium,False,South Coast
+seaside,Salinas Valley - Seaside,Very Low,False,Central Coast
+sebastopol,Santa Rosa Valley - Santa Rosa Plain,Medium,False,North Coast
+selma,San Joaquin Valley - Kings,High,True,Tulare Lake
+shafter,San Joaquin Valley - Kern County,High,True,Tulare Lake
+shasta-lake,,None,False,
+sierra-madre,Raymond,Very Low,False,South Coast
+signal-hill,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+simi-valley,Simi Valley,Very Low,False,South Coast
+solana-beach,,None,False,
+soledad,Salinas Valley - Forebay Aquifer,Medium,False,Central Coast
+solvang,,None,False,
+sonoma,Napa-Sonoma Valley - Sonoma Valley,High,False,San Francisco Bay
+sonora,,None,False,
+south-el-monte,San Gabriel Valley,Very Low,False,South Coast
+south-gate,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+south-lake-tahoe,Tahoe Valley - Tahoe South,Medium,False,North Lahontan
+south-pasadena,San Gabriel Valley,Very Low,False,South Coast
+south-san-francisco,,None,False,
+st-helena,Napa-Sonoma Valley - Napa Valley,High,False,San Francisco Bay
+stanton,Coastal Plain Of Orange County,Medium,False,South Coast
+stockton,San Joaquin Valley - Eastern San Joaquin,High,True,San Joaquin River
+suisun-city,Suisun-Fairfield Valley,Low,False,San Francisco Bay
+sunnyvale,Santa Clara Valley - Santa Clara,High,False,San Francisco Bay
+susanville,Honey Lake Valley,Low,False,Sacramento Valley
+sutter-creek,,None,False,
+taft,San Joaquin Valley - Kern County,High,True,Tulare Lake
+tehachapi,Tehachapi Valley West,Very Low,False,Tulare Lake
+tehama,Sacramento Valley - Red Bluff,Medium,False,Sacramento Valley
+temecula,Temecula Valley,Very Low,False,South Coast
+temple-city,San Gabriel Valley,Very Low,False,South Coast
+thousand-oaks,,None,False,
+tiburon,,None,False,
+torrance,Coastal Plain Of Los Angeles - West Coast,Very Low,False,South Coast
+tracy,San Joaquin Valley - Tracy,Medium,False,San Joaquin River
+trinidad,Big Lagoon Area,Very Low,False,North Coast
+truckee,Martis Valley,Very Low,False,North Lahontan
+tulare,San Joaquin Valley - Kaweah,High,True,Tulare Lake
+tulelake,Klamath River Valley - Tulelake,Medium,False,North Coast
+turlock,San Joaquin Valley - Turlock,High,False,San Joaquin River
+tustin,Coastal Plain Of Orange County,Medium,False,South Coast
+twentynine-palms,Twentynine Palms Valley,Very Low,False,Colorado River
+ukiah,Ukiah Valley,Medium,False,North Coast
+union-city,Santa Clara Valley - Niles Cone,Medium,False,San Francisco Bay
+upland,Upper Santa Ana Valley - Chino,Very Low,False,South Coast
+vacaville,Sacramento Valley - Solano,Medium,False,Sacramento Valley
+vallejo,Napa-Sonoma Valley - Napa-Sonoma Lowlands,Very Low,False,San Francisco Bay
+vernon,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+victorville,Upper Mojave River Valley,Very Low,False,South Lahontan
+villa-park,Coastal Plain Of Orange County,Medium,False,South Coast
+visalia,San Joaquin Valley - Kaweah,High,True,Tulare Lake
+vista,,None,False,
+walnut,,None,False,
+walnut-creek,,None,False,
+wasco,San Joaquin Valley - Kern County,High,True,Tulare Lake
+waterford,San Joaquin Valley - Modesto,High,False,San Joaquin River
+watsonville,Corralitos - Pajaro Valley,High,True,Central Coast
+weed,,None,False,
+west-covina,,None,False,
+west-hollywood,Coastal Plain Of Los Angeles - Hollywood,Very Low,False,South Coast
+west-sacramento,Sacramento Valley - Yolo,High,False,Sacramento Valley
+westlake-village,Thousand Oaks Area,Very Low,False,South Coast
+westminster,Coastal Plain Of Orange County,Medium,False,South Coast
+westmorland,Imperial Valley,Very Low,False,Colorado River
+wheatland,Sacramento Valley - South Yuba,High,False,Sacramento Valley
+whittier,Coastal Plain Of Los Angeles - Central,Very Low,False,South Coast
+wildomar,,None,False,
+williams,Sacramento Valley - Colusa,High,False,Sacramento Valley
+willits,Little Lake Valley,Very Low,False,North Coast
+willows,Sacramento Valley - Colusa,High,False,Sacramento Valley
+windsor,Santa Rosa Valley - Santa Rosa Plain,Medium,False,North Coast
+winters,Sacramento Valley - Yolo,High,False,Sacramento Valley
+woodlake,San Joaquin Valley - Kaweah,High,True,Tulare Lake
+woodland,Sacramento Valley - Yolo,High,False,Sacramento Valley
+woodside,,None,False,
+yorba-linda,,None,False,
+yountville,Napa-Sonoma Valley - Napa Valley,High,False,San Francisco Bay
+yreka,,None,False,
+yuba-city,Sacramento Valley - Sutter,Medium,False,Sacramento Valley
+yucaipa,Upper Santa Ana Valley - Yucaipa,High,False,South Coast
+yucca-valley,,None,False,
+unincorporated-sierra-county,,None,False,
+unincorporated-sacramento-county,San Joaquin Valley - Cosumnes,Medium,False,San Joaquin River
+unincorporated-santa-barbara-county,Santa Ynez River Valley,Medium,False,Central Coast
+unincorporated-calaveras-county,,None,False,
+unincorporated-ventura-county,,None,False,
+unincorporated-los-angeles-county,,None,False,
+unincorporated-sonoma-county,,None,False,
+unincorporated-kings-county,San Joaquin Valley - Tulare Lake,High,True,Tulare Lake
+unincorporated-san-diego-county,,None,False,
+unincorporated-placer-county,,None,False,
+unincorporated-san-francisco-county,,None,False,
+unincorporated-marin-county,,None,False,
+unincorporated-mariposa-county,,None,False,
+unincorporated-lassen-county,,None,False,
+unincorporated-napa-county,,None,False,
+unincorporated-shasta-county,,None,False,
+unincorporated-monterey-county,,None,False,
+unincorporated-trinity-county,,None,False,
+unincorporated-mendocino-county,,None,False,
+unincorporated-inyo-county,Hidden Valley,Very Low,False,South Lahontan
+unincorporated-mono-county,Mono Valley,Very Low,False,South Lahontan
+unincorporated-tuolumne-county,,None,False,
+unincorporated-solano-county,Sacramento Valley - Solano,Medium,False,Sacramento Valley
+unincorporated-san-bernardino-county,Kelso Valley,Very Low,False,South Lahontan
+unincorporated-contra-costa-county,,None,False,
+unincorporated-alpine-county,,None,False,
+unincorporated-el-dorado-county,,None,False,
+unincorporated-yolo-county,Sacramento Valley - Yolo,High,False,Sacramento Valley
+unincorporated-yuba-county,,None,False,
+unincorporated-san-benito-county,,None,False,
+unincorporated-humboldt-county,,None,False,
+unincorporated-riverside-county,Chuckwalla Valley,Very Low,False,Colorado River
+unincorporated-kern-county,,None,False,
+unincorporated-colusa-county,,None,False,
+unincorporated-del-norte-county,,None,False,
+unincorporated-modoc-county,,None,False,
+unincorporated-fresno-county,,None,False,
+unincorporated-madera-county,,None,False,
+unincorporated-santa-clara-county,,None,False,
+unincorporated-tehama-county,Sacramento Valley - Red Bluff,Medium,False,Sacramento Valley
+unincorporated-san-joaquin-county,San Joaquin Valley - Eastern San Joaquin,High,True,San Joaquin River
+unincorporated-alameda-county,Livermore Valley,Medium,False,San Francisco Bay
+unincorporated-nevada-county,,None,False,
+unincorporated-butte-county,,None,False,
+unincorporated-merced-county,San Joaquin Valley - Merced,High,True,San Joaquin River
+unincorporated-tulare-county,,None,False,
+unincorporated-stanislaus-county,San Joaquin Valley - Turlock,High,False,San Joaquin River
+unincorporated-orange-county,,None,False,
+unincorporated-imperial-county,Imperial Valley,Very Low,False,Colorado River
+unincorporated-sutter-county,Sacramento Valley - Sutter,Medium,False,Sacramento Valley
+unincorporated-amador-county,,None,False,
+unincorporated-lake-county,,None,False,
+unincorporated-plumas-county,,None,False,
+unincorporated-san-mateo-county,,None,False,
+unincorporated-siskiyou-county,Shasta Valley,Medium,False,North Coast
+unincorporated-santa-cruz-county,,None,False,
+unincorporated-glenn-county,,None,False,
+unincorporated-san-luis-obispo-county,,None,False,

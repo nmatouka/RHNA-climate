@@ -102,6 +102,7 @@ def run(verbose: bool = True, make_charts: bool = True,
             "occ_housing": stock.reindex(B0.index).values,  # start-of-decade stock
             "population": (pop0 * (stock / stock0)).reindex(B0.index).values,
             "unsafe_share": base["unsafe_share"].values,    # static
+            "W": base["W"].values,                          # water stress (static)
             "E": ex["E"].reindex(B0.index).values,
             "annual_loss_rate": ex["annual_loss_rate"].reindex(B0.index).values,
         })

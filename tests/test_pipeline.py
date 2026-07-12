@@ -115,6 +115,45 @@ def test_county_multipliers_bounded_and_complete():
     assert len(jm) == len(master) and jm.notna().all().all()
 
 
+def test_water_index_bounded_and_complete():
+    master = build_master(verbose=False)
+    assert master["W"].between(0, 1).all()
+    assert master["W"].notna().all()
+    # critically-overdrafted San Joaquin Valley scores high; wet North Coast low.
+    by_county = master.groupby("county")["W"].mean()
+    assert by_county["Fresno"] > by_county["Humboldt"]
+
+
+def test_water_is_purely_redistributive_and_conserves_pool():
+    import copy
+    master = build_master(verbose=False)
+    cfg_on = load_assumptions()
+    cfg_off = copy.deepcopy(cfg_on)
+    cfg_off["water"]["enabled"] = False
+    on = apply_model(master, cfg_on)
+    off = apply_model(master, cfg_off)
+    # Water relocates need; it does not change the statewide total.
+    assert np.isclose(on["rhna_adjusted"].sum(), off["rhna_adjusted"].sum(), rtol=1e-6)
+    # Pool still conserved with the water-siting term included.
+    assert np.isclose(on["received"].sum(), on["removed"].sum(), rtol=1e-6)
+    assert on["water_S"].sum() > 0
+
+
+def test_water_moves_allocation_out_of_overdrafted_valley():
+    import copy
+    master = build_master(verbose=False)
+    cfg_on = load_assumptions()
+    cfg_off = copy.deepcopy(cfg_on)
+    cfg_off["water"]["enabled"] = False
+    on = apply_model(master, cfg_on).set_index("slug")
+    off = apply_model(master, cfg_off).set_index("slug")
+    delta = (on["rhna_adjusted"] - off["rhna_adjusted"])
+    m = master.set_index("slug")
+    # San Joaquin Valley (overdrafted) loses allocation once water is on.
+    val = m["county"].isin(["Fresno", "Kern", "San Joaquin", "Stanislaus", "Merced"])
+    assert delta[val].sum() < 0
+
+
 def test_county_resolution_shifts_share_inland():
     # The signature refinement: DOF growth moves need share OUT of SCAG (slow-
     # growing coastal SoCal) toward Sacramento/Central Valley.

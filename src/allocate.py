@@ -27,9 +27,10 @@ def run(verbose: bool = True, make_charts: bool = True) -> dict:
 
     # ---- jurisdiction output ----
     jcols = ["slug", "name", "juris_type", "county", "region", "population",
-             "occ_housing", "E", "annual_loss_rate", "unsafe_share",
-             "rhna_baseline", "repl_R", "displace_D", "siting_S", "removed",
-             "received", "is_receiver", "rhna_adjusted", "delta", "delta_pct"]
+             "occ_housing", "E", "W", "annual_loss_rate", "unsafe_share",
+             "rhna_baseline", "repl_R", "displace_D", "siting_S", "water_S",
+             "removed", "received", "is_receiver", "rhna_adjusted", "delta",
+             "delta_pct"]
     juris = adj[jcols].sort_values("rhna_adjusted", ascending=False)
     juris.to_csv(paths.ALLOC_JURISDICTION, index=False)
 
@@ -40,6 +41,7 @@ def run(verbose: bool = True, make_charts: bool = True) -> dict:
                    replacement=("repl_R", "sum"),
                    displaced_out=("displace_D", "sum"),
                    siting_moved=("siting_S", "sum"),
+                   water_moved=("water_S", "sum"),
                    received=("received", "sum"),
                    n_juris=("slug", "count"))
               .reset_index())
@@ -57,6 +59,7 @@ def run(verbose: bool = True, make_charts: bool = True) -> dict:
         "baseline_total": tot_base,
         "adjusted_total": tot_adj,
         "replacement_total": adj["repl_R"].sum(),
+        "water_moved": adj["water_S"].sum(),
         "redistributed_pool": adj["removed"].sum(),
         "increase": tot_adj - tot_base,
         "increase_pct": (tot_adj - tot_base) / tot_base * 100.0,
@@ -99,6 +102,7 @@ def _print_summary(statewide, region, juris) -> None:
     print(f"  Increase (replacement need):{s['increase']:>12,.0f}  "
           f"(+{s['increase_pct']:.1f}%)")
     print(f"  Redistributed pool:         {s['redistributed_pool']:>12,.0f}")
+    print(f"    of which water-siting:    {s['water_moved']:>12,.0f}")
     print("-" * 66)
     print("  Biggest gainers (units):")
     for _, r in juris.nlargest(5, "delta").iterrows():

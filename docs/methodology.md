@@ -91,23 +91,39 @@ S_j = B_j · unsafe_share_j · move_fraction
 are very-high (≥90th pct) wildfire or flood hazard. Only `move_fraction` (50%)
 of that share is actually moved (infill/retrofit keeps the rest) — conservative.
 
-### C. Receiver capture — redistributes
-The pool of units leaving hazardous places is captured by climate-resilient
-jurisdictions:
+### E. Water-siting discount `Sw_j` — redistributes (supply-side)
+Water constrains *where* housing can be built, not how much is needed, so it acts
+like a supply-driven siting discount:
 ```
-removed_j  = min(S_j + D_j, B_j)          # can't remove more than allocated
+Sw_j = B_j · max_move · clip((W_j − 0.55)/(1−0.55), 0, 1) ^ 1.5
+```
+`W_j` (0 = secure → 1 = constrained) is a renormalized blend of **SGMA basin
+priority/critical-overdraft** (40%), **NRI drought risk** (35%), and **CMIP6
+aridification** (25%) — built entirely from existing data (`src/water.py`),
+with the SGMA basin assignment produced by reusing climateshed's own
+`casgem_basins` lookup (`scripts/extract_sgma_by_jurisdiction.py`). Only stress
+above 0.55 is discounted; `max_move` (25%) caps it.
+
+### C. Receiver capture — redistributes
+The pool of units leaving hazardous / water-constrained places is captured by
+climate-resilient, water-secure jurisdictions:
+```
+removed_j  = min(S_j + D_j + Sw_j, B_j)   # can't remove more than allocated
 pool       = Σ removed_j
-w_j        = (1−E_j)^a · population_j^b   for eligible receivers (E_j < 0.5), else 0
+w_j        = (1−E_j)^a · population_j^b · (1−W_j)^c   for eligible receivers, else 0
 received_j = pool · w_j / Σ w
 ```
+The water-headroom exponent `c` is kept **modest (0.5)** — see the imported-supply
+limitation in §8.
 
 ### Result and conservation
 ```
 B'_j = B_j − removed_j + received_j + R_j
 ```
 The redistributed pool nets to zero (`Σ received = Σ removed`), so the statewide
-total rises **only** by replacement need: `Σ B'_j = Σ B_j + Σ R_j`. This identity
-is asserted at runtime and in the test suite.
+total rises **only** by replacement need: `Σ B'_j = Σ B_j + Σ R_j`. Water is purely
+redistributive — it leaves the statewide total unchanged. This identity is
+asserted at runtime and in the test suite.
 
 ## 5. Cascade
 
@@ -227,6 +243,25 @@ need, not a point forecast for 2090.
 - **Replacement is assigned in place.** Housing lost in *j* is counted as need in
   *j*; the model does not decide whether to rebuild elsewhere (that would be a
   managed-retreat extension).
+- **External (out-of-state) climate in-migration is OFF by default** — the
+  statewide increase is driven entirely by in-state replacement need. Enabling it
+  (`external_migration`) adds an additive term distributed to receivers.
+- **Water (component E) is a contained, redistributive constraint.** It moves
+  ~19,400 units (with `move_fraction`) out of water-constrained jurisdictions and
+  leaves the statewide total unchanged. The signal is strong where it should be —
+  allocation flows **out of the overdrafted San Joaquin Valley + Sacramento region**
+  (Fresno, Kern, San Joaquin, Stanislaus, Merced; SACOG). Statewide, projected
+  growth and water stress are ~uncorrelated (r≈0), so water refines the geography
+  rather than the totals.
+- **`W_j` under-counts imported-supply risk (key water caveat).** It is a
+  *groundwater*-overdraft + drought + aridification index. It does **not** capture
+  reliance on imported water with declining reliability (Colorado River, State
+  Water Project), so it scores coastal metros (LA, SF, San Diego) as more
+  water-secure *receivers* than they really are. The **siting discount** (moving
+  out of overdrafted basins) is the robust part; the receiver-side reallocation to
+  the coast is deliberately softened (`headroom_exponent` 0.5) and should be read
+  cautiously. Per-jurisdiction imported-supply / UWMP supply-demand balance is the
+  natural next data layer (see `FUTURE_WORK.md`).
 - **External (out-of-state) climate in-migration is OFF by default** — the
   statewide increase is driven entirely by in-state replacement need. Enabling it
   (`external_migration`) adds an additive term distributed to receivers.

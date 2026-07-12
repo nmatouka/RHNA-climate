@@ -53,7 +53,8 @@ def rollup_nri(spine: pd.DataFrame) -> pd.DataFrame:
         if len(sub) == 0 or sub["BUILDVALUE"].sum() <= 0:
             out.append(
                 {"slug": row["slug"], "fire": np.nan, "flood": np.nan,
-                 "heat": np.nan, "loss_rate_hist": np.nan, "unsafe_share": np.nan,
+                 "heat": np.nan, "drought": np.nan, "loss_rate_hist": np.nan,
+                 "unsafe_share": np.nan,
                  "buildvalue": float(sub["BUILDVALUE"].sum()) if len(sub) else 0.0}
             )
             continue
@@ -63,14 +64,15 @@ def rollup_nri(spine: pd.DataFrame) -> pd.DataFrame:
         flood_raw = np.maximum(sub["IFLD_RISKS"].to_numpy(), sub["CFLD_RISKS"].to_numpy())
         flood = float((flood_raw * w).sum()) / 100.0
         heat = float((sub["HWAV_RISKS"].to_numpy() * w).sum()) / 100.0
+        drought = float((sub["DRGT_RISKS"].fillna(0).to_numpy() * w).sum()) / 100.0
         eal = sub[_HAZ_EALB].sum(axis=1).to_numpy()
         loss_rate_hist = float(eal.sum() / bv.sum())
         unsafe = (sub["WFIR_RISKS"].to_numpy() >= thr) | (flood_raw >= thr)
         unsafe_share = float((unsafe * w).sum())
         out.append(
             {"slug": row["slug"], "fire": fire, "flood": flood, "heat": heat,
-             "loss_rate_hist": loss_rate_hist, "unsafe_share": unsafe_share,
-             "buildvalue": float(bv.sum())}
+             "drought": drought, "loss_rate_hist": loss_rate_hist,
+             "unsafe_share": unsafe_share, "buildvalue": float(bv.sum())}
         )
     return pd.DataFrame(out)
 
@@ -89,13 +91,15 @@ def cmip6_signals(spine: pd.DataFrame, decade: str | None = None) -> pd.DataFram
     rows = []
     for slug in spine["slug"]:
         rec = clim.get(slug)
-        vals = {"slug": slug, "tasmax": np.nan, "dry_spell": np.nan, "precip": np.nan}
+        vals = {"slug": slug, "tasmax": np.nan, "dry_spell": np.nan,
+                "precip": np.nan, "precip_change": np.nan}
         if rec:
             block = rec.get("scenarios", {}).get(ssp, {}).get(decade, {})
             if block:
                 vals["tasmax"] = block.get("tasmax_peak_f", {}).get("median", np.nan)
                 vals["dry_spell"] = block.get("max_dry_spell", {}).get("median", np.nan)
                 vals["precip"] = block.get("extreme_precip_days", {}).get("median", np.nan)
+                vals["precip_change"] = block.get("precip_change_pct", {}).get("median", np.nan)
         rows.append(vals)
     return pd.DataFrame(rows)
 
@@ -182,7 +186,7 @@ def compose_exposure(df: pd.DataFrame, bounds: dict | None = None) -> pd.DataFra
     df = df.copy()
 
     # Fill missing hazard components with statewide medians (rare fallbacks).
-    for c in ["fire", "flood", "heat", "loss_rate_hist", "unsafe_share"]:
+    for c in ["fire", "flood", "heat", "drought", "loss_rate_hist", "unsafe_share"]:
         df[c] = df[c].fillna(df[c].median())
 
     # Normalize the SLR magnitude onto [0,1].

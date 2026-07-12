@@ -7,11 +7,13 @@ For each jurisdiction j, starting from baseline RHNA B_j:
   B. Out-displacement   D_j  = population * displacement_fraction(E_j) / hh_size
                                (households leaving j; REDISTRIBUTED)
   D. Siting discount    S_j  = B_j * unsafe_share * move_fraction
-                               (unsafe-sited capacity moved out of j)
-  C. Receiver capture        pool = Σ removed_j  distributed to climate-resilient
-                               receivers by weight (1-E)^a * pop^b
+                               (hazard-unsafe capacity moved out of j)
+  E. Water-siting       Sw_j = B_j * f(W_j)  (supply-side; not-probable-to-water
+                               capacity moved out of water-constrained j)
+  C. Receiver capture        pool = Σ removed_j  distributed to climate-resilient,
+                               water-secure receivers by (1-E)^a * pop^b * (1-W)^c
 
-  removed_j  = min(S_j + D_j, B_j)          # can't remove more than allocated
+  removed_j  = min(S_j + D_j + Sw_j, B_j)   # can't remove more than allocated
   received_j = pool * w_j / Σ w             # receivers only (E < eligibility)
   B'_j       = B_j - removed_j + received_j + R_j
 
@@ -51,19 +53,35 @@ def apply_model(master: pd.DataFrame, cfg: dict | None = None) -> pd.DataFrame:
     # --- B. Out-displacement ---
     D = pop * displacement_fraction(E, cfg) / hh_size
 
-    # --- D. Siting discount ---
+    # --- D. Siting discount (hazard-driven) ---
     S = B * df["unsafe_share"].to_numpy(dtype=float) * cfg["siting"]["move_fraction"]
 
+    # --- E. Water-siting discount (supply-driven) ---
+    W = (df["W"].to_numpy(dtype=float) if "W" in df.columns
+         else np.zeros_like(B))
+    water = cfg.get("water", {})
+    if water.get("enabled") and "W" in df.columns:
+        ws = water["siting"]
+        e_w = np.clip((W - ws["min_stress"]) / (1.0 - ws["min_stress"]), 0.0, 1.0)
+        S_water = B * ws["max_move_fraction"] * e_w ** ws["exponent"]
+    else:
+        S_water = np.zeros_like(B)
+
     # Units removed from j and pushed into the redistribution pool (capped at B).
-    removed = np.minimum(S + D, B)
+    removed = np.minimum(S + D + S_water, B)
     pool = float(removed.sum())
 
     # --- C. Receiver capture ---
     rec = cfg["receiver"]
     eligible = E < rec["max_exposure_eligible"]
+    # Water-secure jurisdictions preferred as receivers (headroom = 1 - W).
+    if water.get("enabled") and "W" in df.columns:
+        headroom = np.clip(1.0 - W, 0.0, 1.0) ** water["receiver"]["headroom_exponent"]
+    else:
+        headroom = np.ones_like(B)
     w = np.where(
         eligible,
-        (1.0 - E) ** rec["resilience_exponent"] * pop ** rec["capacity_exponent"],
+        (1.0 - E) ** rec["resilience_exponent"] * pop ** rec["capacity_exponent"] * headroom,
         0.0,
     )
     wsum = w.sum()
@@ -83,6 +101,7 @@ def apply_model(master: pd.DataFrame, cfg: dict | None = None) -> pd.DataFrame:
     df["repl_R"] = R
     df["displace_D"] = D
     df["siting_S"] = S
+    df["water_S"] = S_water
     df["removed"] = removed
     df["received"] = received
     df["is_receiver"] = eligible

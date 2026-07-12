@@ -153,6 +153,34 @@ trajectory:
     flat:    {"2030s": 1.0, "2040s": 1.0, "2050s": 1.0, "2060s": 1.0, "2070s": 1.0, "2080s": 1.0, "2090s": 1.0}
     decline: {"2030s": 1.0, "2040s": 0.9, "2050s": 0.78, "2060s": 0.65, "2070s": 0.55, "2080s": 0.45, "2090s": 0.38}
 
+# ---- Component E: water-siting discount (supply-side; redistributes) --------
+# Water constrains WHERE housing can be built, not how much is needed. A share of
+# a water-constrained jurisdiction's allocation is treated as not-probable-to-be-
+# watered and moved into the redistribution pool; water-stressed places are also
+# down-weighted as receivers. Purely redistributive -> statewide total unchanged.
+water:
+  enabled: true
+  # W_j = weighted blend (renormalized) of SGMA basin priority/overdraft, NRI
+  # drought risk, and CMIP6 aridification (dry spell + drier precip).
+  weights:
+    sgma: 0.40
+    drought: 0.35
+    aridification: 0.25
+  siting:
+    # No discount below this stress; convex ramp to max_move_fraction at W=1.
+    min_stress: 0.55
+    max_move_fraction: 0.25
+    exponent: 1.5
+  receiver:
+    # Receiver weight multiplied by water headroom (1 - W) ** this exponent.
+    # Kept MODEST (0.5): W_j is a groundwater-overdraft + drought index and does
+    # NOT capture imported-supply risk (Colorado River / SWP cuts), so it
+    # overstates how "water-secure" the coastal metros (LA/SF/SD) are as
+    # receivers. The robust water signal is the siting discount OUT of
+    # overdrafted basins; the receiver side is deliberately soft. See
+    # methodology §8 (imported-supply limitation).
+    headroom_exponent: 0.5
+
 # ---- External in-migration (optional additive term) -------------------------
 # Net climate in-migration to CA from out of state is highly uncertain; default
 # OFF so the statewide increase is driven only by in-state replacement need.

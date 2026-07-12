@@ -18,7 +18,24 @@ def make_all(adj, region, statewide) -> None:
     _region_change(region)
     _exposure_vs_delta(adj)
     _biggest_movers(adj)
-    print(f"[charts] wrote 4 charts to {paths.CHARTS}")
+    _water_siting_by_region(region)
+    print(f"[charts] wrote 5 charts to {paths.CHARTS}")
+
+
+def _water_siting_by_region(region) -> None:
+    """Units pulled out of each region by the water-siting discount (component E)."""
+    if "water_moved" not in region.columns or region["water_moved"].sum() <= 0:
+        return
+    r = region[region["water_moved"] > 1].sort_values("water_moved")
+    fig, ax = plt.subplots(figsize=(7, max(3.5, 0.4 * len(r) + 1)))
+    ax.barh(r["region"], r["water_moved"], color="#2c7fb8")
+    ax.set_xlabel("Allocation moved out by water constraint (units)")
+    ax.set_title("Water-siting discount by region\n(SGMA overdraft + drought + aridification)",
+                 fontsize=10)
+    ax.tick_params(axis="y", labelsize=7)
+    fig.tight_layout()
+    fig.savefig(paths.CHARTS / "water_siting_by_region.png", dpi=130)
+    plt.close(fig)
 
 
 def _statewide_bar(statewide) -> None:

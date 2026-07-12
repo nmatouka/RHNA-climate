@@ -30,10 +30,11 @@ For each jurisdiction *j*, starting from baseline RHNA `B_j`:
 |---|---|---|
 | **A. Replacement** `R_j` | raises total | FEMA NRI building EAL (fire/flood) × CMIP6 uplift × horizon |
 | **B. Out-displacement** `D_j` | redistributes | exposure index `E_j` → displaced households |
-| **C. Receiver capture** | redistributes | pool `ΣD_j` → resilient jurisdictions |
-| **D. Siting discount** `S_j` | redistributes | unsafe-tract share of `B_j` moved out |
+| **C. Receiver capture** | redistributes | pool → resilient, water-secure jurisdictions |
+| **D. Siting discount** `S_j` | redistributes | unsafe (fire/flood) tract share of `B_j` moved out |
+| **E. Water-siting** `Sw_j` | redistributes | water-constrained (SGMA overdraft/drought) share moved out |
 
-`B'_j = B_j − S_j − D_j + received + R_j`
+`B'_j = B_j − S_j − D_j − Sw_j + received + R_j`  (water is purely redistributive)
 
 All tunable parameters live in [`config/assumptions.yaml`](config/assumptions.yaml).
 

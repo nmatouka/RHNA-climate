@@ -25,6 +25,10 @@ def build_master(verbose: bool = True) -> pd.DataFrame:
         exposure.drop(columns=["name", "juris_type", "county"]), on="slug", how="left"
     )
 
+    # Water-stress index W_j (reuses exposure's drought/CMIP6 cols + SGMA basins).
+    from .water import build_water_stress
+    master = master.merge(build_water_stress(master), on="slug", how="left")
+
     # Optional: merge sourced RHNA baseline (Phase 2 output).
     if paths.RHNA_BASELINE.exists():
         master = _merge_rhna(master, verbose)
