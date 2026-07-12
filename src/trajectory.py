@@ -28,6 +28,7 @@ from . import paths
 from .adjustment_model import apply_model
 from .config import load_assumptions
 from .crosswalk import build_master
+from .dof_projections import multiplier_by_jurisdiction
 from .hazard_exposure import (build_exposure_for_decade, pooled_cmip6_bounds,
                               rollup_nri)
 from .housing import attach_housing
@@ -41,14 +42,25 @@ def _decade_end_year(decade: str) -> str:
 
 
 def run(verbose: bool = True, make_charts: bool = True,
-        growth_variant: str | None = None) -> dict:
+        growth_variant: str | None = None, growth_curve: dict | None = None) -> dict:
     paths.ensure_dirs()
     cfg = load_assumptions()
     tj = cfg["trajectory"]
     decades = tj["decades"]
     ypd = tj["years_per_decade"]
-    growth = (tj["baseline_growth_variants"][growth_variant] if growth_variant
-              else tj["baseline_growth_mult"])
+
+    # Growth source: an explicit statewide curve/variant (for comparison and
+    # sensitivity) forces the uniform path; otherwise follow config (county-
+    # resolved DOF households by default).
+    growth = None
+    if growth_curve is not None:
+        source, growth = "statewide", growth_curve
+    elif growth_variant:
+        source, growth = "statewide", tj["baseline_growth_variants"][growth_variant]
+    else:
+        source = tj.get("growth_source", "statewide")
+        if source == "statewide":
+            growth = tj["baseline_growth_mult"]
 
     # Per-decade adjustment uses a 10-yr replacement horizon.
     cfg_d = copy.deepcopy(cfg)
@@ -56,6 +68,7 @@ def run(verbose: bool = True, make_charts: bool = True,
 
     # Authoritative analysis set (539 units w/ 6th-cycle baseline) + geometry.
     master = build_master(verbose=False)
+    jm = multiplier_by_jurisdiction(master) if source == "county" else None
     spine = attach_housing(load_jurisdictions())
     spine = spine[spine["slug"].isin(master["slug"])].reset_index(drop=True)
     nri = rollup_nri(spine)
@@ -74,12 +87,18 @@ def run(verbose: bool = True, make_charts: bool = True,
         yr = _decade_end_year(d)
         ex = build_exposure_for_decade(spine, nri, d, yr, bounds).set_index("slug")
 
+        # Per-jurisdiction baseline-growth multiplier for the decade.
+        if source == "county":
+            mult_d = jm[d].reindex(B0.index).fillna(1.0).values
+        else:
+            mult_d = growth[d]
+
         # Assemble the per-decade "master" apply_model expects.
         md = pd.DataFrame({
             "slug": B0.index,
             "name": base["name"].values,
             "county": base["county"].values,
-            "rhna_baseline": (B0 * growth[d]).values,       # grown baseline
+            "rhna_baseline": (B0 * mult_d).values,          # grown baseline
             "occ_housing": stock.reindex(B0.index).values,  # start-of-decade stock
             "population": (pop0 * (stock / stock0)).reindex(B0.index).values,
             "unsafe_share": base["unsafe_share"].values,    # static
@@ -99,7 +118,8 @@ def run(verbose: bool = True, make_charts: bool = True,
         # Statewide record.
         b, a = adj["rhna_baseline"].sum(), adj["rhna_adjusted"].sum()
         state_rows.append({
-            "decade": d, "slr_year": yr, "growth_mult": growth[d],
+            "decade": d, "slr_year": yr, "growth_source": source,
+            "eff_growth_mult": b / float(B0.sum()),
             "baseline_need": b, "adjusted_need": a,
             "replacement": adj["repl_R"].sum(),
             "redistributed_pool": adj["removed"].sum(),
@@ -145,6 +165,49 @@ def run(verbose: bool = True, make_charts: bool = True,
     return {"statewide": statewide, "region": region, "jurisdiction": juris}
 
 
+def compare_sources(make_charts: bool = True, verbose: bool = True) -> pd.DataFrame:
+    """Run the trajectory under the county-resolved DOF baseline vs the uniform
+    statewide taper and quantify how much county resolution shifts the REGIONAL
+    distribution of cumulative need. Writes outputs/trajectory_region_compare.csv."""
+    cfg = load_assumptions()
+    county = run(verbose=False, make_charts=False)
+    uniform = run(verbose=False, make_charts=False,
+                  growth_curve=cfg["trajectory"]["baseline_growth_mult"])
+
+    def _cum(reg):
+        last = reg.sort_values("decade").groupby("region").tail(1)
+        return last.set_index("region")["cum_adjusted"]
+
+    u, c = _cum(uniform["region"]), _cum(county["region"])
+    cmp = pd.DataFrame({"uniform": u, "county": c}).fillna(0.0)
+    cmp["uniform_share_pct"] = cmp["uniform"] / cmp["uniform"].sum() * 100
+    cmp["county_share_pct"] = cmp["county"] / cmp["county"].sum() * 100
+    cmp["share_shift_pp"] = cmp["county_share_pct"] - cmp["uniform_share_pct"]
+    cmp = cmp.sort_values("share_shift_pp", ascending=False)
+    cmp.to_csv(paths.OUTPUTS / "trajectory_region_compare.csv")
+
+    if verbose:
+        us, cs = uniform["statewide"].iloc[-1], county["statewide"].iloc[-1]
+        print("\n" + "=" * 72)
+        print("  COUNTY-RESOLVED vs UNIFORM baseline — cumulative need to 2100")
+        print("=" * 72)
+        print(f"  {'':22} {'uniform':>14} {'county (DOF)':>14}")
+        print(f"  {'cum baseline':22} {us['cum_baseline']:>14,.0f} {cs['cum_baseline']:>14,.0f}")
+        print(f"  {'cum climate-adjusted':22} {us['cum_adjusted']:>14,.0f} {cs['cum_adjusted']:>14,.0f}")
+        print(f"  {'climate share':22} {us['cum_climate_add']/us['cum_baseline']*100:>13.1f}% "
+              f"{cs['cum_climate_add']/cs['cum_baseline']*100:>13.1f}%")
+        print("-" * 72)
+        print("  Largest regional share shifts (county − uniform), pp of statewide:")
+        for r, row in pd.concat([cmp.head(4), cmp.tail(3)]).iterrows():
+            print(f"    {r[:26]:26} {row['share_shift_pp']:>+6.1f} pp   "
+                  f"({row['uniform_share_pct']:.1f}% -> {row['county_share_pct']:.1f}%)")
+        print("=" * 72)
+    if make_charts:
+        from .viz import make_trajectory_compare_chart
+        make_trajectory_compare_chart(cmp)
+    return cmp
+
+
 def _check_decade(adj: pd.DataFrame, cfg: dict, decade: str) -> None:
     removed, received = adj["removed"].sum(), adj["received"].sum()
     assert np.isclose(received, removed, rtol=1e-6), \
@@ -155,11 +218,13 @@ def _check_decade(adj: pd.DataFrame, cfg: dict, decade: str) -> None:
 
 
 def _print_summary(statewide: pd.DataFrame, region: pd.DataFrame) -> None:
-    cfg = load_assumptions()
     last = statewide.iloc[-1]
     cum_b, cum_a = last["cum_baseline"], last["cum_adjusted"]
+    src = statewide.iloc[0].get("growth_source", "statewide")
+    src_lbl = "county-resolved (DOF households)" if src == "county" else "uniform statewide taper"
     print("\n" + "=" * 72)
     print("  LONGER-HORIZON HOUSING-NEED TRAJECTORY  (SSP2-4.5, 2030s->2090s)")
+    print(f"  baseline growth source: {src_lbl}")
     print("=" * 72)
     print(f"  {'decade':7} {'baseline':>12} {'climate-adj':>12} {'+climate':>10} {'+%':>7}")
     for _, r in statewide.iterrows():
@@ -176,3 +241,4 @@ def _print_summary(statewide: pd.DataFrame, region: pd.DataFrame) -> None:
 
 if __name__ == "__main__":
     run()
+    compare_sources()

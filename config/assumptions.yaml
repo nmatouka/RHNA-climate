@@ -114,6 +114,19 @@ household:
 trajectory:
   decades: ["2030s", "2040s", "2050s", "2060s", "2070s", "2080s", "2090s"]
   years_per_decade: 10
+  # Source of the per-decade baseline (climate-blind) growth multiplier:
+  #   county    -> DOF P-2A county population projections (src/dof_projections.py)
+  #                give each county its own trajectory (RECOMMENDED, real data).
+  #   statewide -> the uniform baseline_growth_mult curve below (fallback / for
+  #                comparison in the trajectory sensitivity).
+  growth_source: county
+  # Growth share of an RHNA allocation (the rest addresses the existing deficit
+  # and persists regardless of demographics). Only this share scales with DOF
+  # household growth. Mirrors stock_growth_fraction.
+  need_growth_share: 0.65
+  # County multipliers are relative to each county's own 2020s growth; bound them:
+  county_growth_floor: 0.25   # a flat/declining county still needs ~25% of pace
+  county_growth_cap: 2.0      # cap runaway high-growth counties
   # Only part of an RHNA allocation is net-new stock; the rest addresses the
   # EXISTING deficit (overcrowding, cost burden, vacancy shortfall) and does not
   # physically enlarge the housing stock. Grow the stock (which drives future

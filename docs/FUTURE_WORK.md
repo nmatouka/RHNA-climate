@@ -54,15 +54,20 @@ sensitivity (`sensitivity.trajectory_sweep`) covers flat/central/decline. Centra
 result: cumulative need to 2100 ~14.0M → ~16.5M (+18%), climate share rising
 11%→30%.
 
-**Remaining refinement — county-level DOF household projections.** The baseline
-growth taper is currently a *statewide* multiplier applied uniformly
-(`trajectory.baseline_growth_mult`). Swapping in DOF **P-2A/P-4 county household
-projections** would differentiate growth geographically (some counties keep
-growing, others shrink), making the per-region trajectory more realistic. The
-hook is clean: replace the uniform `growth_mult_d` with a per-county series.
-DOF file: `P2A_County_Total.xlsx` (population) / P-4 households, on dof.ca.gov.
-Also consider explicit inter-cycle carryover of unmet need (each decade is
-currently an independent cycle).
+**County-level DOF projections — ✅ DONE** (`src/dof_projections.py`,
+`growth_source: county`). DOF P-4 household projections (2010–2040) + P-2A
+population (2020–2070) now give each county its own two-part growth multiplier;
+`trajectory.compare_sources` quantifies the shift vs. the uniform taper. Result:
+cumulative need share moves out of SCAG (−10 pp) into Sacramento/Bay/Central
+Valley, and the climate share rises (20.4% vs 18.2%).
+
+**Remaining refinements here.** (a) **Sub-county growth** — within a county,
+city vs. unincorporated growth still rides 6th-cycle shares; DOF has no
+sub-county projections, so this would need a local land-use/ACS proxy.
+(b) **Inter-cycle carryover** — each decade is an independent cycle; unmet need
+from one cycle does not roll into the next. (c) **Post-2070 households** are
+inferred from population via a declining household-size trajectory; revisit when
+DOF extends the household series.
 
 ---
 

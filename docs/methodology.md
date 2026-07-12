@@ -142,14 +142,20 @@ answering "what might future cycles need once climate is included?"
 
 For each decade *d* ∈ {2030s … 2090s} (each ≈ one 8–10 yr planning cycle):
 
-1. **Growing, tapered baseline.** `baseline_need_j,d = B_j × growth_mult_d`, where
-   `B_j` is the 6th-cycle allocation and `growth_mult_d` is a DOF-informed
-   statewide household-growth multiplier (2030s = 1.0, tapering to 0.60 by the
-   2090s). Rationale: DOF projects California's population to **plateau in the
-   mid-2040s and then slowly decline**, but household formation continues as
-   average household size falls — so per-cycle need eases gradually rather than
-   collapsing. Applied uniformly (county-level DOF household projections are the
-   pluggable refinement; see `FUTURE_WORK.md`).
+1. **Growing baseline, resolved by county.** `baseline_need_j,d = B_j ×
+   growth_mult_county(j),d`. The default multiplier is **county-resolved from real
+   DOF projections** (`src/dof_projections.py`, `growth_source: county`): DOF P-4
+   household projections (2010–2040) plus P-2A population (2020–2070, converted to
+   households via a declining household-size trajectory) give each county its own
+   household-growth path. The multiplier is two-part —
+   `need_growth_share × (HH_growth_d / HH_growth_2020s) + (1 − need_growth_share)`
+   — so only the ~65% growth share of an allocation responds to demographics while
+   the existing-deficit share persists (need never collapses); bounded to
+   [0.25, 2.0]. A **uniform statewide taper** (`baseline_growth_mult`, 2030s = 1.0
+   → 0.60) is retained for comparison and sensitivity. Rationale: DOF projects
+   California to **plateau in the mid-2040s then slowly decline**, with growth
+   concentrating **inland** (Central Valley, Sacramento) while coastal metros
+   (esp. Los Angeles) taper — a geography the uniform curve cannot see.
 2. **Time-varying climate.** Exposure, the CMIP6 uplift, and sea-level rise are
    recomputed for decade *d* (`build_exposure_for_decade`). CMIP6 signals are
    normalized against **bounds pooled across all decades** so intensification
@@ -163,29 +169,45 @@ For each decade *d* ∈ {2030s … 2090s} (each ≈ one 8–10 yr planning cycle
    baseline need; the remainder addresses the *existing* deficit and adds no
    physical units.
 
-Results accumulate into a cumulative-need trajectory. **Central case (SSP2-4.5):**
+Results accumulate into a cumulative-need trajectory. **Central case (SSP2-4.5,
+county-resolved baseline):**
 
-| | Cumulative need to 2100 |
-|---|---|
-| Baseline (climate-blind) | **~14.0M** |
-| Climate-adjusted minimum | **~16.5M** |
-| Climate-driven addition | **+2.5M (+18%)** |
+| Cumulative need to 2100 | County (DOF) | Uniform taper |
+|---|---|---|
+| Baseline (climate-blind) | **~11.8M** | ~14.0M |
+| Climate-adjusted minimum | **~14.3M** | ~16.5M |
+| Climate-driven addition | **+2.4M (+20%)** | +2.5M (+18%) |
+
+Two things change when the real county DOF baseline replaces the uniform taper.
+(a) **Magnitude falls ~13%** — DOF's actual projected household growth is lower
+than the earlier hand-set curve; the 2030s baseline lands at 0.77× the 6th cycle,
+matching how real 7th-cycle determinations have come in below the 6th. (b) **The
+regional mix shifts materially**: county resolution moves cumulative need share
+**out of SCAG (−10 pp: 54% → 44%)** — slow-growing coastal Southern California —
+and **into SACOG (+3.8 pp), the Bay Area, and the Central Valley** (San Joaquin,
+Stanislaus, Merced). The uniform taper froze every region at its 6th-cycle share
+and missed this entirely. See `outputs/trajectory_region_compare.csv` and
+`charts/trajectory_region_shift.png`.
 
 The signature finding is temporal: the climate-driven **share** of housing need
-rises from ~11% (2030s) to ~30% (2090s) — as demographic growth tapers, climate
+rises from ~14% (2030s) to ~27% (2090s) — as demographic growth tapers, climate
 replacement and sea-level displacement become an ever-larger fraction of why
-California must build. The cumulative climate addition is robust (~2.49M–2.62M)
-across flat/decline household-growth variants (`trajectory_sweep`), because it is
+California must build. Routing growth into higher-exposure inland counties makes
+this share **larger** than under the uniform baseline (20.4% vs 18.2% cumulative).
+The cumulative climate addition is robust (~2.4M–2.6M) across county/flat/decline
+growth paths (`trajectory_sweep`), because it is
 driven by housing stock and hazard, not the demographic path. Outputs:
 `outputs/trajectory_statewide.csv`, `outputs/trajectory_region.csv`, and
 `outputs/charts/trajectory_*.png`.
 
-**Added limitations for the trajectory:** the baseline-growth taper is a
-documented statewide assumption, not county-resolved; each decade is treated as an
-independent planning cycle (no explicit inter-cycle carryover of unmet need); and
-compounding uncertainty makes late-century decades more illustrative than
-predictive. It shows the *shape and direction* of climate-driven need, not a point
-forecast for 2090.
+**Added limitations for the trajectory:** the baseline is county-resolved but not
+finer — within a county, city vs. unincorporated growth still rides the 6th-cycle
+shares. DOF ends at 2070, so 2070s–2090s hold the 2060s multiplier, and post-2040
+households are inferred from population via a declining household-size trajectory.
+Each decade is an independent planning cycle (no explicit inter-cycle carryover of
+unmet need), and compounding uncertainty makes late-century decades more
+illustrative than predictive. It shows the *shape and direction* of climate-driven
+need, not a point forecast for 2090.
 
 ## 8. Key assumptions and limitations
 

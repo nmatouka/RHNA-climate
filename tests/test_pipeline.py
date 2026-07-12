@@ -72,13 +72,16 @@ def test_slugify_matches_climateshed_convention():
 
 # --- longer-horizon trajectory -------------------------------------------------
 from src import trajectory  # noqa: E402
+from src.dof_projections import county_growth_multipliers, multiplier_by_jurisdiction  # noqa: E402
 
-_TRAJ = trajectory.run(verbose=False, make_charts=False)["statewide"]
+_TRAJ = trajectory.run(verbose=False, make_charts=False)["statewide"]  # county (default)
+_TRAJ_UNI = trajectory.run(verbose=False, make_charts=False,
+                           growth_curve=CFG["trajectory"]["baseline_growth_mult"])["statewide"]
 
 
-def test_trajectory_anchors_to_sixth_cycle():
-    # The 2030s baseline (growth_mult = 1.0) must equal the 6th-cycle total.
-    row = _TRAJ[_TRAJ["decade"] == "2030s"].iloc[0]
+def test_uniform_trajectory_anchors_to_sixth_cycle():
+    # In uniform mode the 2030s multiplier is 1.0, so baseline == 6th-cycle total.
+    row = _TRAJ_UNI[_TRAJ_UNI["decade"] == "2030s"].iloc[0]
     assert abs(row["baseline_need"] - 2_495_457) < 1
 
 
@@ -95,7 +98,26 @@ def test_trajectory_decade_conservation_and_climate_positive():
     assert (add > 0).all()
 
 
-def test_trajectory_climate_share_rises_over_time():
-    # Climate becomes a larger share of need as demographic growth tapers.
-    assert _TRAJ["climate_add_pct"].is_monotonic_increasing
+def test_trajectory_climate_share_grows_end_to_end():
+    # Climate becomes a larger share of need over the horizon (not necessarily
+    # monotone: DOF household growth is uneven across decades).
     assert _TRAJ.iloc[-1]["climate_add_pct"] > _TRAJ.iloc[0]["climate_add_pct"]
+
+
+def test_county_multipliers_bounded_and_complete():
+    cm = county_growth_multipliers()
+    assert len(cm) == 58  # all CA counties
+    floor = CFG["trajectory"]["county_growth_floor"]
+    cap = CFG["trajectory"]["county_growth_cap"]
+    assert (cm.values >= floor - 1e-9).all() and (cm.values <= cap + 1e-9).all()
+    master = build_master(verbose=False)
+    jm = multiplier_by_jurisdiction(master)
+    assert len(jm) == len(master) and jm.notna().all().all()
+
+
+def test_county_resolution_shifts_share_inland():
+    # The signature refinement: DOF growth moves need share OUT of SCAG (slow-
+    # growing coastal SoCal) toward Sacramento/Central Valley.
+    cmp = trajectory.compare_sources(make_charts=False, verbose=False)
+    assert cmp.loc["SCAG", "share_shift_pp"] < -2.0
+    assert cmp.loc["SACOG", "share_shift_pp"] > 1.0

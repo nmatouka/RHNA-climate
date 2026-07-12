@@ -55,9 +55,9 @@ docs/methodology.md       full write-up (§7 = longer-horizon trajectory)
 python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m src.source_rhna   # normalize HCD baseline -> FIPS
 ./.venv/bin/python -m src.allocate      # 6th-cycle pipeline -> outputs/ + charts
-./.venv/bin/python -m src.trajectory    # decadal need to 2100 -> outputs/trajectory_*
+./.venv/bin/python -m src.trajectory    # decadal need to 2100 (county DOF baseline)
 ./.venv/bin/python -m src.sensitivity   # uncertainty bands
-./.venv/bin/python -m pytest -q         # invariants (12 tests)
+./.venv/bin/python -m pytest -q         # invariants (14 tests)
 ```
 
 ## Headline result
@@ -70,13 +70,17 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 | Climate-adjusted **probable minimum** | **2,719,039  (+9.0%)** |
 | Sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
 
-**Longer horizon (cumulative need to 2100, SSP2-4.5):**
+**Longer horizon (cumulative need to 2100, SSP2-4.5, county-resolved DOF baseline):**
 
 | | Units |
 |---|---|
-| Baseline (climate-blind) | ~14.0M |
-| Climate-adjusted minimum | **~16.5M  (+18%)** |
-| Climate share of need | rises **11% (2030s) → 30% (2090s)** |
+| Baseline (climate-blind) | ~11.8M |
+| Climate-adjusted minimum | **~14.3M  (+20%)** |
+| Climate share of need | rises **14% (2030s) → 27% (2090s)** |
+
+County-resolved DOF growth moves cumulative need **out of SCAG (−10 pp)** into
+Sacramento (SACOG +3.8 pp), the Bay Area, and the Central Valley — a shift the
+uniform taper misses. See `outputs/trajectory_region_compare.csv`.
 
 Full write-up and caveats in [`docs/methodology.md`](docs/methodology.md);
 planned extensions in [`docs/FUTURE_WORK.md`](docs/FUTURE_WORK.md).
@@ -86,5 +90,7 @@ planned extensions in [`docs/FUTURE_WORK.md`](docs/FUTURE_WORK.md).
 Complete and reproducible end-to-end. Baseline reconciles to the known ~2.5M
 statewide total; regional rollup matches published MPO determinations (SCAG,
 ABAG/MTC, SANDAG, AMBAG exact). Both the single 6th-cycle adjustment and the
-longer-horizon decadal trajectory to 2100 are implemented. External out-of-state
-in-migration term is available but off by default (see `docs/FUTURE_WORK.md`).
+longer-horizon decadal trajectory to 2100 are implemented, the latter with a
+**county-resolved baseline from real DOF household/population projections**.
+External out-of-state in-migration term is available but off by default (see
+`docs/FUTURE_WORK.md`).

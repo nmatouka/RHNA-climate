@@ -106,6 +106,25 @@ def _trajectory_cumulative(statewide) -> None:
     plt.close(fig)
 
 
+def make_trajectory_compare_chart(cmp) -> None:
+    """Regional share shift from uniform -> county-resolved baseline."""
+    paths.CHARTS.mkdir(parents=True, exist_ok=True)
+    d = cmp[cmp["share_shift_pp"].abs() >= 0.2].sort_values("share_shift_pp")
+    if d.empty:
+        return
+    fig, ax = plt.subplots(figsize=(7, max(4, 0.4 * len(d) + 1)))
+    colors = [_BLUE if v > 0 else _RED for v in d["share_shift_pp"]]
+    ax.barh(d.index, d["share_shift_pp"], color=colors)
+    ax.axvline(0, color="k", lw=0.8)
+    ax.set_xlabel("Shift in share of cumulative statewide need (percentage points)")
+    ax.set_title("County-resolved DOF growth vs. uniform taper\n"
+                 "how the region mix of 2100 need changes", fontsize=10)
+    ax.tick_params(axis="y", labelsize=8)
+    fig.tight_layout()
+    fig.savefig(paths.CHARTS / "trajectory_region_shift.png", dpi=130)
+    plt.close(fig)
+
+
 def _trajectory_per_decade(statewide) -> None:
     s = statewide
     x = np.arange(len(s))

@@ -23,6 +23,10 @@ ASSUMPTIONS = CONFIG / "assumptions.yaml"
 # Sourced RHNA baseline (populated in Phase 2)
 RHNA_BASELINE = RAW / "rhna_6th_cycle_jurisdiction.csv"
 
+# DOF county projections (Baseline 2024 vintage)
+DOF_P2A = RAW / "dof" / "P2A_County_Total.xlsx"
+DOF_P4 = RAW / "dof" / "P4_HHProjections_B2024.xlsx"
+
 # Generated artifacts
 MASTER_TABLE = PROCESSED / "master_jurisdiction.csv"
 ALLOC_JURISDICTION = OUTPUTS / "allocation_jurisdiction.csv"
