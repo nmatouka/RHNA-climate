@@ -106,6 +106,40 @@ siting:
 household:
   avg_size: 2.9                   # CA avg household size (persons/household)
 
+# ---- Longer-horizon trajectory (src/trajectory.py) --------------------------
+# Projects housing need DECADE-BY-DECADE beyond the 6th cycle, with time-varying
+# climate (CMIP6 decade + rising SLR) layered on a growing baseline. Each decade
+# ~ one 8-10 yr planning cycle; the 2030s (7th-cycle era) is normalized to the
+# 6th-cycle magnitude so the trajectory is anchored to HCD's actual numbers.
+trajectory:
+  decades: ["2030s", "2040s", "2050s", "2060s", "2070s", "2080s", "2090s"]
+  years_per_decade: 10
+  # Only part of an RHNA allocation is net-new stock; the rest addresses the
+  # EXISTING deficit (overcrowding, cost burden, vacancy shortfall) and does not
+  # physically enlarge the housing stock. Grow the stock (which drives future
+  # replacement need) by only this growth-component fraction of each decade's
+  # baseline need. ~0.65 reflects the growth share of the 6th-cycle determination.
+  stock_growth_fraction: 0.65
+  # Baseline (climate-BLIND) housing-need per decade as a multiplier on each
+  # jurisdiction's 6th-cycle allocation. 2030s = 1.0 (reference).
+  # DOF-informed shape: CA population is projected to plateau in the mid-2040s
+  # and then slowly decline, BUT household formation continues (household size
+  # keeps falling), so need tapers gradually rather than collapsing. This is a
+  # documented statewide assumption applied uniformly; replace with county-level
+  # DOF household projections for geographic differentiation (see FUTURE_WORK).
+  baseline_growth_mult:
+    "2030s": 1.00
+    "2040s": 0.95
+    "2050s": 0.88
+    "2060s": 0.80
+    "2070s": 0.72
+    "2080s": 0.66
+    "2090s": 0.60
+  # Sensitivity: a flat (no-taper) vs a steeper-decline household-growth path.
+  baseline_growth_variants:
+    flat:    {"2030s": 1.0, "2040s": 1.0, "2050s": 1.0, "2060s": 1.0, "2070s": 1.0, "2080s": 1.0, "2090s": 1.0}
+    decline: {"2030s": 1.0, "2040s": 0.9, "2050s": 0.78, "2060s": 0.65, "2070s": 0.55, "2080s": 0.45, "2090s": 0.38}
+
 # ---- External in-migration (optional additive term) -------------------------
 # Net climate in-migration to CA from out of state is highly uncertain; default
 # OFF so the statewide increase is driven only by in-state replacement need.

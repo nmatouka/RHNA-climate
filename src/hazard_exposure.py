@@ -78,11 +78,13 @@ def rollup_nri(spine: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # CMIP6 SSP2-4.5 mid-century signals
 # ---------------------------------------------------------------------------
-def cmip6_signals(spine: pd.DataFrame) -> pd.DataFrame:
+def cmip6_signals(spine: pd.DataFrame, decade: str | None = None) -> pd.DataFrame:
     """Raw ensemble-median CMIP6 values per jurisdiction for the configured
-    scenario/decade. Missing jurisdictions get NaN (filled later)."""
+    scenario and the given decade (defaults to config). Missing jurisdictions
+    get NaN (filled later)."""
     cfg = load_assumptions()["scenario"]
-    ssp, decade = cfg["ssp"], cfg["decade"]
+    ssp = cfg["ssp"]
+    decade = decade or cfg["decade"]
     clim = json.loads(paths.CA_CLIMATE.read_text())["jurisdictions"]
     rows = []
     for slug in spine["slug"]:
@@ -110,9 +112,10 @@ def _haversine_km(lat1, lon1, lat2, lon2) -> float:
     return 2 * r * math.asin(math.sqrt(a))
 
 
-def slr_signal(spine: pd.DataFrame) -> pd.DataFrame:
+def slr_signal(spine: pd.DataFrame, year: str | None = None) -> pd.DataFrame:
     cfg = load_assumptions()["exposure"]
-    scenario, year, coastal_km = cfg["slr_scenario"], cfg["slr_year"], cfg["coastal_km"]
+    scenario, coastal_km = cfg["slr_scenario"], cfg["coastal_km"]
+    year = year or cfg["slr_year"]
     pts = json.loads(paths.CA_SLR.read_text())["points"]
     rows = []
     for _, row in spine.iterrows():
@@ -141,18 +144,42 @@ def _minmax(s: pd.Series) -> pd.Series:
     return (s - lo) / (hi - lo)
 
 
-def build_exposure(spine: pd.DataFrame) -> pd.DataFrame:
-    """Merge NRI + CMIP6 + SLR and compute E_j, climate_uplift, annual_loss_rate."""
-    cfg = load_assumptions()
-    ex = cfg["exposure"]
-    rep = cfg["replacement"]
+def _norm_to(s: pd.Series, lo: float, hi: float) -> pd.Series:
+    """Normalize onto [0,1] against FIXED bounds (for temporal consistency
+    across decades). Falls back to cross-sectional min-max if bounds degenerate."""
+    s = s.astype(float)
+    if lo is None or hi is None or not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+        return _minmax(s)
+    return ((s - lo) / (hi - lo)).clip(0.0, 1.0)
 
-    df = (
-        spine[["slug", "name", "juris_type", "county"]]
-        .merge(rollup_nri(spine), on="slug", how="left")
-        .merge(cmip6_signals(spine), on="slug", how="left")
-        .merge(slr_signal(spine), on="slug", how="left")
-    )
+
+def pooled_cmip6_bounds(spine: pd.DataFrame, decades: list[str]) -> dict:
+    """Min/max of each CMIP6 signal POOLED across all jurisdictions AND decades,
+    for the configured scenario. Normalizing every decade against these shared
+    bounds makes the climate-intensification signal (and thus the uplift) rise
+    monotonically over time instead of being re-centered each decade."""
+    acc = {"tasmax": [], "dry_spell": [], "precip": []}
+    for d in decades:
+        sig = cmip6_signals(spine, decade=d)
+        for k in acc:
+            acc[k].append(sig[k])
+    bounds = {}
+    for k, series_list in acc.items():
+        allv = pd.concat(series_list)
+        bounds[k] = (float(allv.min()), float(allv.max()))
+    return bounds
+
+
+def compose_exposure(df: pd.DataFrame, bounds: dict | None = None) -> pd.DataFrame:
+    """Given a frame with fire/flood/heat/loss_rate_hist/unsafe_share/
+    tasmax/dry_spell/precip/slr_cm, compute E, climate_uplift, annual_loss_rate.
+
+    If `bounds` is given (from pooled_cmip6_bounds), the CMIP6 intensification
+    signal is normalized against those fixed bounds (time-consistent); otherwise
+    it is min-max normalized within `df` (the single-shot default)."""
+    cfg = load_assumptions()
+    ex, rep = cfg["exposure"], cfg["replacement"]
+    df = df.copy()
 
     # Fill missing hazard components with statewide medians (rare fallbacks).
     for c in ["fire", "flood", "heat", "loss_rate_hist", "unsafe_share"]:
@@ -170,14 +197,18 @@ def build_exposure(spine: pd.DataFrame) -> pd.DataFrame:
     ) / wsum
     df["E"] = df["E"].clip(0, 1)
 
-    # CMIP6 climate-intensification signals, min-max normalized statewide.
-    fire_sig = (_minmax(df["tasmax"]) + _minmax(df["dry_spell"])) / 2.0
-    flood_sig = _minmax(df["precip"])
+    # CMIP6 climate-intensification signals.
+    if bounds:
+        fire_sig = (_norm_to(df["tasmax"], *bounds["tasmax"])
+                    + _norm_to(df["dry_spell"], *bounds["dry_spell"])) / 2.0
+        flood_sig = _norm_to(df["precip"], *bounds["precip"])
+    else:
+        fire_sig = (_minmax(df["tasmax"]) + _minmax(df["dry_spell"])) / 2.0
+        flood_sig = _minmax(df["precip"])
     up = rep["climate_uplift"]
     signal = (up["fire_signal_weight"] * fire_sig + up["flood_signal_weight"] * flood_sig)
     signal = signal / (up["fire_signal_weight"] + up["flood_signal_weight"])
     df["climate_uplift"] = 1.0 + up["max_uplift"] * signal
-    # Jurisdictions missing CMIP6 data get no amplification (conservative).
     df["climate_uplift"] = df["climate_uplift"].fillna(1.0)
 
     # Annual loss rate = historical NRI rate * CMIP6 uplift, capped.
@@ -185,5 +216,30 @@ def build_exposure(spine: pd.DataFrame) -> pd.DataFrame:
         df["loss_rate_hist"] * rep["eal_to_unit_loss_factor"] * df["climate_uplift"]
     ).clip(upper=rep["max_annual_loss_rate"])
     df["annual_loss_rate"] = df["annual_loss_rate"].fillna(0.0)
-
     return df
+
+
+def build_exposure(spine: pd.DataFrame) -> pd.DataFrame:
+    """Single-shot exposure for the configured scenario/decade (unchanged API)."""
+    df = (
+        spine[["slug", "name", "juris_type", "county"]]
+        .merge(rollup_nri(spine), on="slug", how="left")
+        .merge(cmip6_signals(spine), on="slug", how="left")
+        .merge(slr_signal(spine), on="slug", how="left")
+    )
+    return compose_exposure(df)
+
+
+def build_exposure_for_decade(
+    spine: pd.DataFrame, nri: pd.DataFrame, decade: str, slr_year: str, bounds: dict
+) -> pd.DataFrame:
+    """Time-varying exposure for one decade. `nri` is the precomputed static
+    rollup (rollup_nri) — fire/flood/heat and the historical loss rate do not
+    change over time; only the CMIP6 uplift and SLR do."""
+    df = (
+        spine[["slug", "name", "juris_type", "county"]]
+        .merge(nri, on="slug", how="left")
+        .merge(cmip6_signals(spine, decade=decade), on="slug", how="left")
+        .merge(slr_signal(spine, year=slr_year), on="slug", how="left")
+    )
+    return compose_exposure(df, bounds=bounds)

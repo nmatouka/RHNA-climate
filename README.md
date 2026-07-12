@@ -44,9 +44,9 @@ config/assumptions.yaml   all tunable parameters + scenario/horizon
 data/external/            vendored snapshots of climate + housing data (see PROVENANCE.md)
 data/raw/                 sourced RHNA baseline (6th cycle) + DOF projections
 data/processed/           joined master jurisdiction table (generated)
-src/                      pipeline modules
-outputs/                  allocation CSVs (statewide/region/jurisdiction) + charts
-docs/methodology.md       full write-up
+src/                      pipeline modules (allocate = 6th cycle; trajectory = to 2100)
+outputs/                  allocation + trajectory CSVs (statewide/region/jurisdiction) + charts
+docs/methodology.md       full write-up (§7 = longer-horizon trajectory)
 ```
 
 ## Run
@@ -54,18 +54,29 @@ docs/methodology.md       full write-up
 ```bash
 python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m src.source_rhna   # normalize HCD baseline -> FIPS
-./.venv/bin/python -m src.allocate      # full pipeline -> outputs/ + charts
-./.venv/bin/python -m src.sensitivity   # uncertainty band
-./.venv/bin/python -m pytest -q         # invariants (8 tests)
+./.venv/bin/python -m src.allocate      # 6th-cycle pipeline -> outputs/ + charts
+./.venv/bin/python -m src.trajectory    # decadal need to 2100 -> outputs/trajectory_*
+./.venv/bin/python -m src.sensitivity   # uncertainty bands
+./.venv/bin/python -m pytest -q         # invariants (12 tests)
 ```
 
 ## Headline result
+
+**6th cycle (single adjustment):**
 
 | | Units |
 |---|---|
 | Baseline (HCD 6th cycle) | 2,495,457 |
 | Climate-adjusted **probable minimum** | **2,719,039  (+9.0%)** |
 | Sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
+
+**Longer horizon (cumulative need to 2100, SSP2-4.5):**
+
+| | Units |
+|---|---|
+| Baseline (climate-blind) | ~14.0M |
+| Climate-adjusted minimum | **~16.5M  (+18%)** |
+| Climate share of need | rises **11% (2030s) → 30% (2090s)** |
 
 Full write-up and caveats in [`docs/methodology.md`](docs/methodology.md);
 planned extensions in [`docs/FUTURE_WORK.md`](docs/FUTURE_WORK.md).
@@ -74,5 +85,6 @@ planned extensions in [`docs/FUTURE_WORK.md`](docs/FUTURE_WORK.md).
 
 Complete and reproducible end-to-end. Baseline reconciles to the known ~2.5M
 statewide total; regional rollup matches published MPO determinations (SCAG,
-ABAG/MTC, SANDAG, AMBAG exact). External out-of-state in-migration term is
-available but off by default.
+ABAG/MTC, SANDAG, AMBAG exact). Both the single 6th-cycle adjustment and the
+longer-horizon decadal trajectory to 2100 are implemented. External out-of-state
+in-migration term is available but off by default (see `docs/FUTURE_WORK.md`).

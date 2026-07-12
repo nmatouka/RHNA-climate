@@ -62,6 +62,38 @@ def sweep(verbose: bool = True) -> pd.DataFrame:
     return df
 
 
+def trajectory_sweep(verbose: bool = True) -> pd.DataFrame:
+    """Cumulative-to-2100 trajectory under the baseline household-growth variants
+    (central / flat / decline). Shows how the long-horizon 'probable minimum'
+    depends on the most uncertain input — the future demographic path."""
+    from . import trajectory
+    cfg0 = load_assumptions()
+    variants = [None] + list(cfg0["trajectory"]["baseline_growth_variants"].keys())
+    rows = []
+    for v in variants:
+        s = trajectory.run(verbose=False, make_charts=False, growth_variant=v)["statewide"]
+        last = s.iloc[-1]
+        rows.append({
+            "growth_variant": v or "central",
+            "cum_baseline_2100": last["cum_baseline"],
+            "cum_adjusted_2100": last["cum_adjusted"],
+            "cum_climate_add": last["cum_climate_add"],
+            "climate_add_pct_2100": last["climate_add_pct"],
+        })
+    df = pd.DataFrame(rows)
+    df.to_csv(paths.OUTPUTS / "sensitivity_trajectory.csv", index=False)
+    if verbose:
+        print("\n" + "=" * 64)
+        print("  TRAJECTORY SENSITIVITY — cumulative need to 2100")
+        print("=" * 64)
+        for _, r in df.iterrows():
+            print(f"  {r['growth_variant']:8}  baseline {r['cum_baseline_2100']:>12,.0f}"
+                  f"  climate-adj {r['cum_adjusted_2100']:>12,.0f}"
+                  f"  (+{r['cum_climate_add']:,.0f})")
+        print("=" * 64)
+    return df
+
+
 def _report(df, base, cfg0) -> None:
     lo, hi = df["adjusted_total"].min(), df["adjusted_total"].max()
     print("\n" + "=" * 64)
@@ -90,3 +122,4 @@ def _report(df, base, cfg0) -> None:
 
 if __name__ == "__main__":
     sweep()
+    trajectory_sweep()

@@ -76,6 +76,59 @@ def _exposure_vs_delta(adj) -> None:
     plt.close(fig)
 
 
+def make_trajectory_charts(statewide, region) -> None:
+    """Charts for the longer-horizon decadal trajectory."""
+    paths.CHARTS.mkdir(parents=True, exist_ok=True)
+    _trajectory_cumulative(statewide)
+    _trajectory_per_decade(statewide)
+    print(f"[charts] wrote 2 trajectory charts to {paths.CHARTS}")
+
+
+def _trajectory_cumulative(statewide) -> None:
+    s = statewide
+    x = s["decade"].tolist()
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.fill_between(x, s["cum_baseline"], s["cum_adjusted"], color=_RED, alpha=0.18,
+                    label="Climate-driven addition")
+    ax.plot(x, s["cum_adjusted"], "-o", color=_RED, lw=2, label="Climate-adjusted minimum")
+    ax.plot(x, s["cum_baseline"], "-o", color=_GREY, lw=2, label="Baseline (climate-blind)")
+    last = s.iloc[-1]
+    ax.annotate(f"+{last['cum_climate_add']:,.0f}\n(+{last['cum_climate_add']/last['cum_baseline']*100:.0f}%)",
+                xy=(len(x) - 1, last["cum_adjusted"]), xytext=(-10, 8),
+                textcoords="offset points", ha="right", color=_RED, fontsize=9, fontweight="bold")
+    ax.set_ylabel("Cumulative housing need (units)")
+    ax.set_title("Cumulative statewide housing need to 2100 (SSP2-4.5)\n"
+                 "baseline vs. climate-adjusted 'probable minimum'", fontsize=11)
+    ax.legend(loc="upper left", fontsize=9)
+    ax.grid(axis="y", alpha=0.25)
+    fig.tight_layout()
+    fig.savefig(paths.CHARTS / "trajectory_cumulative.png", dpi=130)
+    plt.close(fig)
+
+
+def _trajectory_per_decade(statewide) -> None:
+    s = statewide
+    x = np.arange(len(s))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.6))
+    # Left: per-decade baseline vs adjusted bars.
+    w = 0.4
+    ax1.bar(x - w / 2, s["baseline_need"], w, color=_GREY, label="Baseline")
+    ax1.bar(x + w / 2, s["adjusted_need"], w, color=_BLUE, label="Climate-adjusted")
+    ax1.set_xticks(x); ax1.set_xticklabels(s["decade"], fontsize=8)
+    ax1.set_ylabel("Housing need per decade (units)")
+    ax1.set_title("Per-decade need: baseline vs. climate-adjusted", fontsize=10)
+    ax1.legend(fontsize=8)
+    # Right: climate share of need over time.
+    ax2.plot(x, s["climate_add_pct"], "-o", color=_RED, lw=2)
+    ax2.set_xticks(x); ax2.set_xticklabels(s["decade"], fontsize=8)
+    ax2.set_ylabel("Climate-driven share of need (%)")
+    ax2.set_title("Climate becomes a larger share of need over time", fontsize=10)
+    ax2.grid(axis="y", alpha=0.25)
+    fig.tight_layout()
+    fig.savefig(paths.CHARTS / "trajectory_per_decade.png", dpi=130)
+    plt.close(fig)
+
+
 def _biggest_movers(adj) -> None:
     top = adj.nlargest(12, "delta")
     bot = adj.nsmallest(12, "delta")

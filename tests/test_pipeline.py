@@ -68,3 +68,34 @@ def test_slugify_matches_climateshed_convention():
     assert slugify("La Cañada Flintridge") == "la-ca-ada-flintridge"
     assert slugify("St. Helena") == "st-helena"
     assert slugify("Adelanto") == "adelanto"
+
+
+# --- longer-horizon trajectory -------------------------------------------------
+from src import trajectory  # noqa: E402
+
+_TRAJ = trajectory.run(verbose=False, make_charts=False)["statewide"]
+
+
+def test_trajectory_anchors_to_sixth_cycle():
+    # The 2030s baseline (growth_mult = 1.0) must equal the 6th-cycle total.
+    row = _TRAJ[_TRAJ["decade"] == "2030s"].iloc[0]
+    assert abs(row["baseline_need"] - 2_495_457) < 1
+
+
+def test_trajectory_cumulative_monotonic():
+    for col in ["cum_baseline", "cum_adjusted"]:
+        assert _TRAJ[col].is_monotonic_increasing
+        assert (_TRAJ[col].diff().dropna() > 0).all()
+
+
+def test_trajectory_decade_conservation_and_climate_positive():
+    # Each decade: adjusted - baseline == replacement (pool nets to zero) and > 0.
+    add = _TRAJ["adjusted_need"] - _TRAJ["baseline_need"]
+    assert np.allclose(add, _TRAJ["replacement"], rtol=1e-6)
+    assert (add > 0).all()
+
+
+def test_trajectory_climate_share_rises_over_time():
+    # Climate becomes a larger share of need as demographic growth tapers.
+    assert _TRAJ["climate_add_pct"].is_monotonic_increasing
+    assert _TRAJ.iloc[-1]["climate_add_pct"] > _TRAJ.iloc[0]["climate_add_pct"]

@@ -43,49 +43,30 @@ existing hook; sensitivity should sweep the sign/magnitude given the uncertainty
 
 ---
 
-## 2. Longer horizon — housing need *beyond* the 6th cycle
+## 2. Longer horizon — housing need *beyond* the 6th cycle ✅ IMPLEMENTED
 
-**Status:** `horizon_years` scales replacement need, and `src/sensitivity.py`
-already sweeps 8/16/30 yr. The CMIP6 data is decadal (`2030s…2090s`) and fully
-vendored, but the model currently uses a **single decade snapshot** (`2050s`) and
-holds the baseline `B_j` fixed at the 6th-cycle allocation.
+**Done** (`src/trajectory.py`, methodology §7). Walks decades `2030s → 2090s`
+with a growing DOF-informed baseline, per-decade time-varying climate (CMIP6
+decade + rising SLR, pooled-normalized so intensification rises over time), the
+same A–D adjustment per decade, and cumulative accounting to 2100. Outputs
+`trajectory_statewide.csv` / `trajectory_region.csv` and two charts; a growth-path
+sensitivity (`sensitivity.trajectory_sweep`) covers flat/central/decline. Central
+result: cumulative need to 2100 ~14.0M → ~16.5M (+18%), climate share rising
+11%→30%.
 
-**Goal:** move from "adjust the 6th cycle" to a **trajectory of statewide housing
-need to 2050/2100**, showing what future cycles (7th, 8th, …) might require once
-climate is included — not just a scaled replacement figure.
-
-**What's missing today:**
-- **Future baseline growth.** Beyond the 6th cycle, `B_j` itself should grow with
-  projected household formation (DOF projections to 2050/2060), not stay fixed.
-  Replacement + displacement then layer on top of a *growing* baseline.
-- **Time-varying climate.** Step through CMIP6 decades (exposure and
-  `climate_uplift` recomputed per decade) instead of one 2050s snapshot, so later
-  decades carry higher hazard.
-- **Cumulative accounting.** Replacement and displacement accumulate across
-  decades; SLR exposure ratchets up (the SLR data already has 2020→2100 steps).
-
-**Design sketch:**
-- New `src/trajectory.py` that walks decades `2030s → 2090s`:
-  - baseline_growth_d from DOF projections,
-  - exposure_d / uplift_d from that decade's CMIP6 (+ SLR year),
-  - replacement_d, displacement_d, redistribution_d,
-  - accumulate into a per-decade `need_d` and a running total.
-- Output: `outputs/trajectory_statewide.csv` (need by decade) + a line/area chart
-  of baseline vs. climate-adjusted need over time, with the scenario band.
-- Keep the current single-horizon model as the "6th-cycle" special case.
-
-**Data / methods to source:**
-- DOF population/household projections (P-1/P-3) by county to 2060.
-- Optionally HCD's household-growth methodology to keep the growth term
-  consistent with how RHND is actually derived.
-
-**Effort:** larger. This is a genuine model extension (a time-stepped engine) plus
-DOF projection sourcing, but it reuses the existing exposure, replacement, and
-redistribution components per decade.
+**Remaining refinement — county-level DOF household projections.** The baseline
+growth taper is currently a *statewide* multiplier applied uniformly
+(`trajectory.baseline_growth_mult`). Swapping in DOF **P-2A/P-4 county household
+projections** would differentiate growth geographically (some counties keep
+growing, others shrink), making the per-region trajectory more realistic. The
+hook is clean: replace the uniform `growth_mult_d` with a per-county series.
+DOF file: `P2A_County_Total.xlsx` (population) / P-4 households, on dof.ca.gov.
+Also consider explicit inter-cycle carryover of unmet need (each decade is
+currently an independent cycle).
 
 ---
 
-### Cross-cutting refinements (smaller, noted in methodology.md §7)
+### Cross-cutting refinements (smaller, noted in methodology.md §8)
 - Per-jurisdiction **receiver cap** (small towns can absorb large % gains today).
 - **CA-relative vs national** NRI percentile option for the exposure index.
 - **Income-category** split of the adjustment (baseline has VLI/LI/MOD/AboveMod).

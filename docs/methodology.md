@@ -134,7 +134,60 @@ Riverside, Ontario, Fontana, Irvine) into resilient high-capacity cores (Los
 Angeles, San Francisco, Sacramento, Fresno). See `outputs/` and
 `outputs/charts/`.
 
-## 7. Key assumptions and limitations
+## 7. Longer-horizon trajectory (beyond the 6th cycle)
+
+Sections 1–6 adjust the single 6th-cycle allocation. `src/trajectory.py` extends
+this to a **decade-by-decade projection of statewide housing need to 2100**,
+answering "what might future cycles need once climate is included?"
+
+For each decade *d* ∈ {2030s … 2090s} (each ≈ one 8–10 yr planning cycle):
+
+1. **Growing, tapered baseline.** `baseline_need_j,d = B_j × growth_mult_d`, where
+   `B_j` is the 6th-cycle allocation and `growth_mult_d` is a DOF-informed
+   statewide household-growth multiplier (2030s = 1.0, tapering to 0.60 by the
+   2090s). Rationale: DOF projects California's population to **plateau in the
+   mid-2040s and then slowly decline**, but household formation continues as
+   average household size falls — so per-cycle need eases gradually rather than
+   collapsing. Applied uniformly (county-level DOF household projections are the
+   pluggable refinement; see `FUTURE_WORK.md`).
+2. **Time-varying climate.** Exposure, the CMIP6 uplift, and sea-level rise are
+   recomputed for decade *d* (`build_exposure_for_decade`). CMIP6 signals are
+   normalized against **bounds pooled across all decades** so intensification
+   rises monotonically over time instead of being re-centred each decade; SLR uses
+   the end-of-decade year. NRI hazard *geography* is static (it sets where risk
+   is); climate supplies the *intensification* over time.
+3. **Adjustment.** The same components A–D (`apply_model`, 10-yr replacement
+   horizon) produce `adjusted_need_j,d`, with exact per-decade pool conservation.
+4. **Stock growth.** The housing stock — which drives future replacement — grows
+   by only the net-new share (`stock_growth_fraction ≈ 0.65`) of each decade's
+   baseline need; the remainder addresses the *existing* deficit and adds no
+   physical units.
+
+Results accumulate into a cumulative-need trajectory. **Central case (SSP2-4.5):**
+
+| | Cumulative need to 2100 |
+|---|---|
+| Baseline (climate-blind) | **~14.0M** |
+| Climate-adjusted minimum | **~16.5M** |
+| Climate-driven addition | **+2.5M (+18%)** |
+
+The signature finding is temporal: the climate-driven **share** of housing need
+rises from ~11% (2030s) to ~30% (2090s) — as demographic growth tapers, climate
+replacement and sea-level displacement become an ever-larger fraction of why
+California must build. The cumulative climate addition is robust (~2.49M–2.62M)
+across flat/decline household-growth variants (`trajectory_sweep`), because it is
+driven by housing stock and hazard, not the demographic path. Outputs:
+`outputs/trajectory_statewide.csv`, `outputs/trajectory_region.csv`, and
+`outputs/charts/trajectory_*.png`.
+
+**Added limitations for the trajectory:** the baseline-growth taper is a
+documented statewide assumption, not county-resolved; each decade is treated as an
+independent planning cycle (no explicit inter-cycle carryover of unmet need); and
+compounding uncertainty makes late-century decades more illustrative than
+predictive. It shows the *shape and direction* of climate-driven need, not a point
+forecast for 2090.
+
+## 8. Key assumptions and limitations
 
 - **All tunable parameters live in `config/assumptions.yaml`** and are chosen at
   the conservative end. Sensitivity (`src/sensitivity.py`) sweeps the three most
@@ -159,12 +212,13 @@ Angeles, San Francisco, Sacramento, Fresno). See `outputs/` and
   no legal/RHNA-methodology constraints (e.g. jobs-housing fit, equity
   adjustments) are modeled.
 
-## 8. Reproduce
+## 9. Reproduce
 
 ```bash
 python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m src.source_rhna     # normalize HCD baseline -> FIPS
-./.venv/bin/python -m src.allocate        # full pipeline -> outputs/ + charts
-./.venv/bin/python -m src.sensitivity     # uncertainty band -> outputs/sensitivity.csv
+./.venv/bin/python -m src.allocate        # 6th-cycle pipeline -> outputs/ + charts
+./.venv/bin/python -m src.trajectory      # decadal need to 2100 -> outputs/trajectory_*
+./.venv/bin/python -m src.sensitivity     # uncertainty bands -> outputs/sensitivity*.csv
 ./.venv/bin/python -m pytest -q           # invariants
 ```

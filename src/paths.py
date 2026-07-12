@@ -29,6 +29,10 @@ ALLOC_JURISDICTION = OUTPUTS / "allocation_jurisdiction.csv"
 ALLOC_REGION = OUTPUTS / "allocation_region.csv"
 ALLOC_STATEWIDE = OUTPUTS / "allocation_statewide.csv"
 
+# Longer-horizon trajectory (src/trajectory.py)
+TRAJ_STATEWIDE = OUTPUTS / "trajectory_statewide.csv"
+TRAJ_REGION = OUTPUTS / "trajectory_region.csv"
+
 
 def ensure_dirs() -> None:
     for d in (PROCESSED, OUTPUTS, CHARTS):
