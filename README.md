@@ -5,22 +5,22 @@ Housing Needs Allocation (RHNA).
 
 ## Why
 
-California's RHNA determines how many housing units each region — then each
-city/county — must plan for. HCD's determination is built from Dept. of Finance
+California's RHNA sets how many housing units each region, and then each city and
+county, has to plan for. HCD builds that number from Department of Finance
 projections plus adjustments for overcrowding, cost burden, vacancy, and
-replacement need. **None of these inputs account for climate change** — housing
-lost to wildfire/flood/sea-level rise, or population displaced by future climate
-hazards, is invisible to the formula.
+replacement need. **None of those inputs account for climate change.** The homes
+wildfire, flood, and sea-level rise will destroy, and the households those hazards
+displace, never enter the formula.
 
 This project layers climate exposure onto the **6th-cycle (2021–2029)** RHNA
 baseline to produce a more probable *minimum* statewide allocation, cascaded to
-region (COG/MPO) and jurisdiction. The adjustment both **raises** the total
-(disaster replacement need) and **redistributes** it away from high-hazard
-jurisdictions toward climate-resilient receiver areas. Displacement is modeled
-**bottom-up from California hazard exposure** under **SSP2-4.5** using CMIP6
-decadal projections.
+region (COG/MPO) and jurisdiction. The adjustment does two things. It **raises**
+the total by disaster replacement need, and it **redistributes** allocation away
+from high-hazard jurisdictions toward climate-resilient receiver areas.
+Displacement is modeled bottom-up from California hazard exposure under
+**SSP2-4.5**, using CMIP6 decadal projections.
 
-> This is an analytical estimate, **not** an official HCD determination.
+> This is an analytical estimate, not an official HCD determination.
 
 ## Model (see `docs/methodology.md` for full formulas)
 
@@ -62,12 +62,12 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m pytest -q         # invariants (23 tests)
 ```
 
-📊 **Results write-up with figures & citations:** [`docs/index.html`](docs/index.html)
+**Results write-up with figures and citations:** [`docs/index.html`](docs/index.html)
 (published via GitHub Pages). Full methodology: [`docs/methodology.md`](docs/methodology.md).
 
 ## Headline result
 
-**6th cycle — two models (base, and base + compound):**
+**6th cycle, two models (base, and base + compound):**
 
 | | Units |
 |---|---|
@@ -77,18 +77,18 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 | Base sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
 | Compound stranded band (uncertain) | 2.7k – 20k units |
 
-The **compound** model is shown *alongside* the base, not merged into it:
-stacked-hazard places (Inland Empire/Coachella) shed capacity that can't all be
-rehoused in safe areas, so some is **stranded** and the total falls below the base
-— a transparent scenario for an effect we're genuinely uncertain about.
+The **compound** model runs alongside the base, not merged into it. Stacked-hazard
+places (Inland Empire/Coachella) shed capacity that can't all be rehoused in safe
+areas, so some of it is **stranded** and the total lands below the base. Whether
+hazards compound this way is uncertain, so it stays a separate scenario.
 
-> **Read at two confidence levels.** The **statewide total** (+9%, replacement) is
-> the well-grounded number — it rests on FEMA NRI building-loss rates, the HCD
-> baseline, and CMIP6, and the tornado in `docs/methodology.md §9` confirms *no
-> redistribution parameter moves it*. The **geography** — who loses and who
-> receives the ~626k redistributed units — rides on author-judgment parameters
-> (blend weights, exponents; provenance tagged in §2a) and is **directional/
-> illustrative**, not a forecast of exact per-jurisdiction counts.
+> **Two confidence levels.** The **statewide total** (+9%, replacement) is the
+> solid number. It rests on FEMA NRI building-loss rates, the HCD baseline, and
+> CMIP6, and the tornado in `docs/methodology.md §9` shows no redistribution
+> parameter moves it. The **geography**, meaning who loses and who receives the
+> ~626k redistributed units, rides on author-judgment parameters (blend weights and
+> exponents, tagged in §2a). Read it as directional, not a forecast of exact
+> per-jurisdiction counts.
 
 **Longer horizon (cumulative need to 2100, SSP2-4.5, county-resolved DOF baseline):**
 
@@ -99,8 +99,8 @@ rehoused in safe areas, so some is **stranded** and the total falls below the ba
 | Climate share of need | rises **14% (2030s) → 27% (2090s)** |
 
 County-resolved DOF growth moves cumulative need **out of SCAG (−10 pp)** into
-Sacramento (SACOG +3.8 pp), the Bay Area, and the Central Valley — a shift the
-uniform taper misses. See `outputs/trajectory_region_compare.csv`.
+Sacramento (SACOG +3.8 pp), the Bay Area, and the Central Valley. The uniform taper
+misses this shift. See `outputs/trajectory_region_compare.csv`.
 
 **Compound climate constraints (each hazard counted once):**
 
