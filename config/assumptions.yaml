@@ -72,6 +72,13 @@ displacement:
   #   frac = max_fraction * e ** exponent
   # => 0 below the threshold, max_fraction at E_j = 1. Convex (exponent>1) so
   # only the most-exposed places shed meaningful population.
+  # LITERATURE ANCHOR (McConnell et al. 2024, Nature Communications 15:6631):
+  # only catastrophic wildfires drove migration — Camp Fire (near-total
+  # destruction of Paradise) ~6.8-8.3% out-migration in yr 1, while typical
+  # destructive fires drove ~0.4-0.5%. So max_fraction=0.10 at E=1 tracks the
+  # worst observed event, and the convex curve keeps moderate-exposure places
+  # near zero — consistent with the evidence. (Hauer et al. 2016, Nat. Clim.
+  # Change, anchors SLR displacement: ~1M Californians exposed at 1.8 m by 2100.)
   max_fraction: 0.10              # at most 10% of pop displaced over horizon
   exponent: 2.0
   # Exposure threshold below which no displacement occurs (avoids penalizing
@@ -122,8 +129,12 @@ trajectory:
   growth_source: county
   # Growth share of an RHNA allocation (the rest addresses the existing deficit
   # and persists regardless of demographics). Only this share scales with DOF
-  # household growth. Mirrors stock_growth_fraction.
+  # household growth. AUTHOR ASSUMPTION (~0.6-0.7), not a sourced figure — HCD's
+  # growth-vs-existing-need split varies by region; refine from HCD 6th-cycle
+  # determination component breakdowns. Swept in sensitivity. Mirrors
+  # stock_growth_fraction.
   need_growth_share: 0.65
+  need_growth_share_sensitivity: [0.50, 0.65, 0.80]
   # County multipliers are relative to each county's own 2020s growth; bound them:
   county_growth_floor: 0.25   # a flat/declining county still needs ~25% of pace
   county_growth_cap: 2.0      # cap runaway high-growth counties
@@ -131,7 +142,9 @@ trajectory:
   # EXISTING deficit (overcrowding, cost burden, vacancy shortfall) and does not
   # physically enlarge the housing stock. Grow the stock (which drives future
   # replacement need) by only this growth-component fraction of each decade's
-  # baseline need. ~0.65 reflects the growth share of the 6th-cycle determination.
+  # baseline need. AUTHOR ASSUMPTION (~0.6-0.7), mirrors need_growth_share — HCD's
+  # growth-vs-existing-need split is not cleanly 0.65 and varies by region; not a
+  # sourced figure. Swept via need_growth_share_sensitivity (shared value).
   stock_growth_fraction: 0.65
   # Baseline (climate-BLIND) housing-need per decade as a multiplier on each
   # jurisdiction's 6th-cycle allocation. 2030s = 1.0 (reference).
@@ -225,7 +238,10 @@ constraints:
 compound:
   enabled: true
   min_stack: 2            # only places stacking >= this many hazard axes
-  rate: 0.15             # extra share of B moved out per stacked axis beyond min
+  # Marginal-on-RESIDUAL: extra share of the capacity that SURVIVES the per-axis
+  # discounts (B - base_removed) moved out per stacked axis beyond min_stack — so
+  # it does not re-penalize units already discounted by fire/flood/water siting.
+  rate: 0.15
   exponent: 1.0
   rehouse_fraction: 0.5   # fraction of compound-displaced capacity that finds a
                           # safe home; (1 - this) is stranded (lost from total)

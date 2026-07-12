@@ -11,10 +11,28 @@ from . import paths
 
 
 @lru_cache(maxsize=1)
-def load_assumptions() -> dict[str, Any]:
-    """Parse assumptions.yaml (cached)."""
+def _load_file() -> dict[str, Any]:
     with open(paths.ASSUMPTIONS) as f:
         return yaml.safe_load(f)
+
+
+_override: dict[str, Any] | None = None
+
+
+def load_assumptions() -> dict[str, Any]:
+    """Parse assumptions.yaml (cached), unless a temporary override is set.
+
+    `set_override(cfg)` lets the sensitivity tornado rebuild `master` under a
+    perturbed config so parameters that are baked into master at build time
+    (exposure/uplift/water weights) can be swept truthfully. All modules resolve
+    this global at call time, so the override reaches them regardless of import
+    style."""
+    return _override if _override is not None else _load_file()
+
+
+def set_override(cfg: dict[str, Any] | None) -> None:
+    global _override
+    _override = cfg
 
 
 def slugify(name: str) -> str:

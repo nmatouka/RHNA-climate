@@ -119,7 +119,17 @@ housing-relevant signals still on the table (all present in existing data):
 
 ### Cross-cutting refinements (smaller, noted in methodology.md §9)
 - Per-jurisdiction **receiver cap** (small towns can absorb large % gains today).
-- **CA-relative vs national** NRI percentile option for the exposure index.
+- **CA-relative vs national** NRI percentile option for the exposure index, and a
+  common normalization across indices (`E_j` is absolute-percentile; `H_j` and the
+  aridification term are cross-sectional min–max — see methodology §9).
+- **Parameter calibration.** Displacement is now literature-anchored (McConnell
+  et al. 2024; Hauer et al. 2016), but the blend weights (exposure/water/heat),
+  the receiver/siting exponents, and `move_fraction` remain **author judgment**
+  (provenance tagged in methodology §2a). The tornado (`sensitivity.tornado`)
+  shows they move only the geography, not the statewide total — so calibrating
+  them from empirical post-disaster relocation data would sharpen the *map*, not
+  the headline. A natural next step is a formal one-at-a-time → joint calibration
+  against observed CA relocation/rebuild patterns.
 - **Income-category** split of the adjustment (baseline has VLI/LI/MOD/AboveMod).
 - **Managed-retreat** variant: assign replacement need to safer areas rather than
   in-place.

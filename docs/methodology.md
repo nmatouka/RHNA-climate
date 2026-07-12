@@ -23,6 +23,17 @@ region and jurisdiction. It does two things at once:
 > determination. Parameters are chosen conservatively so the result reads as a
 > defensible *floor*, presented with an uncertainty band.
 
+> **Read the two outputs at different confidence levels.** The **statewide total**
+> (+9% replacement) rests on authoritative data — HCD baseline, FEMA NRI
+> building-loss rates, CMIP6 intensification — and is the well-grounded number.
+> The **redistribution** (who loses and who receives ~626k units, every
+> jurisdiction- and region-level shift) rides on the displacement/receiver/siting
+> parameters, which are literature-anchored where evidence exists (wildfire
+> out-migration) but author judgment elsewhere (blend weights, exponents). Treat
+> the geography as **directional/illustrative**, not a point estimate. §2a tags
+> every parameter's provenance; the tornado (§9) shows the total is robust to all
+> redistribution parameters — they move only the map.
+
 ## 2. Data
 
 | Input | Source | Use |
@@ -38,6 +49,60 @@ Jurisdictions join on 7-digit `PLACE_FIPS` (cities) / 5-digit `COUNTY_FIPS`
 (unincorporated). Coverage: **539 / 539** analysis units (the phantom
 "Unincorporated San Francisco County" is dropped — SF is a consolidated
 city-county). Statewide baseline reconciles to **2,495,457 units**.
+
+## 2a. Parameter provenance
+
+Every tunable parameter (all in `config/assumptions.yaml`) is tagged below by the
+strength of its source. This is the honest map of what is *grounded in data or
+literature* versus what is *author judgment* — the distinction that separates the
+well-supported statewide total from the illustrative geography.
+
+**Data-grounded** (external authoritative source; not free parameters):
+
+| Parameter | Source |
+|---|---|
+| Baseline allocation `B_j` (539 units, 4 income cats) | HCD 6th-cycle determination (data.ca.gov) |
+| `loss_rate_hist` (building EAL ÷ building value) | FEMA National Risk Index v1.20 |
+| `climate_uplift` signals (dry-spell, heat, extreme-precip) | CMIP6 5-model ensemble, SSP2-4.5 |
+| SLR magnitude (`slr_scenario: intermediate`, `slr_year: 2050`) | NOAA/Sweet 2022 via OPC 2024 planning guidance |
+| SGMA basin priority / critical-overdraft | DWR SGMA basin prioritization |
+| Per-county decadal growth (`growth_source: county`) | DOF P-2A / P-4 projections |
+| `household.avg_size` (2.9) | CA/Census average household size |
+| `horizon.years` = 8 (single-cycle length) | HCD 6th-cycle span (the *extension* to 16/30 yr is judgment) |
+
+**Literature-anchored** (a parameter whose value is set to match empirical findings):
+
+| Parameter | Anchor |
+|---|---|
+| `displacement.max_fraction` (0.10 at E=1) | McConnell et al. 2024, *Nat. Commun.* 15:6631 — Camp Fire drove ~6.8–8.3% yr-1 out-migration (near-total destruction); the 10% ceiling tracks the worst observed event. SLR displacement scale: Hauer et al. 2016. |
+| `displacement` convex shape (near-zero below threshold) | Same — *typical* destructive fires drove only ~0.4–0.5% migration, so only catastrophic exposure should move population. |
+
+**Author judgment** (reasonable, conservative, but *not* externally sourced — these
+drive the redistribution and are the model's real uncertainty; swept in §9):
+
+| Parameter | Value | Role |
+|---|---|---|
+| `exposure.weights` | fire .40 / flood .30 / heat .15 / slr .15 | blends hazard axes into `E_j` |
+| `water.weights` | sgma .40 / drought .35 / arid .25 | blends into `W_j` |
+| `heat.weights` | warm-nights .35 / cdd .30 / peak .20 / ac-gap .15 | blends into `H_j` |
+| `displacement.exponent` / `min_exposure` | 2.0 / 0.5 | curve convexity + threshold |
+| `receiver.resilience_exponent` / `capacity_exponent` | 1.5 / 1.0 | receiver weighting |
+| `siting.move_fraction` / `unsafe_percentile` | 0.5 / 0.90 | share of unsafe capacity moved (cutoff matches NRI "very high" convention) |
+| `water.siting` min_stress / max_move / exponent | 0.55 / 0.25 / 1.5 | water discount ramp |
+| `water.receiver.headroom_exponent` | 0.5 | kept modest — imported-supply caveat (§9) |
+| `replacement.eal_to_unit_loss_factor` | 1.0 | conservative (no amplification) |
+| `replacement.max_annual_loss_rate` | 0.02 | **non-binding rail** (max modeled rate ≈0.0087) |
+| `replacement.climate_uplift.max_uplift` + signal weights | 0.5 / .6 / .4 | uplift ceiling + fire-vs-flood split |
+| `exposure.slr_norm_cm` / `coastal_km` | 60 / 25 | normalization constants |
+| `need_growth_share` / `stock_growth_fraction` | 0.65 | growth-vs-deficit split (see §7 caveat) |
+| `constraints.thresholds` | fire/flood .90, slr .40, water/heat .55 | per-axis "constrained" cutoffs |
+| `compound` rate / exponent / rehouse / min_stack | 0.15 / 1.0 / 0.5 / 2 | uncertain second model (§8a) |
+
+The tornado (§9) sweeps the high-leverage author-judgment parameters and confirms
+**none of them move the statewide total** — they redistribute only. The total
+responds essentially to `horizon.years` (data-grounded cycle length) and, weakly,
+to the replacement uplift. So the author-judgment concentration is entirely on the
+*geography*, which is exactly why the geography is framed as directional.
 
 ## 3. Hazard exposure index `E_j`
 
@@ -82,6 +147,15 @@ displacement_fraction(E) = max_fraction · clip((E−min_exposure)/(1−min_expo
 ```
 A convex, threshold-relative curve: **zero below `min_exposure` (0.5)**, rising
 to `max_fraction` (10%) at E=1. Only the most-exposed places shed population.
+**Literature anchor:** McConnell et al. (2024, *Nature Communications* 15:6631)
+find that only catastrophic wildfires drove out-migration — the Camp Fire
+(near-total destruction of Paradise) produced ~6.8–8.3% out-migration in year one,
+while typical destructive fires drove only ~0.4–0.5%. The 10% ceiling at E=1 tracks
+the worst observed event, and the convex curve keeps moderate-exposure places near
+zero — both consistent with that evidence. SLR displacement scale is anchored to
+Hauer et al. (2016, *Nature Climate Change*): ~1M Californians exposed at 1.8 m by
+2100. The `exponent` (2.0) and `min_exposure` (0.5) remain author choices setting
+the curve shape, and are swept in §9.
 
 ### D. Siting discount `S_j` — redistributes
 ```
@@ -140,15 +214,23 @@ which validates both the baseline join and the region map.
 | Baseline (HCD 6th cycle) | **2,495,457** |
 | Climate-adjusted probable minimum | **2,719,039** |
 | Increase (replacement need) | **+223,582  (+9.0%)** |
-| Redistributed pool | 606,483 |
+| Redistributed pool | 625,871 |
 
 **Sensitivity band** (sweeping horizon 8/16/30 yr and displacement parameters):
 adjusted total ranges **2.72M (+9.0%) to 3.33M (+33.6%)**. The central estimate
 uses the conservative 8-year (single-cycle) horizon. Redistribution moves
 allocation out of high-hazard Inland Empire jurisdictions (Unincorporated
-Riverside, Ontario, Fontana, Irvine) into resilient high-capacity cores (Los
-Angeles, San Francisco, Sacramento, Fresno). See `outputs/` and
+Riverside, Irvine, Ontario, Riverside, Fontana) into resilient high-capacity cores
+(Los Angeles, San Francisco, Sacramento, San Diego). Note that once **water**
+(component E) is included, the San Joaquin Valley (e.g. Fresno) is a net *donor*,
+not a receiver — overdraft pushes allocation out of it. See `outputs/` and
 `outputs/charts/`.
+
+> **Confidence.** The total (+9%) is the well-grounded number (FEMA/HCD/CMIP6).
+> The ~626k-unit redistribution above is **directional** — it rests on the
+> author-judgment parameters tagged in §2a and is sensitive to them (§9). Read
+> the jurisdiction/region shifts as *illustrative of the pattern*, not a forecast
+> of exact counts.
 
 ## 7. Longer-horizon trajectory (beyond the 6th cycle)
 
@@ -210,9 +292,11 @@ rises from ~14% (2030s) to ~27% (2090s) — as demographic growth tapers, climat
 replacement and sea-level displacement become an ever-larger fraction of why
 California must build. Routing growth into higher-exposure inland counties makes
 this share **larger** than under the uniform baseline (20.4% vs 18.2% cumulative).
-The cumulative climate addition is robust (~2.4M–2.6M) across county/flat/decline
-growth paths (`trajectory_sweep`), because it is
-driven by housing stock and hazard, not the demographic path. Outputs:
+The cumulative climate addition is robust (~2.3M–2.6M) both across county/flat/
+decline growth paths (`trajectory_sweep`) and across the growth-vs-deficit share
+(`trajectory_share_sweep` sweeps `need_growth_share` 0.50/0.65/0.80 →
++2.34M/+2.42M/+2.49M), because it is driven by housing stock and hazard, not the
+demographic path or the deficit split. Outputs:
 `outputs/trajectory_statewide.csv`, `outputs/trajectory_region.csv`, and
 `outputs/charts/trajectory_*.png`.
 
@@ -279,12 +363,16 @@ uncertain, so it is presented as a **separate second model** shown alongside the
 base, never folded into a single headline. Every run emits both.
 
 `apply_model(compound=True)` adds one term to the base: jurisdictions stacking
-`n_constraints ≥ min_stack` (2) shed an **extra** siting discount
-`Sw_comp = B_j · rate · (n−min+1)^exp`, of which only **`rehouse_fraction`** can be
-absorbed by climate-safe receivers. The remainder is **stranded** — California may
-simply lack enough safe, water-secure, heat-livable land to rehouse everyone — and
-**drops out of the total**, so the compound model's probable minimum lands *below*
-the base:
+`n_constraints ≥ min_stack` (2) shed an **extra** siting discount applied to the
+capacity that **survives** the independent per-axis discounts —
+`Sw_comp = (B_j − removed_base_j) · rate · (n−min+1)^exp` — of which only
+**`rehouse_fraction`** can be absorbed by climate-safe receivers. Applying the
+compound rate to the *residual* (`B − removed_base`) rather than to full `B_j` is
+deliberate: it avoids re-penalizing units already moved by the fire/flood/water
+siting terms, so the compound effect is genuinely **marginal**, not
+double-counted. The remainder is **stranded** — California may simply lack enough
+safe, water-secure, heat-livable land to rehouse everyone — and **drops out of the
+total**, so the compound model's probable minimum lands *below* the base:
 
 ```
 Σ B'_compound = Σ B'_base − stranded,   stranded = (1−rehouse_fraction)·Σ Sw_comp
@@ -294,20 +382,39 @@ This deliberately **breaks the base model's conservation identity** (that's the
 point: stacked capacity that can't be rehoused is lost, not moved). The base path
 (`compound=False`) is byte-identical to before and still conserves.
 
-**Result (6th cycle):** base **2,719,039** → compound **2,701,968** (17,072
-stranded). Swept over the uncertain parameters (`rate`, `rehouse_fraction`), the
-stranded band is **~5.7k–40k units** (`sensitivity_compound.csv`). Cumulative to
-2100 the compound trajectory strands ~105k. Compounding pulls allocation out of
-the **Inland Empire** (SCAG −17k; Unincorporated Riverside, Ontario, Perris) — a
-"there aren't enough safe places" signal. **Option 3** (explicit physical
+**Result (6th cycle):** base **2,719,039** → compound **2,711,041** (7,998
+stranded — more conservative than the pre-marginal implementation, which
+double-counted). Swept over the uncertain parameters (`rate`, `rehouse_fraction`),
+the stranded band is **~2.7k–20k units** (`sensitivity_compound.csv`). Compounding
+pulls allocation out of the **Inland Empire + Coachella Valley** (SCAG −8.1k;
+Unincorporated Riverside, Coachella, Perris, Indio, Menifee) — a "there aren't
+enough safe places" signal. **Option 3** (explicit physical
 couplings — post-fire debris flow, overdraft subsidence — which could *raise* the
 total via cascade losses) is the planned more rigorous successor.
 
 ## 9. Key assumptions and limitations
 
-- **All tunable parameters live in `config/assumptions.yaml`** and are chosen at
-  the conservative end. Sensitivity (`src/sensitivity.py`) sweeps the three most
-  uncertain (horizon, displacement fraction, displacement exponent).
+- **All tunable parameters live in `config/assumptions.yaml`** (provenance tagged
+  in §2a) and are chosen at the conservative end. Sensitivity (`src/sensitivity.py`)
+  now does two things: a joint sweep of the horizon/displacement parameters (the
+  reported band), and a **one-at-a-time tornado** (`tornado()`) over the
+  high-leverage *fixed* parameters — exposure/water weights, receiver and siting
+  exponents, `move_fraction`, the loss-rate cap. The tornado's finding is decisive:
+  the statewide **total** swings only with `horizon.years` (+23% at 30 yr) and
+  weakly with the replacement uplift; **every redistribution parameter leaves the
+  total unchanged and moves only the map** (reported as L1 allocation distance).
+  Parameters baked into `master` at build time are swept by rebuilding it under a
+  config override (`config.set_override`) so the sweep is truthful, not a no-op.
+- **Mixed normalization across indices (documented fragility).** `E_j` is built
+  from **absolute national NRI percentiles** (a tract at the 90th US percentile
+  scores 0.90 regardless of the CA distribution), whereas `H_j` (heat) and the
+  aridification sub-term of `W_j` use **cross-sectional min–max** over the 539 CA
+  units (relative, and therefore outlier-sensitive — one extreme jurisdiction
+  compresses the rest). Applying **absolute** thresholds (e.g. the constraint
+  cutoffs in §8) to these **relative** indices is internally a slight
+  apples-to-oranges; it is tolerable here because the cutoffs (0.55) were chosen
+  against the observed relative distributions, but a future refinement should put
+  all indices on a common (preferably absolute or robust-quantile) footing.
 - **Exposure uses national NRI percentiles**, so California (high inland-flood
   and wildfire nationally) skews high in absolute terms. This is appropriate for
   the *relative within-CA ranking* that drives redistribution; the displacement

@@ -58,9 +58,12 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python -m src.allocate      # 6th-cycle pipeline -> outputs/ + charts
 ./.venv/bin/python -m src.trajectory    # decadal need to 2100 (county DOF baseline)
 ./.venv/bin/python -m src.constraints   # compound climate-constraint view
-./.venv/bin/python -m src.sensitivity   # uncertainty bands
-./.venv/bin/python -m pytest -q         # invariants (20 tests)
+./.venv/bin/python -m src.sensitivity   # uncertainty bands + tornado
+./.venv/bin/python -m pytest -q         # invariants (23 tests)
 ```
+
+📊 **Results write-up with figures & citations:** [`docs/index.html`](docs/index.html)
+(published via GitHub Pages). Full methodology: [`docs/methodology.md`](docs/methodology.md).
 
 ## Headline result
 
@@ -70,14 +73,22 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 |---|---|
 | Baseline (HCD 6th cycle) | 2,495,457 |
 | **BASE** model (hazards independent) | **2,719,039  (+9.0%)** |
-| **COMPOUND** model (option 2, stranding) | **2,701,968  (+8.3%)** |
+| **COMPOUND** model (option 2, stranding) | **2,711,041  (+8.6%)** |
 | Base sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
-| Compound stranded band (uncertain) | 5.7k – 40k units |
+| Compound stranded band (uncertain) | 2.7k – 20k units |
 
 The **compound** model is shown *alongside* the base, not merged into it:
 stacked-hazard places (Inland Empire/Coachella) shed capacity that can't all be
 rehoused in safe areas, so some is **stranded** and the total falls below the base
 — a transparent scenario for an effect we're genuinely uncertain about.
+
+> **Read at two confidence levels.** The **statewide total** (+9%, replacement) is
+> the well-grounded number — it rests on FEMA NRI building-loss rates, the HCD
+> baseline, and CMIP6, and the tornado in `docs/methodology.md §9` confirms *no
+> redistribution parameter moves it*. The **geography** — who loses and who
+> receives the ~626k redistributed units — rides on author-judgment parameters
+> (blend weights, exponents; provenance tagged in §2a) and is **directional/
+> illustrative**, not a forecast of exact per-jurisdiction counts.
 
 **Longer horizon (cumulative need to 2100, SSP2-4.5, county-resolved DOF baseline):**
 

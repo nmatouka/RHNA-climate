@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Climate-Adjusted RHNA — A Probable Minimum for California</title>
+<meta name="description" content="Layering wildfire, flood, sea-level-rise, and water constraints onto California's 6th-cycle RHNA to estimate a more probable minimum statewide housing allocation.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f7f8fa;
+    --surface-2: #eef1f5;
+    --border: #e2e6ec;
+    --text: #1a2028;
+    --muted: #5c6673;
+    --faint: #8a93a0;
+    --blue: #2b6cb0;
+    --blue-soft: #e7f0f9;
+    --red: #c53030;
+    --red-soft: #fbeaea;
+    --purple: #8e44ad;
+    --green: #1a7f5a;
+    --accent: var(--blue);
+    --maxw: 860px;
+    --radius: 12px;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1319;
+      --surface: #171c24;
+      --surface-2: #1e242e;
+      --border: #2a323d;
+      --text: #e6eaf0;
+      --muted: #9aa5b3;
+      --faint: #6b747f;
+      --blue: #6ba7e0;
+      --blue-soft: #17273a;
+      --red: #e88a8a;
+      --red-soft: #33201f;
+      --purple: #c08adb;
+      --green: #4fbd91;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---- Hero ---- */
+  header.hero {
+    background: linear-gradient(160deg, var(--surface) 0%, var(--bg) 70%);
+    border-bottom: 1px solid var(--border);
+    padding: 68px 0 46px;
+  }
+  .eyebrow {
+    font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 16px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(30px, 5.4vw, 46px);
+    line-height: 1.12; letter-spacing: -0.01em;
+    margin: 0 0 18px; font-weight: 700;
+  }
+  .lede { font-size: 19px; color: var(--muted); margin: 0 0 8px; max-width: 62ch; }
+  .byline { font-size: 14px; color: var(--faint); margin-top: 22px; }
+  .byline a { color: var(--muted); }
+
+  /* ---- Confidence callout ---- */
+  .confidence {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 34px 0 6px;
+  }
+  .conf-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 18px 16px; background: var(--surface);
+  }
+  .conf-card .tag {
+    font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    display: inline-block; padding: 3px 9px; border-radius: 20px; margin-bottom: 10px;
+  }
+  .conf-card.grounded { border-color: color-mix(in srgb, var(--green) 40%, var(--border)); }
+  .conf-card.grounded .tag { background: color-mix(in srgb, var(--green) 16%, transparent); color: var(--green); }
+  .conf-card.directional { border-color: color-mix(in srgb, var(--red) 34%, var(--border)); }
+  .conf-card.directional .tag { background: var(--red-soft); color: var(--red); }
+  .conf-card h3 { margin: 0 0 6px; font-size: 16px; }
+  .conf-card p { margin: 0; font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+
+  /* ---- Stat row ---- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0 6px; }
+  .stat {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 16px; background: var(--surface); text-align: left;
+  }
+  .stat .num { font-family: var(--serif); font-size: 30px; font-weight: 700; line-height: 1; color: var(--accent); }
+  .stat .lab { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+
+  /* ---- Sections ---- */
+  main { padding: 20px 0 40px; }
+  section { padding: 34px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: 0; }
+  h2 {
+    font-family: var(--serif); font-size: 27px; margin: 0 0 4px; letter-spacing: -0.01em;
+    scroll-margin-top: 20px;
+  }
+  h2 .kicker { display:block; font-family: var(--sans); font-size: 12.5px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color: var(--accent); margin-bottom: 8px; }
+  h3 { font-size: 18px; margin: 26px 0 8px; }
+  p { margin: 14px 0; }
+  ul { padding-left: 20px; } li { margin: 7px 0; }
+  strong { font-weight: 700; }
+  .muted { color: var(--muted); }
+  sup a { font-size: .72em; padding: 0 1px; font-weight: 700; }
+
+  /* ---- Figures ---- */
+  figure {
+    margin: 26px 0; border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; background: var(--surface);
+  }
+  figure img { display: block; width: 100%; height: auto; background: #fff; }
+  figcaption {
+    font-size: 13.5px; color: var(--muted); padding: 12px 16px; border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  figcaption b { color: var(--text); }
+
+  /* ---- Model formula block ---- */
+  .formula {
+    font-family: var(--mono); font-size: 14.5px; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    overflow-x: auto; color: var(--text); margin: 18px 0;
+  }
+
+  /* ---- Component table ---- */
+  .tbl-scroll { overflow-x: auto; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--faint); font-weight: 700; }
+  td code, p code, li code { font-family: var(--mono); font-size: 13px; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
+  .prov-data { color: var(--green); font-weight: 700; }
+  .prov-lit { color: var(--blue); font-weight: 700; }
+  .prov-auth { color: var(--red); font-weight: 700; }
+
+  /* ---- Callout / note ---- */
+  .note {
+    border-left: 3px solid var(--accent); background: var(--surface);
+    padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 20px 0; font-size: 15px;
+  }
+  .note.warn { border-left-color: var(--red); }
+
+  /* ---- References ---- */
+  ol.refs { font-size: 14px; color: var(--muted); line-height: 1.55; padding-left: 22px; }
+  ol.refs li { margin: 10px 0; }
+  ol.refs li:target { background: var(--blue-soft); border-radius: 6px; padding: 4px 8px; margin-left: -8px; }
+
+  pre.code {
+    font-family: var(--mono); font-size: 13px; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; overflow-x: auto;
+  }
+
+  footer {
+    padding: 30px 0 60px; color: var(--faint); font-size: 13.5px; text-align: center;
+  }
+
+  @media (max-width: 680px) {
+    body { font-size: 16px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .confidence { grid-template-columns: 1fr; }
+    header.hero { padding: 48px 0 34px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">California housing policy × climate risk</div>
+    <h1>A Climate&#8288;-&#8288;Adjusted “Probable&nbsp;Minimum” for California’s&nbsp;RHNA</h1>
+    <p class="lede">
+      California tells every city how much housing to plan for. The formula counts
+      overcrowding, cost burden, and vacancy — but <em>not</em> the homes wildfire,
+      flood, and sea-level rise will destroy, nor the households those hazards
+      displace. This analysis layers climate exposure onto the 6th-cycle allocation
+      to estimate a <strong>more probable minimum</strong>.
+    </p>
+
+    <div class="confidence">
+      <div class="conf-card grounded">
+        <span class="tag">Well-grounded</span>
+        <h3>The statewide total: +9%</h3>
+        <p>Rests on authoritative data — the HCD baseline, FEMA building-loss rates,
+        and CMIP6 intensification. A sensitivity tornado confirms no redistribution
+        assumption moves it.</p>
+      </div>
+      <div class="conf-card directional">
+        <span class="tag">Directional</span>
+        <h3>The geography: who wins &amp; loses</h3>
+        <p>The ~626k units redistributed between jurisdictions ride on author-judgment
+        parameters. Read the map as <em>illustrative of the pattern</em>, not a
+        forecast of exact counts.</p>
+      </div>
+    </div>
+    <p class="byline">
+      Reproducible Python pipeline · SSP2-4.5 · CMIP6 · 539 jurisdictions ·
+      <a href="https://github.com/nmatouka/RHNA-climate">source on GitHub</a> ·
+      <a href="methodology.md">full methodology</a>
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="num">+9.0%</div><div class="lab">Statewide replacement floor RHNA omits (2.50M → 2.72M units)</div></div>
+    <div class="stat"><div class="num">+2.4M</div><div class="lab">Cumulative climate-driven need to 2100 (+20% over the climate-blind path)</div></div>
+    <div class="stat"><div class="num">39%</div><div class="lab">of 6th-cycle RHNA sits under ≥1 high climate constraint</div></div>
+    <div class="stat"><div class="num">27%</div><div class="lab">Climate share of need by the 2090s, up from 14% in the 2030s</div></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="gap">
+    <h2><span class="kicker">The gap</span>Climate is invisible to the housing formula</h2>
+    <p>
+      California’s Regional Housing Needs Allocation (RHNA) sets, for each region and
+      then each city and county, how many housing units to plan for over an ~8-year
+      cycle. The Department of Housing and Community Development (HCD) builds it from
+      Department of Finance projections plus adjustments for overcrowding, cost
+      burden, vacancy, and replacement need.<sup><a href="#r-hcd">1</a></sup>
+    </p>
+    <p>
+      <strong>None of those inputs account for climate change.</strong> Housing lost
+      to wildfire, flood, and sea-level rise — and the population displaced by those
+      hazards — does not enter the formula. As the state directs growth toward some
+      of its most fire- and flood-exposed inland areas, that omission grows more
+      consequential each cycle. This project asks a narrow, quantifiable question:
+      <em>if you layer physical climate risk onto the existing baseline, how does the
+      probable-minimum allocation change — in total, and in shape?</em>
+    </p>
+    <div class="note">
+      This is an analytical estimate to inform debate, <strong>not</strong> an
+      official HCD determination. Parameters are chosen at the conservative end so the
+      result reads as a defensible <em>floor</em>, presented with an uncertainty band.
+    </div>
+  </section>
+
+  <section id="model">
+    <h2><span class="kicker">The model</span>Raise the total, then redistribute it</h2>
+    <p>
+      Starting from each jurisdiction’s 6th-cycle baseline <code>B_j</code>, five
+      components act on the allocation. One <strong>raises</strong> the statewide
+      total (replacement need current RHNA omits); the rest <strong>redistribute</strong>
+      allocation away from hazardous, water-constrained places toward climate-resilient
+      receivers.
+    </p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Component</th><th>Effect</th><th>Built from</th></tr></thead>
+      <tbody>
+        <tr><td><b>A.</b> Replacement <code>R_j</code></td><td>raises total</td><td>FEMA NRI building expected-annual-loss ÷ building value × CMIP6 uplift × horizon<sup><a href="#r-nri">2</a></sup><sup><a href="#r-cmip6">3</a></sup></td></tr>
+        <tr><td><b>B.</b> Out-displacement <code>D_j</code></td><td>redistributes</td><td>hazard exposure index <code>E_j</code> → displaced households (convex curve)</td></tr>
+        <tr><td><b>C.</b> Receiver capture</td><td>redistributes</td><td>pool → resilient, higher-capacity, water-secure jurisdictions</td></tr>
+        <tr><td><b>D.</b> Siting discount <code>S_j</code></td><td>redistributes</td><td>very-high fire/flood tract share of <code>B_j</code> moved out</td></tr>
+        <tr><td><b>E.</b> Water-siting <code>Sw_j</code></td><td>redistributes</td><td>SGMA overdraft + drought + aridification share moved out<sup><a href="#r-sgma">4</a></sup></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="formula">B'_j = B_j &minus; removed_j + received_j + R_j&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp; removed = D_j + S_j + Sw_j</div>
+    <p>
+      The redistributed pool nets to zero (<code>Σ received = Σ removed</code>), so the
+      statewide total rises <strong>only</strong> by replacement need. That identity is
+      asserted at runtime and in the test suite — water and displacement move the map
+      but never the total.
+    </p>
+  </section>
+
+  <section id="result">
+    <h2><span class="kicker">Result · 6th cycle</span>A +9% replacement floor</h2>
+    <p>
+      Applied to the 2021–2029 baseline, replacement need adds <strong>223,582
+      units</strong> — a <strong>+9.0%</strong> floor the current determination omits
+      entirely. The baseline reconciles exactly to the published <strong>2,495,457</strong>
+      statewide total, and the regional rollup matches the published SCAG, ABAG/MTC,
+      SANDAG, and AMBAG determinations, validating the join.
+    </p>
+    <figure>
+      <img src="figures/statewide_baseline_vs_adjusted.png" alt="Bar chart: statewide baseline 2.50M vs climate-adjusted 2.72M">
+      <figcaption><b>The statewide floor.</b> Climate replacement need raises the
+      probable-minimum allocation from 2.50M to 2.72M units (+9.0%) under SSP2-4.5.</figcaption>
+    </figure>
+    <p>
+      Underneath that total, ~626k units shift between jurisdictions. Allocation flows
+      out of high-hazard Inland Empire cities — Unincorporated Riverside (&minus;21k),
+      Irvine, Ontario, Riverside, Fontana — and into resilient high-capacity cores:
+      Los Angeles (+30k), San Francisco (+28k), Sacramento, and San Diego. At the
+      <em>regional</em> scale the large metros gain most, because they both absorb
+      replacement need and receive displaced capacity.
+    </p>
+    <figure>
+      <img src="figures/region_change.png" alt="Net RHNA change by region">
+      <figcaption><b>Net change by region</b> (climate-adjusted &minus; baseline).
+      Coastal metros with large, lower-hazard cores gain; agricultural and
+      fire-exposed regions (Tulare, Madera, Butte) shed allocation.</figcaption>
+    </figure>
+  </section>
+
+  <section id="robustness">
+    <h2><span class="kicker">Robustness</span>The total is robust; the map is not</h2>
+    <p>
+      The model has ~30 parameters. The honest question is which ones the answer
+      actually depends on. A one-at-a-time <strong>tornado</strong> varies each fixed
+      parameter across a plausible range and measures two things: its effect on the
+      statewide <em>total</em>, and its effect on the <em>geography</em> (the L1
+      distance of the per-jurisdiction allocation from the central case).
+    </p>
+    <figure>
+      <img src="figures/sensitivity_tornado.png" alt="Tornado chart showing only horizon.years moves the statewide total">
+      <figcaption><b>The decisive result.</b> Only the replacement horizon moves the
+      statewide total (+23% at a 30-year horizon; the replacement uplift adds ~1%).
+      <b>Every redistribution parameter — exposure and water weights, receiver and
+      siting exponents, <code>move_fraction</code> — leaves the total unchanged and
+      moves only the map.</b></figcaption>
+    </figure>
+    <p>
+      This is why the two headline outputs carry different confidence. The
+      <strong>+9% total</strong> depends essentially on the data-grounded cycle length
+      and FEMA loss rates. The author-judgment parameters — blend weights, exponents —
+      are concentrated entirely on the <em>geography</em>, which is exactly why the
+      per-jurisdiction and per-region shifts are framed as directional. The reported
+      band comes from a joint sweep of the horizon and displacement parameters:
+      <strong>+9.0% (8-year) to +33.6% (30-year)</strong>.
+    </p>
+
+    <h3>Where each parameter comes from</h3>
+    <p>Every parameter is tagged by the strength of its source. The distinction below
+       <em>is</em> the confidence story.</p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Tier</th><th>Parameters</th><th>Basis</th></tr></thead>
+      <tbody>
+        <tr><td><span class="prov-data">Data-grounded</span></td>
+            <td>baseline <code>B_j</code>, building-loss rates, CMIP6 signals, SLR, SGMA priority, county growth, household size, cycle length</td>
+            <td>HCD, FEMA NRI, CMIP6, NOAA/OPC, DWR, DOF, Census<sup><a href="#r-hcd">1</a></sup><sup><a href="#r-nri">2</a></sup><sup><a href="#r-slr">5</a></sup><sup><a href="#r-dof">6</a></sup></td></tr>
+        <tr><td><span class="prov-lit">Literature-anchored</span></td>
+            <td>displacement ceiling &amp; convex shape</td>
+            <td>McConnell et al. 2024; Hauer et al. 2016<sup><a href="#r-mcconnell">7</a></sup><sup><a href="#r-hauer">8</a></sup></td></tr>
+        <tr><td><span class="prov-auth">Author judgment</span></td>
+            <td>exposure/water/heat blend weights, receiver &amp; siting exponents, <code>move_fraction</code>, normalization constants</td>
+            <td>Reasonable &amp; conservative, but not externally sourced. Swept above — they move only the map.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section id="trajectory">
+    <h2><span class="kicker">To 2100</span>Climate becomes an ever-larger share of need</h2>
+    <p>
+      Extending the model decade-by-decade to 2100 — with a growing baseline resolved
+      from real county-level DOF household and population projections,<sup><a href="#r-dof">6</a></sup>
+      and climate intensification rising over time — the cumulative climate-driven
+      addition is <strong>~2.4M units (+20%)</strong> over the climate-blind path.
+    </p>
+    <figure>
+      <img src="figures/trajectory_cumulative.png" alt="Cumulative housing need to 2100, baseline vs climate-adjusted">
+      <figcaption><b>Cumulative statewide need to 2100</b> under SSP2-4.5. The shaded
+      band is the climate-driven addition; the compound model (stranding) tracks just
+      below the base.</figcaption>
+    </figure>
+    <p>
+      The signature finding is temporal. As demographic growth tapers — DOF projects
+      California to plateau in the mid-2040s — climate replacement and sea-level
+      displacement become a growing fraction of <em>why</em> the state must keep
+      building. The climate share of need rises from <strong>~14% in the 2030s to
+      ~27% by the 2090s</strong>. This addition is robust (~2.3–2.6M) across every
+      demographic path tested, because it is driven by housing stock and hazard, not
+      the growth assumption.
+    </p>
+    <figure>
+      <img src="figures/trajectory_per_decade.png" alt="Per-decade need and rising climate share">
+      <figcaption><b>Left:</b> per-decade need, baseline vs. climate-adjusted.
+      <b>Right:</b> the climate-driven share of need climbing each decade as
+      demographic growth fades.</figcaption>
+    </figure>
+    <p>
+      Resolving growth to real counties also moves the <em>map</em> of future need:
+      out of slow-growing coastal Southern California (SCAG &minus;10 pp of the
+      statewide share) and into Sacramento, the Bay Area, and the Central Valley —
+      a shift the earlier uniform-taper assumption could not see.
+    </p>
+    <figure>
+      <img src="figures/trajectory_region_shift.png" alt="Regional share shift from uniform to county-resolved baseline">
+      <figcaption><b>County resolution reshapes the geography of need</b> — shift in
+      each region’s share of cumulative 2100 need vs. a uniform statewide taper.</figcaption>
+    </figure>
+  </section>
+
+  <section id="compound">
+    <h2><span class="kicker">Compound risk</span>Where hazards stack</h2>
+    <p>
+      A separate reporting layer asks a different question: <em>what share of RHNA
+      sits somewhere genuinely hard to build, and where do hazards stack?</em> Five
+      distinct axes — fire, flood, sea-level rise, water, and chronic heat — are each
+      counted once (heat enters only via a habitability index, never the acute
+      heat-wave term already inside exposure, to avoid double-counting).
+    </p>
+    <figure>
+      <img src="figures/compound_constraints.png" alt="RHNA constrained by each hazard axis and by number stacked">
+      <figcaption><b>Left:</b> share of 6th-cycle RHNA that is very-high on each axis —
+      water (17%) and flood (14%) lead. <b>Right:</b> most constrained RHNA faces a
+      single hazard; a smaller tail stacks several.</figcaption>
+    </figure>
+    <p>
+      <strong>~39% of statewide RHNA carries at least one high climate constraint; ~7%
+      stacks two or more.</strong> The compound view surfaces what no single hazard
+      does: the <strong>Inland Empire and Coachella Valley</strong> as the epicenter of
+      stacked constraints — a growth destination <em>and</em> among the hardest places
+      to build safely.
+    </p>
+    <h3>Compounding as a second model</h3>
+    <p>
+      Whether stacked hazards <em>compound</em> — whether being moderately bad on
+      several axes is worse than the sum — is genuinely uncertain, so it is presented
+      as a <strong>separate second model</strong>, never merged into the headline.
+      Stacked places shed an extra increment applied only to the capacity that survives
+      the per-axis discounts (a deliberately <em>marginal</em> term, to avoid
+      double-counting). Some of that capacity cannot be rehoused in safe, water-secure,
+      heat-livable areas — it is <strong>stranded</strong> and drops out of the total,
+      pulling the compound minimum slightly <em>below</em> the base.
+    </p>
+    <figure>
+      <img src="figures/model_base_vs_compound.png" alt="Base vs compound model totals and where compounding pulls allocation">
+      <figcaption><b>Two models, shown side by side.</b> The compound model strands
+      ~8k units (2.719M → 2.711M) and pulls allocation out of the Inland Empire /
+      Coachella Valley — a “there aren’t enough safe places” signal, uncertain by
+      construction and swept over a band.</figcaption>
+    </figure>
+  </section>
+
+  <section id="limits">
+    <h2><span class="kicker">Confidence &amp; limits</span>What to trust, and what not to</h2>
+    <ul>
+      <li><strong>The +9% total is the solid number.</strong> It rests on FEMA building
+        expected-annual-loss rates — a real fractional loss of building stock, not a
+        made-up figure — the reconciled HCD baseline, and CMIP6 intensification.</li>
+      <li><strong>The geography is directional.</strong> Who loses and who receives the
+        ~626k redistributed units depends on author-judgment blend weights and
+        exponents. The pattern (out of stacked-hazard inland areas, into resilient
+        cores) is robust; the exact per-jurisdiction counts are not.</li>
+      <li><strong>Water under-counts imported supply.</strong> The water index is
+        groundwater-based; it does not capture Colorado River / State Water Project
+        reliability, so it treats coastal metros as more water-secure receivers than
+        they may be. The robust water signal is the siting discount <em>out</em> of
+        overdrafted basins; the receiver side is deliberately softened.</li>
+      <li><strong>Replacement is assigned in place</strong> — the model does not decide
+        whether to rebuild elsewhere (a managed-retreat extension), and out-of-state
+        climate migration is off by default.</li>
+      <li><strong>Late-century decades are illustrative,</strong> not point forecasts —
+        DOF projections end at 2070 and compounding uncertainty grows over time.</li>
+    </ul>
+    <div class="note warn">
+      Bottom line: the <strong>total is defensible</strong>; the
+      <strong>who-gains-who-loses is directional/illustrative.</strong> The
+      <a href="methodology.md">methodology</a> tags every parameter’s provenance
+      (§2a) and documents the tornado (§9) behind these claims.
+    </div>
+  </section>
+
+  <section id="data">
+    <h2><span class="kicker">Data</span>Sources &amp; reproduction</h2>
+    <p>All inputs are authoritative, vendored with provenance, and the pipeline runs
+       reproducibly end-to-end:</p>
+    <ul>
+      <li><strong>Baseline:</strong> HCD 6th-cycle RHNA determination (data.ca.gov).</li>
+      <li><strong>Hazard &amp; loss:</strong> FEMA National Risk Index v1.20 (tract building EAL + hazard percentiles).</li>
+      <li><strong>Climate:</strong> CMIP6 5-model ensemble, SSP2-4.5; NOAA/Sweet 2022 sea-level rise via California OPC 2024 guidance.</li>
+      <li><strong>Demographics:</strong> DOF P-2A population and P-4 household projections, county-resolved.</li>
+      <li><strong>Water:</strong> DWR SGMA basin prioritization / critical-overdraft designations.</li>
+    </ul>
+    <pre class="code">python -m venv .venv &amp;&amp; ./.venv/bin/pip install -r requirements.txt
+./.venv/bin/python -m src.source_rhna   # normalize HCD baseline → FIPS
+./.venv/bin/python -m src.allocate      # 6th-cycle pipeline → outputs/ + charts
+./.venv/bin/python -m src.trajectory    # decadal need to 2100
+./.venv/bin/python -m src.constraints   # compound climate-constraint view
+./.venv/bin/python -m src.sensitivity   # uncertainty bands + tornado
+./.venv/bin/python -m pytest -q         # 23 invariant tests</pre>
+  </section>
+
+  <section id="refs">
+    <h2><span class="kicker">References</span>Citations</h2>
+    <ol class="refs">
+      <li id="r-hcd">California Department of Housing and Community Development.
+        <i>Regional Housing Needs Determination — 6th Cycle</i>. State of California
+        Open Data (data.ca.gov).</li>
+      <li id="r-nri">Federal Emergency Management Agency. <i>National Risk Index for
+        Natural Hazards</i>, v1.20.0. Expected Annual Loss (building) and hazard risk
+        percentiles by census tract. hazards.fema.gov/nri.</li>
+      <li id="r-cmip6">Eyring, V., Bony, S., Meehl, G. A., et al. (2016). “Overview of
+        the Coupled Model Intercomparison Project Phase 6 (CMIP6).” <i>Geoscientific
+        Model Development</i> 9, 1937–1958. Scenario SSP2-4.5 (O’Neill et al. 2016).</li>
+      <li id="r-sgma">California Department of Water Resources. <i>Sustainable
+        Groundwater Management Act (SGMA) Basin Prioritization</i> and
+        Critically-Overdrafted Basins designations.</li>
+      <li id="r-slr">Sweet, W. V., Hamlington, B. D., Kopp, R. E., et al. (2022).
+        <i>Global and Regional Sea Level Rise Scenarios for the United States</i>.
+        NOAA Technical Report NOS 01. Applied via California Ocean Protection Council
+        (2024) State Sea-Level Rise Guidance.</li>
+      <li id="r-dof">California Department of Finance. <i>Population Projections
+        (P-2A)</i> and <i>Housing / Household Projections (P-4)</i>, by county.</li>
+      <li id="r-mcconnell">McConnell, K., Fussell, E., DeWaard, J., Whitaker, S.,
+        Curtis, K. J., St. Denis, L., Balch, J., &amp; Price, K. (2024). “Rare and
+        highly destructive wildfires drive human migration in the U.S.”
+        <i>Nature Communications</i> 15, 6631.
+        <a href="https://doi.org/10.1038/s41467-024-50630-4">doi:10.1038/s41467-024-50630-4</a>.
+        <span class="muted">The 2018 Camp Fire drove 68–83 additional out-migrants per
+        thousand residents in year one; the vast majority of destructive fires drove
+        minimal migration — anchoring the model’s convex displacement curve.</span></li>
+      <li id="r-hauer">Hauer, M. E., Evans, J. M., &amp; Mishra, D. R. (2016).
+        “Millions projected to be at risk from sea-level rise in the continental United
+        States.” <i>Nature Climate Change</i> 6, 691–695.
+        <a href="https://doi.org/10.1038/nclimate2961">doi:10.1038/nclimate2961</a>.
+        <span class="muted">Anchors the scale of sea-level-rise displacement.</span></li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    An analytical estimate to inform debate — not an official HCD determination.<br>
+    <a href="https://github.com/nmatouka/RHNA-climate">github.com/nmatouka/RHNA-climate</a>
+    · <a href="methodology.md">Methodology</a> · <a href="FUTURE_WORK.md">Roadmap</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -42,7 +42,8 @@ def _decade_end_year(decade: str) -> str:
 
 
 def run(verbose: bool = True, make_charts: bool = True,
-        growth_variant: str | None = None, growth_curve: dict | None = None) -> dict:
+        growth_variant: str | None = None, growth_curve: dict | None = None,
+        write_outputs: bool = True) -> dict:
     paths.ensure_dirs()
     cfg = load_assumptions()
     tj = cfg["trajectory"]
@@ -105,7 +106,7 @@ def run(verbose: bool = True, make_charts: bool = True,
             "W": base["W"].values,                          # water stress (static)
             "H": base["H"].values,                          # heat habitability (static)
             "fire": base["fire"].values, "flood": base["flood"].values,
-            "slr": base["slr"].values,                      # for compound n_constraints
+            "slr": ex["slr"].reindex(B0.index).values,      # decade SLR (compound n_constraints)
             "E": ex["E"].reindex(B0.index).values,
             "annual_loss_rate": ex["annual_loss_rate"].reindex(B0.index).values,
         })
@@ -156,13 +157,19 @@ def run(verbose: bool = True, make_charts: bool = True,
     statewide["cum_adjusted_compound"] = statewide["adjusted_need_compound"].cumsum()
     statewide["cum_climate_add"] = statewide["cum_adjusted"] - statewide["cum_baseline"]
     statewide["cum_stranded"] = statewide["stranded"].cumsum()
-    statewide.to_csv(paths.TRAJ_STATEWIDE, index=False)
 
     region = pd.concat(region_frames, ignore_index=True)
     region = region.sort_values(["region", "decade"])
     region["cum_baseline"] = region.groupby("region")["baseline_need"].cumsum()
     region["cum_adjusted"] = region.groupby("region")["adjusted_need"].cumsum()
-    region.to_csv(paths.TRAJ_REGION, index=False)
+
+    # Only the canonical (config-default) run writes the CSVs. compare_sources and
+    # the sensitivity sweeps call run() with alternative growth curves and must NOT
+    # clobber the headline county-resolved outputs (previously the uniform variant,
+    # run last, overwrote the county central case).
+    if write_outputs:
+        statewide.to_csv(paths.TRAJ_STATEWIDE, index=False)
+        region.to_csv(paths.TRAJ_REGION, index=False)
 
     juris = pd.concat(juris_frames, ignore_index=True)
 
@@ -180,8 +187,8 @@ def compare_sources(make_charts: bool = True, verbose: bool = True) -> pd.DataFr
     statewide taper and quantify how much county resolution shifts the REGIONAL
     distribution of cumulative need. Writes outputs/trajectory_region_compare.csv."""
     cfg = load_assumptions()
-    county = run(verbose=False, make_charts=False)
-    uniform = run(verbose=False, make_charts=False,
+    county = run(verbose=False, make_charts=False, write_outputs=False)
+    uniform = run(verbose=False, make_charts=False, write_outputs=False,
                   growth_curve=cfg["trajectory"]["baseline_growth_mult"])
 
     def _cum(reg):

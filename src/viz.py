@@ -235,6 +235,39 @@ def _trajectory_per_decade(statewide) -> None:
     plt.close(fig)
 
 
+def make_tornado_chart(df) -> None:
+    """Two-panel tornado: (left) each fixed parameter's effect on the statewide
+    TOTAL, (right) its effect on the MAP (L1 allocation distance). Visual proof of
+    the headline claim — only the horizon moves the total; the redistribution
+    parameters move only the geography."""
+    paths.CHARTS.mkdir(parents=True, exist_ok=True)
+    d = df.sort_values("map_L1_max")
+    labels = [p.replace("replacement.", "").replace("displacement.", "disp.")
+               .replace("climate_uplift.", "").replace(".weights", "")
+               .replace("water.siting.", "water.").replace("receiver.", "recv.")
+              for p in d["parameter"]]
+    y = np.arange(len(d))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5.2), sharey=True)
+
+    ax1.barh(y, d["total_swing_pct"], color=[_RED if v > 1 else _GREY for v in d["total_swing_pct"]])
+    ax1.set_yticks(y); ax1.set_yticklabels(labels, fontsize=8)
+    ax1.set_xlabel("Swing in statewide TOTAL (%)")
+    ax1.set_title("Effect on the statewide total\n(only horizon moves it)", fontsize=10)
+    for i, v in enumerate(d["total_swing_pct"]):
+        ax1.text(v, i, f" {v:.0f}%", va="center", fontsize=7,
+                 color=_RED if v > 1 else _GREY)
+    ax1.margins(x=0.12)
+
+    ax2.barh(y, d["map_L1_max"], color=_BLUE)
+    ax2.set_xlabel("Effect on the MAP — L1 allocation distance (units)")
+    ax2.set_title("Effect on the geography\n(redistribution parameters move it)", fontsize=10)
+    fig.suptitle("Tornado — the total is robust to redistribution parameters; only the map moves",
+                 fontsize=11, fontweight="bold")
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.savefig(paths.CHARTS / "sensitivity_tornado.png", dpi=130)
+    plt.close(fig)
+
+
 def _biggest_movers(adj) -> None:
     top = adj.nlargest(12, "delta")
     bot = adj.nsmallest(12, "delta")

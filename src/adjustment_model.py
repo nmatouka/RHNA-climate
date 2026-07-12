@@ -86,7 +86,12 @@ def apply_model(master: pd.DataFrame, cfg: dict | None = None,
         from .constraints import constraint_flags
         nc = constraint_flags(df, cfg)["n_constraints"].to_numpy(dtype=float)
         g = np.clip(nc - comp["min_stack"] + 1.0, 0.0, None) ** comp["exponent"]
-        S_comp = np.minimum(B * comp["rate"] * g, np.maximum(B - base_removed, 0.0))
+        # Marginal-on-residual: the compound penalty applies to the capacity that
+        # SURVIVES the independent per-axis discounts (B - base_removed), not to B,
+        # so it does not re-penalize units already moved by the fire/flood/water
+        # siting terms (avoids double-counting).
+        remaining = np.maximum(B - base_removed, 0.0)
+        S_comp = np.minimum(remaining * comp["rate"] * g, remaining)
         rehouse = float(comp["rehouse_fraction"])
     else:
         S_comp = np.zeros_like(B)
