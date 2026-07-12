@@ -29,6 +29,11 @@ def build_master(verbose: bool = True) -> pd.DataFrame:
     from .water import build_water_stress
     master = master.merge(build_water_stress(master), on="slug", how="left")
 
+    # Heat-habitability index H_j (feeds the compound view + compound model).
+    from .heat import build_heat_habitability
+    master = master.merge(build_heat_habitability(master)[["slug", "H"]],
+                          on="slug", how="left")
+
     # Optional: merge sourced RHNA baseline (Phase 2 output).
     if paths.RHNA_BASELINE.exists():
         master = _merge_rhna(master, verbose)

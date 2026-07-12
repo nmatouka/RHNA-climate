@@ -64,13 +64,20 @@ python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 
 ## Headline result
 
-**6th cycle (single adjustment):**
+**6th cycle — two models (base, and base + compound):**
 
 | | Units |
 |---|---|
 | Baseline (HCD 6th cycle) | 2,495,457 |
-| Climate-adjusted **probable minimum** | **2,719,039  (+9.0%)** |
-| Sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
+| **BASE** model (hazards independent) | **2,719,039  (+9.0%)** |
+| **COMPOUND** model (option 2, stranding) | **2,701,968  (+8.3%)** |
+| Base sensitivity band (8–30 yr horizon) | 2.72M – 3.33M |
+| Compound stranded band (uncertain) | 5.7k – 40k units |
+
+The **compound** model is shown *alongside* the base, not merged into it:
+stacked-hazard places (Inland Empire/Coachella) shed capacity that can't all be
+rehoused in safe areas, so some is **stranded** and the total falls below the base
+— a transparent scenario for an effect we're genuinely uncertain about.
 
 **Longer horizon (cumulative need to 2100, SSP2-4.5, county-resolved DOF baseline):**
 

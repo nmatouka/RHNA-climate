@@ -120,6 +120,39 @@ def _report(df, base, cfg0) -> None:
     print("=" * 64)
 
 
+def compound_sweep(verbose: bool = True) -> pd.DataFrame:
+    """Sweep the (uncertain) compound-model parameters — how much extra capacity
+    stacked places shed (`rate`) and how much can be rehoused (`rehouse_fraction`)
+    — to present the stranded / compound-total as a band, not a point."""
+    master = build_master(verbose=False)
+    cfg0 = load_assumptions()
+    base_total = apply_model(master, cfg0, compound=False)["rhna_adjusted"].sum()
+    rows = []
+    for rate in cfg0["compound"]["rate_sensitivity"]:
+        for rehouse in cfg0["compound"]["rehouse_sensitivity"]:
+            cfg = copy.deepcopy(cfg0)
+            cfg["compound"]["rate"] = rate
+            cfg["compound"]["rehouse_fraction"] = rehouse
+            comp = apply_model(master, cfg, compound=True)
+            rows.append({"rate": rate, "rehouse_fraction": rehouse,
+                         "compound_total": comp["rhna_adjusted"].sum(),
+                         "stranded": comp.attrs["stranded"]})
+    df = pd.DataFrame(rows)
+    df["base_total"] = base_total
+    df.to_csv(paths.OUTPUTS / "sensitivity_compound.csv", index=False)
+    if verbose:
+        lo, hi = df["stranded"].min(), df["stranded"].max()
+        print("\n" + "=" * 64)
+        print("  COMPOUND-MODEL SENSITIVITY (stranded units band)")
+        print("=" * 64)
+        print(f"  Base model total:      {base_total:>12,.0f}")
+        print(f"  Stranded range:        {lo:>12,.0f}  ..  {hi:,.0f}")
+        print(f"  Compound total range:  {base_total-hi:>12,.0f}  ..  {base_total-lo:,.0f}")
+        print("=" * 64)
+    return df
+
+
 if __name__ == "__main__":
     sweep()
     trajectory_sweep()
+    compound_sweep()

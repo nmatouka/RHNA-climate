@@ -34,8 +34,17 @@ def displacement_fraction(E: np.ndarray, cfg: dict) -> np.ndarray:
     return d["max_fraction"] * e ** d["exponent"]
 
 
-def apply_model(master: pd.DataFrame, cfg: dict | None = None) -> pd.DataFrame:
-    """Return `master` with adjustment columns and the adjusted allocation B'_j."""
+def apply_model(master: pd.DataFrame, cfg: dict | None = None,
+                compound: bool = False) -> pd.DataFrame:
+    """Return `master` with adjustment columns and the adjusted allocation B'_j.
+
+    compound=False -> the BASE model (components A-E, pool conserved, total rises
+    only by replacement). compound=True -> adds the option-2 compound effect: an
+    extra siting discount on multiply-stacked jurisdictions of which only
+    `rehouse_fraction` can be absorbed by safe receivers; the rest is STRANDED,
+    lowering the statewide total below the base (the "not enough safe places"
+    scenario). The base path is byte-identical to compound=False.
+    """
     cfg = cfg or load_assumptions()
     df = master.copy()
 
@@ -68,8 +77,26 @@ def apply_model(master: pd.DataFrame, cfg: dict | None = None) -> pd.DataFrame:
         S_water = np.zeros_like(B)
 
     # Units removed from j and pushed into the redistribution pool (capped at B).
-    removed = np.minimum(S + D + S_water, B)
-    pool = float(removed.sum())
+    base_removed = np.minimum(S + D + S_water, B)
+
+    # --- Compound (option 2): extra siting discount on multiply-stacked places;
+    #     only rehouse_fraction is rehousable, the rest is STRANDED. ---
+    comp = cfg.get("compound", {})
+    if compound and comp.get("enabled") and "H" in df.columns:
+        from .constraints import constraint_flags
+        nc = constraint_flags(df, cfg)["n_constraints"].to_numpy(dtype=float)
+        g = np.clip(nc - comp["min_stack"] + 1.0, 0.0, None) ** comp["exponent"]
+        S_comp = np.minimum(B * comp["rate"] * g, np.maximum(B - base_removed, 0.0))
+        rehouse = float(comp["rehouse_fraction"])
+    else:
+        S_comp = np.zeros_like(B)
+        rehouse = 1.0
+
+    removed = base_removed + S_comp
+    base_pool = float(base_removed.sum())
+    compound_pool = float(S_comp.sum())
+    stranded = (1.0 - rehouse) * compound_pool
+    pool = base_pool + rehouse * compound_pool   # what actually gets rehoused
 
     # --- C. Receiver capture ---
     rec = cfg["receiver"]
@@ -102,10 +129,13 @@ def apply_model(master: pd.DataFrame, cfg: dict | None = None) -> pd.DataFrame:
     df["displace_D"] = D
     df["siting_S"] = S
     df["water_S"] = S_water
+    df["compound_S"] = S_comp
     df["removed"] = removed
     df["received"] = received
     df["is_receiver"] = eligible
     df["rhna_adjusted"] = Bp
     df["delta"] = Bp - B
     df["delta_pct"] = np.where(B > 0, df["delta"] / B * 100.0, np.nan)
+    df.attrs["stranded"] = stranded
+    df.attrs["compound"] = bool(compound and comp.get("enabled"))
     return df

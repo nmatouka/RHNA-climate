@@ -213,6 +213,26 @@ constraints:
     water: 0.55     # water-stress index W_j
     heat: 0.55      # heat-habitability index H_j
 
+# ---- Compound model (option 2, shown as a SECOND model) ---------------------
+# The base model treats hazards independently. This OPTIONAL second model adds a
+# compound effect: jurisdictions stacking multiple climate constraints
+# (n_constraints >= min_stack) shed EXTRA capacity, of which only rehouse_fraction
+# can be absorbed by climate-safe receivers — the rest is STRANDED (California may
+# lack enough safe/water-secure/heat-livable land to rehouse everyone), lowering
+# the statewide probable minimum BELOW the base. Presented alongside the base as
+# a scenario, because compounding is genuinely uncertain (option 3 — explicit
+# physical couplings — is the eventual more rigorous approach).
+compound:
+  enabled: true
+  min_stack: 2            # only places stacking >= this many hazard axes
+  rate: 0.15             # extra share of B moved out per stacked axis beyond min
+  exponent: 1.0
+  rehouse_fraction: 0.5   # fraction of compound-displaced capacity that finds a
+                          # safe home; (1 - this) is stranded (lost from total)
+  # Swept to present a band (compounding strength is uncertain).
+  rate_sensitivity: [0.10, 0.15, 0.25]
+  rehouse_sensitivity: [0.25, 0.50, 0.75]
+
 # ---- External in-migration (optional additive term) -------------------------
 # Net climate in-migration to CA from out of state is highly uncertain; default
 # OFF so the statewide increase is driven only by in-state replacement need.

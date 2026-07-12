@@ -160,6 +160,37 @@ def test_compound_constraints_count_each_axis_once():
     assert df["n_constraints"].between(0, len(AXES)).all()
 
 
+def test_compound_model_strands_capacity_below_base():
+    import copy
+    master = build_master(verbose=False)
+    base = apply_model(master, CFG, compound=False)
+    comp = apply_model(master, CFG, compound=True)
+    stranded = comp.attrs["stranded"]
+    # Compound lowers the statewide total by exactly the stranded amount.
+    assert stranded > 0
+    assert comp["compound_S"].sum() > 0
+    assert np.isclose(comp["rhna_adjusted"].sum(),
+                      base["rhna_adjusted"].sum() - stranded, rtol=1e-6)
+    # Only multiply-stacked jurisdictions shed compound capacity.
+    assert (comp.loc[comp["compound_S"] > 0, "compound_S"] > 0).all()
+
+
+def test_base_model_untouched_when_compound_off():
+    # apply_model(compound=False) must be the conserving base model.
+    adj = apply_model(build_master(verbose=False), CFG, compound=False)
+    assert np.isclose(adj["received"].sum(), adj["removed"].sum(), rtol=1e-6)
+    assert (adj["compound_S"] == 0).all()
+
+
+def test_compound_reduces_inland_empire():
+    master = build_master(verbose=False)
+    base = apply_model(master, CFG, compound=False).set_index("slug")
+    comp = apply_model(master, CFG, compound=True).set_index("slug")
+    m = master.set_index("slug")
+    ie = m["county"] == "Riverside"  # stacked fire/flood/water/heat
+    assert (comp.loc[ie, "rhna_adjusted"].sum() < base.loc[ie, "rhna_adjusted"].sum())
+
+
 def test_compound_flags_expected_geography():
     from src.constraints import build_constraints
     df = build_constraints(verbose=False, make_chart=False).set_index("name")

@@ -25,10 +25,27 @@ import pandas as pd
 from . import paths
 from .config import load_assumptions
 from .crosswalk import build_master
-from .heat import build_heat_habitability
 from .regions import assign_regions
 
 AXES = ["fire", "flood", "slr", "water", "heat"]
+
+
+def constraint_flags(df: pd.DataFrame, cfg: dict | None = None) -> pd.DataFrame:
+    """Add per-axis constraint flags (c_fire..c_heat) and n_constraints to `df`.
+
+    Pure helper (no I/O) shared by the reporting view and the compound model.
+    Each hazard is counted once: fire/flood/slr from the exposure sub-scores,
+    water=W_j, heat=H_j. The acute NRI heat-wave term already inside E_j is NOT
+    re-counted here. `df` must carry fire, flood, slr, W, H.
+    """
+    thr = (cfg or load_assumptions())["constraints"]["thresholds"]
+    df = df.copy()
+    score = {"fire": df["fire"], "flood": df["flood"], "slr": df["slr"],
+             "water": df["W"], "heat": df["H"]}
+    for ax in AXES:
+        df[f"c_{ax}"] = (score[ax].fillna(0) >= thr[ax]).astype(int)
+    df["n_constraints"] = df[[f"c_{ax}" for ax in AXES]].sum(axis=1)
+    return df
 
 
 def build_constraints(master: pd.DataFrame | None = None,
@@ -36,15 +53,7 @@ def build_constraints(master: pd.DataFrame | None = None,
     if master is None:
         master = build_master(verbose=False)
     master = assign_regions(master)
-    heat = build_heat_habitability(master)
-    df = master.merge(heat[["slug", "H"]], on="slug", how="left")
-
-    thr = load_assumptions()["constraints"]["thresholds"]
-    score = {"fire": df["fire"], "flood": df["flood"], "slr": df["slr"],
-             "water": df["W"], "heat": df["H"]}
-    for ax in AXES:
-        df[f"c_{ax}"] = (score[ax].fillna(0) >= thr[ax]).astype(int)
-    df["n_constraints"] = df[[f"c_{ax}" for ax in AXES]].sum(axis=1)
+    df = constraint_flags(master)
     df["constraint_axes"] = df.apply(
         lambda r: ",".join(ax for ax in AXES if r[f"c_{ax}"]), axis=1)
 

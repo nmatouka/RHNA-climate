@@ -107,7 +107,10 @@ def _trajectory_cumulative(statewide) -> None:
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.fill_between(x, s["cum_baseline"], s["cum_adjusted"], color=_RED, alpha=0.18,
                     label="Climate-driven addition")
-    ax.plot(x, s["cum_adjusted"], "-o", color=_RED, lw=2, label="Climate-adjusted minimum")
+    ax.plot(x, s["cum_adjusted"], "-o", color=_RED, lw=2, label="BASE model")
+    if "cum_adjusted_compound" in s.columns:
+        ax.plot(x, s["cum_adjusted_compound"], "--s", color="#8e44ad", lw=1.8,
+                label="COMPOUND model (stranding)")
     ax.plot(x, s["cum_baseline"], "-o", color=_GREY, lw=2, label="Baseline (climate-blind)")
     last = s.iloc[-1]
     ax.annotate(f"+{last['cum_climate_add']:,.0f}\n(+{last['cum_climate_add']/last['cum_baseline']*100:.0f}%)",
@@ -120,6 +123,34 @@ def _trajectory_cumulative(statewide) -> None:
     ax.grid(axis="y", alpha=0.25)
     fig.tight_layout()
     fig.savefig(paths.CHARTS / "trajectory_cumulative.png", dpi=130)
+    plt.close(fig)
+
+
+def make_model_compare_chart(region, statewide) -> None:
+    """Base vs compound model: statewide totals + regions most reduced by compounding."""
+    paths.CHARTS.mkdir(parents=True, exist_ok=True)
+    b = statewide[statewide["model"] == "base"].iloc[0]
+    c = statewide[statewide["model"] == "compound"].iloc[0]
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+    bars = ax1.bar(["Baseline\n(HCD)", "BASE model", "COMPOUND\nmodel"],
+                   [b["baseline_total"], b["adjusted_total"], c["adjusted_total"]],
+                   color=[_GREY, _BLUE, "#8e44ad"], width=0.62)
+    ax1.bar_label(bars, fmt="{:,.0f}", padding=3, fontsize=9)
+    ax1.set_ylabel("Statewide RHNA (units)")
+    ax1.set_title(f"Two models — compound strands {c['stranded']:,.0f} units\n"
+                  "(un-rehousable in safe areas)", fontsize=10)
+    ax1.margins(y=0.15)
+
+    r = region.copy().sort_values("delta_compound")
+    r = r[r["delta_compound"].abs() >= 1].head(12)
+    ax2.barh(r["region"], r["delta_compound"], color="#8e44ad")
+    ax2.axvline(0, color="k", lw=0.8)
+    ax2.set_xlabel("Change under compound model (units)")
+    ax2.set_title("Where compounding pulls allocation\n(net, base → compound)", fontsize=10)
+    ax2.tick_params(axis="y", labelsize=7)
+    fig.tight_layout()
+    fig.savefig(paths.CHARTS / "model_base_vs_compound.png", dpi=130)
     plt.close(fig)
 
 

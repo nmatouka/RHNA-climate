@@ -103,11 +103,15 @@ def run(verbose: bool = True, make_charts: bool = True,
             "population": (pop0 * (stock / stock0)).reindex(B0.index).values,
             "unsafe_share": base["unsafe_share"].values,    # static
             "W": base["W"].values,                          # water stress (static)
+            "H": base["H"].values,                          # heat habitability (static)
+            "fire": base["fire"].values, "flood": base["flood"].values,
+            "slr": base["slr"].values,                      # for compound n_constraints
             "E": ex["E"].reindex(B0.index).values,
             "annual_loss_rate": ex["annual_loss_rate"].reindex(B0.index).values,
         })
 
-        adj = apply_model(md, cfg_d)
+        adj = apply_model(md, cfg_d, compound=False)
+        adj_c = apply_model(md, cfg_d, compound=True)
         _check_decade(adj, cfg_d, d)
 
         adj["decade"] = d
@@ -116,12 +120,15 @@ def run(verbose: bool = True, make_charts: bool = True,
                                  "rhna_adjusted", "repl_R", "removed", "received",
                                  "E"]].copy())
 
-        # Statewide record.
+        # Statewide record (base + compound).
         b, a = adj["rhna_baseline"].sum(), adj["rhna_adjusted"].sum()
+        a_c = adj_c["rhna_adjusted"].sum()
         state_rows.append({
             "decade": d, "slr_year": yr, "growth_source": source,
             "eff_growth_mult": b / float(B0.sum()),
             "baseline_need": b, "adjusted_need": a,
+            "adjusted_need_compound": a_c,
+            "stranded": float(adj_c.attrs.get("stranded", 0.0)),
             "replacement": adj["repl_R"].sum(),
             "redistributed_pool": adj["removed"].sum(),
             "climate_add": a - b, "climate_add_pct": (a - b) / b * 100.0,
@@ -146,7 +153,9 @@ def run(verbose: bool = True, make_charts: bool = True,
     statewide = pd.DataFrame(state_rows)
     statewide["cum_baseline"] = statewide["baseline_need"].cumsum()
     statewide["cum_adjusted"] = statewide["adjusted_need"].cumsum()
+    statewide["cum_adjusted_compound"] = statewide["adjusted_need_compound"].cumsum()
     statewide["cum_climate_add"] = statewide["cum_adjusted"] - statewide["cum_baseline"]
+    statewide["cum_stranded"] = statewide["stranded"].cumsum()
     statewide.to_csv(paths.TRAJ_STATEWIDE, index=False)
 
     region = pd.concat(region_frames, ignore_index=True)
@@ -232,11 +241,13 @@ def _print_summary(statewide: pd.DataFrame, region: pd.DataFrame) -> None:
         print(f"  {r['decade']:7} {r['baseline_need']:>12,.0f} {r['adjusted_need']:>12,.0f}"
               f" {r['climate_add']:>10,.0f} {r['climate_add_pct']:>6.1f}%")
     print("-" * 72)
+    cum_c = last["cum_adjusted_compound"]
     print(f"  CUMULATIVE need to 2100:")
     print(f"    Baseline (climate-blind):   {cum_b:>14,.0f}")
-    print(f"    Climate-adjusted minimum:   {cum_a:>14,.0f}")
-    print(f"    Climate-driven addition:    {cum_a - cum_b:>14,.0f}  "
+    print(f"    BASE model:                 {cum_a:>14,.0f}  "
           f"(+{(cum_a - cum_b) / cum_b * 100:.1f}%)")
+    print(f"    COMPOUND model:             {cum_c:>14,.0f}  "
+          f"(stranded {last['cum_stranded']:,.0f})")
     print("=" * 72)
 
 

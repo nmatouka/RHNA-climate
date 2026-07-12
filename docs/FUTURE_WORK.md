@@ -106,9 +106,14 @@ housing-relevant signals still on the table (all present in existing data):
 - **Wildfire smoke / air quality** (CalEnviroScreen PM2.5) — habitability.
 - **Snowpack decline** (`ca_snow_historical`) — would sharpen the water layer's
   surface-supply dimension (currently only aridification).
-- **Compound-hazard as a model effect** (not just a reporting view) — the deeper
-  refinement: the Inland Empire stacks fire+flood+water+heat, and a jurisdiction
-  moderate on each individually may be effectively unbuildable when they combine.
+- **Compound-hazard as a model effect** — ✅ option 2 DONE (a second model with
+  stranding; methodology §8a). **Option 3 (planned):** replace the generic
+  `n_constraints` penalty with **explicit pairwise physical couplings** — post-fire
+  debris flow (fire×flood), overdraft subsidence (water×flood), Delta
+  (SLR×riverine×subsidence). Unlike option 2, well-justified couplings can *raise*
+  the probable minimum (cascade events destroy more housing than summed
+  independent EALs), so this feeds **replacement**, not just siting. Start with
+  post-fire debris flow (best-documented; USGS debris-flow hazard layers).
 - **Land subsidence** from overdraft (San Joaquin Valley) — needs InSAR/DWR data
   (not in climateshed); ties water → physical buildability.
 

@@ -271,6 +271,38 @@ and Menifee (fire+flood+water). These are a growth destination **and** the harde
 places to build, a tension invisible to any one hazard. Output:
 `outputs/constraints_by_jurisdiction.csv`, `charts/compound_constraints.png`.
 
+### 8a. The compound effect as a SECOND model (option 2)
+
+The base model (§4) treats hazards independently. Whether they *compound* —
+whether being moderately bad on several axes is worse than the sum — is genuinely
+uncertain, so it is presented as a **separate second model** shown alongside the
+base, never folded into a single headline. Every run emits both.
+
+`apply_model(compound=True)` adds one term to the base: jurisdictions stacking
+`n_constraints ≥ min_stack` (2) shed an **extra** siting discount
+`Sw_comp = B_j · rate · (n−min+1)^exp`, of which only **`rehouse_fraction`** can be
+absorbed by climate-safe receivers. The remainder is **stranded** — California may
+simply lack enough safe, water-secure, heat-livable land to rehouse everyone — and
+**drops out of the total**, so the compound model's probable minimum lands *below*
+the base:
+
+```
+Σ B'_compound = Σ B'_base − stranded,   stranded = (1−rehouse_fraction)·Σ Sw_comp
+```
+
+This deliberately **breaks the base model's conservation identity** (that's the
+point: stacked capacity that can't be rehoused is lost, not moved). The base path
+(`compound=False`) is byte-identical to before and still conserves.
+
+**Result (6th cycle):** base **2,719,039** → compound **2,701,968** (17,072
+stranded). Swept over the uncertain parameters (`rate`, `rehouse_fraction`), the
+stranded band is **~5.7k–40k units** (`sensitivity_compound.csv`). Cumulative to
+2100 the compound trajectory strands ~105k. Compounding pulls allocation out of
+the **Inland Empire** (SCAG −17k; Unincorporated Riverside, Ontario, Perris) — a
+"there aren't enough safe places" signal. **Option 3** (explicit physical
+couplings — post-fire debris flow, overdraft subsidence — which could *raise* the
+total via cascade losses) is the planned more rigorous successor.
+
 ## 9. Key assumptions and limitations
 
 - **All tunable parameters live in `config/assumptions.yaml`** and are chosen at
