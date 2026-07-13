@@ -104,6 +104,30 @@ def test_trajectory_climate_share_grows_end_to_end():
     assert _TRAJ.iloc[-1]["climate_add_pct"] > _TRAJ.iloc[0]["climate_add_pct"]
 
 
+def test_canonical_trajectory_outputs_survive_variant_runs():
+    # Regression: compare_sources and the sensitivity sweeps (and the uniform run
+    # in this very test module) call run() with alternate growth paths / a config
+    # override. Those must NEVER overwrite the shared trajectory CSVs, which must
+    # always hold the canonical county-resolved case. Only a canonical run writes.
+    from src import config, paths
+
+    trajectory.run(verbose=False, make_charts=False)                 # canonical -> writes
+    assert pd.read_csv(paths.TRAJ_STATEWIDE)["growth_source"].iloc[0] == "county"
+    before = paths.TRAJ_STATEWIDE.read_text()
+
+    trajectory.run(verbose=False, make_charts=False,                 # uniform curve
+                   growth_curve=CFG["trajectory"]["baseline_growth_mult"])
+    trajectory.run(verbose=False, make_charts=False, growth_variant="flat")  # variant
+    config.set_override(CFG)                                         # override active
+    try:
+        trajectory.run(verbose=False, make_charts=False)
+    finally:
+        config.set_override(None)
+
+    assert paths.TRAJ_STATEWIDE.read_text() == before, \
+        "a non-canonical run overwrote the canonical trajectory CSV"
+
+
 def test_county_multipliers_bounded_and_complete():
     cm = county_growth_multipliers()
     assert len(cm) == 58  # all CA counties

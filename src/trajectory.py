@@ -43,9 +43,21 @@ def _decade_end_year(decade: str) -> str:
 
 def run(verbose: bool = True, make_charts: bool = True,
         growth_variant: str | None = None, growth_curve: dict | None = None,
-        write_outputs: bool = True) -> dict:
+        write_outputs: bool | None = None) -> dict:
     paths.ensure_dirs()
     cfg = load_assumptions()
+
+    # A run is "canonical" only when it computes the headline projection: the
+    # config-default growth path (no variant, no override curve) under no config
+    # override. Only a canonical run may write the shared CSVs, so alternate runs
+    # (compare_sources, sensitivity sweeps) can never clobber the county-resolved
+    # outputs no matter how they call run(). `write_outputs` is an explicit
+    # override of this default (None = auto-decide from canonicity).
+    from . import config as _config
+    is_canonical = (growth_variant is None and growth_curve is None
+                    and not _config.is_override_active())
+    if write_outputs is None:
+        write_outputs = is_canonical
     tj = cfg["trajectory"]
     decades = tj["decades"]
     ypd = tj["years_per_decade"]
@@ -163,10 +175,8 @@ def run(verbose: bool = True, make_charts: bool = True,
     region["cum_baseline"] = region.groupby("region")["baseline_need"].cumsum()
     region["cum_adjusted"] = region.groupby("region")["adjusted_need"].cumsum()
 
-    # Only the canonical (config-default) run writes the CSVs. compare_sources and
-    # the sensitivity sweeps call run() with alternative growth curves and must NOT
-    # clobber the headline county-resolved outputs (previously the uniform variant,
-    # run last, overwrote the county central case).
+    # Only a canonical run writes the shared CSVs (see write_outputs above), so the
+    # uniform/variant/override runs can never overwrite the county central case.
     if write_outputs:
         statewide.to_csv(paths.TRAJ_STATEWIDE, index=False)
         region.to_csv(paths.TRAJ_REGION, index=False)

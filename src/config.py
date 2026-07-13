@@ -35,6 +35,13 @@ def set_override(cfg: dict[str, Any] | None) -> None:
     _override = cfg
 
 
+def is_override_active() -> bool:
+    """True while a temporary config override is in effect (used by the
+    sensitivity sweeps). Lets output-writing code tell a canonical run from a
+    perturbed one without threading a flag through every caller."""
+    return _override is not None
+
+
 def slugify(name: str) -> str:
     """Reproduce the climateshed slug transform EXACTLY: lowercase, then
     collapse every run of non-[a-z0-9] characters to a single hyphen.
