@@ -18,7 +18,10 @@ region (COG/MPO) and jurisdiction. The adjustment does two things. It **raises**
 the total by disaster replacement need, and it **redistributes** allocation away
 from high-hazard jurisdictions toward climate-resilient receiver areas.
 Displacement is modeled bottom-up from California hazard exposure under
-**SSP2-4.5**, using CMIP6 decadal projections.
+**SSP2-4.5**, using **LOCA2**-downscaled CMIP6 decadal projections (Scripps/UCSD,
+5-GCM ensemble, from the Cal-Adapt Analytics Engine `cadcat` catalog on the 3-km
+`d03` grid). See [`data/external/PROVENANCE.md`](data/external/PROVENANCE.md) for
+the full climate-data lineage.
 
 > This is an analytical estimate, not an official HCD determination.
 
@@ -28,7 +31,7 @@ For each jurisdiction *j*, starting from baseline RHNA `B_j`:
 
 | Component | Effect | Source |
 |---|---|---|
-| **A. Replacement** `R_j` | raises total | FEMA NRI building EAL (fire/flood) × CMIP6 uplift × horizon |
+| **A. Replacement** `R_j` | raises total | FEMA NRI building EAL (fire/flood) × LOCA2 CMIP6 uplift × horizon |
 | **B. Out-displacement** `D_j` | redistributes | exposure index `E_j` → displaced households |
 | **C. Receiver capture** | redistributes | pool → resilient, water-secure jurisdictions |
 | **D. Siting discount** `S_j` | redistributes | unsafe (fire/flood) tract share of `B_j` moved out |

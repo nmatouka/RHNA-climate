@@ -269,7 +269,7 @@
     <table>
       <thead><tr><th>Component</th><th>Effect</th><th>Built from</th></tr></thead>
       <tbody>
-        <tr><td><b>A.</b> Replacement <code>R_j</code></td><td>raises total</td><td>FEMA NRI building expected-annual-loss ÷ building value × CMIP6 uplift × horizon<sup><a href="#r-nri">2</a></sup><sup><a href="#r-cmip6">3</a></sup></td></tr>
+        <tr><td><b>A.</b> Replacement <code>R_j</code></td><td>raises total</td><td>FEMA NRI building expected-annual-loss ÷ building value × LOCA2 CMIP6 uplift × horizon<sup><a href="#r-nri">2</a></sup><sup><a href="#r-cmip6">3</a></sup></td></tr>
         <tr><td><b>B.</b> Out-displacement <code>D_j</code></td><td>redistributes</td><td>hazard exposure index <code>E_j</code> → displaced households (convex curve)</td></tr>
         <tr><td><b>C.</b> Receiver capture</td><td>redistributes</td><td>pool → resilient, higher-capacity, water-secure jurisdictions</td></tr>
         <tr><td><b>D.</b> Siting discount <code>S_j</code></td><td>redistributes</td><td>very-high fire/flood tract share of <code>B_j</code> moved out</td></tr>
@@ -351,8 +351,8 @@
       <thead><tr><th>Tier</th><th>Parameters</th><th>Basis</th></tr></thead>
       <tbody>
         <tr><td><span class="prov-data">Data-grounded</span></td>
-            <td>baseline <code>B_j</code>, building-loss rates, CMIP6 signals, SLR, SGMA priority, county growth, household size, cycle length</td>
-            <td>HCD, FEMA NRI, CMIP6, NOAA/OPC, DWR, DOF, Census<sup><a href="#r-hcd">1</a></sup><sup><a href="#r-nri">2</a></sup><sup><a href="#r-slr">5</a></sup><sup><a href="#r-dof">6</a></sup></td></tr>
+            <td>baseline <code>B_j</code>, building-loss rates, LOCA2 CMIP6 signals, SLR, SGMA priority, county growth, household size, cycle length</td>
+            <td>HCD, FEMA NRI, LOCA2/cadcat, NOAA/OPC, DWR, DOF, Census<sup><a href="#r-hcd">1</a></sup><sup><a href="#r-nri">2</a></sup><sup><a href="#r-slr">5</a></sup><sup><a href="#r-dof">6</a></sup></td></tr>
         <tr><td><span class="prov-lit">Literature-anchored</span></td>
             <td>displacement ceiling and convex shape</td>
             <td>McConnell et al. 2024; Hauer et al. 2016<sup><a href="#r-mcconnell">7</a></sup><sup><a href="#r-hauer">8</a></sup></td></tr>
@@ -484,7 +484,7 @@
     <ul>
       <li><strong>Baseline:</strong> HCD 6th-cycle RHNA determination (data.ca.gov).</li>
       <li><strong>Hazard and loss:</strong> FEMA National Risk Index v1.20 (tract building EAL + hazard percentiles).</li>
-      <li><strong>Climate:</strong> CMIP6 5-model ensemble, SSP2-4.5; NOAA/Sweet 2022 sea-level rise via California OPC 2024 guidance.</li>
+      <li><strong>Climate:</strong> LOCA2-downscaled CMIP6 (Scripps/UCSD, 5th Assessment), read from the cadcat catalog behind the Cal-Adapt Analytics Engine on the 3-km <code>d03</code> grid. 5-GCM ensemble (ACCESS-CM2, EC-Earth3, GFDL-ESM4, MIROC6, MRI-ESM2-0), SSP2-4.5. Sea-level rise from NOAA/Sweet 2022, scenario naming per California OPC 2024 guidance.</li>
       <li><strong>Demographics:</strong> DOF P-2A population and P-4 household projections, county-resolved.</li>
       <li><strong>Water:</strong> DWR SGMA basin prioritization / critical-overdraft designations.</li>
     </ul>
@@ -506,9 +506,19 @@
       <li id="r-nri">Federal Emergency Management Agency. <i>National Risk Index for
         Natural Hazards</i>, v1.20.0. Expected Annual Loss (building) and hazard risk
         percentiles by census tract. hazards.fema.gov/nri.</li>
-      <li id="r-cmip6">Eyring, V., Bony, S., Meehl, G. A., et al. (2016). “Overview of
-        the Coupled Model Intercomparison Project Phase 6 (CMIP6).” <i>Geoscientific
-        Model Development</i> 9, 1937–1958. Scenario SSP2-4.5 (O’Neill et al. 2016).</li>
+      <li id="r-cmip6">Climate projections: <b>LOCA2</b> statistically-downscaled
+        CMIP6 (Pierce, D. W., and D. R. Cayan; Scripps Institution of Oceanography,
+        UC San Diego), for California’s Fifth Climate Change Assessment. Five GCMs
+        (ACCESS-CM2, EC-Earth3, GFDL-ESM4, MIROC6, MRI-ESM2-0; r1i1p1f1), SSP2-4.5,
+        3-km <code>d03</code> California grid. Accessed via the Cal-Adapt Analytics
+        Engine <code>cadcat</code> catalog on AWS Open Data (<code>s3://cadcat/loca2</code>,
+        us-west-2), retrieved 2026-07-06 from
+        <a href="https://analytics.cal-adapt.org">analytics.cal-adapt.org</a>.
+        Methods: Pierce, D. W., D. R. Cayan, D. R. Feldman, &amp; M. D. Risser (2023).
+        “Future Increases in North American Extreme Precipitation in CMIP6 Downscaled
+        with LOCA.” <i>Journal of Hydrometeorology</i> 24(5), 951–975.
+        <a href="https://doi.org/10.1175/JHM-D-22-0194.1">doi:10.1175/JHM-D-22-0194.1</a>.
+        Underlying models: CMIP6 (Eyring et al. 2016; scenario SSP2-4.5, O’Neill et al. 2016).</li>
       <li id="r-sgma">California Department of Water Resources. <i>Sustainable
         Groundwater Management Act (SGMA) Basin Prioritization</i> and
         Critically-Overdrafted Basins designations.</li>

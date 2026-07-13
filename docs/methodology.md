@@ -40,9 +40,19 @@ region and jurisdiction. It does two things at once:
 |---|---|---|
 | 6th-cycle RHNA allocation `B_j` | HCD "6th Cycle RHNA Progress Report" (data.ca.gov) | Baseline, per jurisdiction, 4 income categories |
 | FEMA National Risk Index v1.20 (Dec 2025) | climateshed-cmip6-service | Tract building EAL ($) + hazard percentiles → replacement + exposure |
-| CMIP6 5-model ensemble, SSP2-4.5 | climateshed-cmip6-service | Mid-century climate intensification multiplier |
+| LOCA2-downscaled CMIP6, 5-model ensemble, SSP2-4.5 | climateshed-cmip6-service (from cadcat) | Mid-century climate intensification multiplier |
 | NOAA/Sweet et al. 2022 sea-level rise (OPC 2024) | climateshed-cmip6-service | Coastal exposure |
 | Occupied housing + population (2024) | CA GHG Inventory / v2_jurisdictions | Stock at risk + capacity |
+
+The climate layer is **LOCA2** statistically-downscaled CMIP6 (Scripps/UCSD, for
+California's 5th Climate Change Assessment), read from the **cadcat** AWS Open Data
+catalog (`s3://cadcat/loca2/ucsd`) that backs the Cal-Adapt Analytics Engine, on the
+**3-km `d03` California grid**. The ensemble is **5 GCMs** (ACCESS-CM2, EC-Earth3,
+GFDL-ESM4, MIROC6, MRI-ESM2-0; r1i1p1f1) reduced to per-jurisdiction ensemble
+median; scenario **SSP2-4.5**, decade **2050s** central, baseline 1981–2010.
+Methods: Pierce et al. 2023, *J. Hydrometeorology* 24(5),
+[doi:10.1175/JHM-D-22-0194.1](https://doi.org/10.1175/JHM-D-22-0194.1). Native
+LOCA2 is 6 km over North America; cadcat serves the 3-km California `d03` grid.
 
 Full provenance in `data/external/PROVENANCE.md` and `data/raw/PROVENANCE.md`.
 Jurisdictions join on 7-digit `PLACE_FIPS` (cities) / 5-digit `COUNTY_FIPS`
@@ -63,7 +73,7 @@ well-supported statewide total from the illustrative geography.
 |---|---|
 | Baseline allocation `B_j` (539 units, 4 income cats) | HCD 6th-cycle determination (data.ca.gov) |
 | `loss_rate_hist` (building EAL ÷ building value) | FEMA National Risk Index v1.20 |
-| `climate_uplift` signals (dry-spell, heat, extreme-precip) | CMIP6 5-model ensemble, SSP2-4.5 |
+| `climate_uplift` signals (`max_dry_spell`, `tasmax_peak_f`, `extreme_precip_days`) | LOCA2-downscaled CMIP6, 5-model ensemble, SSP2-4.5 (cadcat / Cal-Adapt) |
 | SLR magnitude (`slr_scenario: intermediate`, `slr_year: 2050`) | NOAA/Sweet 2022 via OPC 2024 planning guidance |
 | SGMA basin priority / critical-overdraft | DWR SGMA basin prioritization |
 | Per-county decadal growth (`growth_source: county`) | DOF P-2A / P-4 projections |
@@ -132,11 +142,13 @@ For each jurisdiction *j*, from baseline `B_j`:
 R_j = occ_housing_j · annual_loss_rate_j · horizon_years
 annual_loss_rate_j = min( (WFIR_EALB+CFLD_EALB+IFLD_EALB) / BUILDVALUE
                           · climate_uplift_j , cap )
-climate_uplift_j = 1 + max_uplift · normalized(CMIP6 SSP2-4.5 signals)
+climate_uplift_j = 1 + max_uplift · normalized(LOCA2 SSP2-4.5 signals)
+  fire signal  = mean of normalized max_dry_spell + tasmax_peak_f
+  flood signal = normalized extreme_precip_days   (weighted 0.6 fire / 0.4 flood)
 ```
 `annual_loss_rate` is a **real fractional building-loss rate** from FEMA NRI
 building expected-annual-loss dollars over building value, scaled up by projected
-mid-century intensification (dry-spell/heat → fire; extreme-precip → flood).
+mid-century intensification (dry-spell + peak-heat → fire; extreme-precip → flood).
 Statewide this is ≈0.17–0.22%/yr; over the 8-year horizon it adds replacement
 need where destruction occurs.
 
